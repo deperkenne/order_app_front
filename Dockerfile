@@ -10,6 +10,8 @@ RUN npm install
 # Copier le code source
 COPY . .
 
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
 # Build de production
 RUN npm run build
 
