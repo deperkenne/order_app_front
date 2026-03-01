@@ -37,7 +37,7 @@ jobs:
           docker images
 
           echo " Lancement du container pour test"
-          docker run -d --name votingApp kennetchofo/frontend-voting-app:${{ github.sha }}
+          docker run -d --name votingApp kennetchofo/order_app:${{ github.sha }}
 
           echo "Logs du container :"
           docker logs votingApp
