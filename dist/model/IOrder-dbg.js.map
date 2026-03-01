@@ -1,0 +1,1 @@
+{"version":3,"file":"IOrder-dbg.js","names":[],"sources":["IOrder.ts"],"sourcesContent":["import { IOrderItem } from \"./IOrder_item\";\r\nexport interface IOrder {\r\n    OrderUuid?: string;\r\n    OrderId: string;\r\n    CustomerId: string;\r\n    TotalAmount: number;\r\n    Currency:  string;\r\n    Status:   string;\r\n}"],"mappings":"","ignoreList":[]}

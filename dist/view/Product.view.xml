@@ -1,0 +1,307 @@
+<mvc:View controllerName="comkenneorderapp.controller.Product"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m" xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    height="100%"
+    class="testpage">
+
+   
+    
+
+    <Page id="ProductPage1" title="{i18n>title}" showHeader="false" >
+
+         <!--<core:Fragment fragmentName="com.kenne.orderapp.Fragments.Header" type="XML"/>-->
+        <core:Fragment fragmentName="comkenneorderapp.Fragments.Navbar" type="XML"/>
+          
+        <HBox id="mainContainer"  alignItems="Start" class="panierWrapper">
+                          
+            <!-- CART DROPDOWN CONTENT -->
+            <VBox id="cartContent" visible="{ui>/isCartVisible}" class="panierDropdown">
+                
+                <!-- CART ITEMS LIST -->
+                <VBox id="cartListContainer" class="panierListContainer">
+                    <List
+                        
+                        id="cartList"
+                        items="{products>/filteredItems}"
+                        noDataText="Your cart is empty"
+                        class="panierList">
+                        <items>
+                            <CustomListItem  id="cartItemid">
+                                <VBox   id="itemWrapper"  width="100%" class="panierItemWrapper">
+                                    
+                                    <!-- PRODUCT INFO ROW -->
+                                    <HBox 
+                                        id="itemHeader" 
+                                        alignItems="Start" 
+                                        class="panierItemHeader"
+                                        wrap="Wrap">
+                                        
+                                        <!-- PRODUCT IMAGE -->
+                                        <Image 
+                                            id="pImg"
+                                            src="{products>imageUrl}" 
+                                            width="90px" 
+                                            height="110px" 
+                                            class="panierProductImage" />
+
+                                        <!-- PRODUCT DETAILS -->
+                                        <VBox 
+                                            id="pDetails" 
+                                            class="panierItemDetails"
+                                            justifyContent="SpaceBetween">
+                                            
+                                            <!-- NAME & CATEGORY -->
+                                            <VBox class="panierItemMeta"  id="pPanier">
+                                                <Title 
+                                                    id="pName" 
+                                                    text="{products>productName}" 
+                                                    level="H4"
+                                                    class="panierItemName" />
+                                                <Text 
+                                                    id="pCategory"
+                                                    text="{products>category}" 
+                                                    class="panierItemCategory" />
+                                            </VBox>
+
+                                            <!-- PRICE & QUANTITY INFO -->
+                                            <HBox 
+                                                id="pSubInfo" 
+                                                justifyContent="SpaceBetween" 
+                                                alignItems="Center"
+                                                class="panierItemFooter"
+                                                wrap="Wrap">
+                                                
+                                                <Text 
+                                                    id="pQtyTxt" 
+                                                    text="Qty:{products>quantity}" 
+                                                    class="panierQtyText" />
+                                                
+                                                <Title 
+                                                    id="pPrice" 
+                                                        text="{= ${products>price} + ' ' + ${products>currency} }"
+                                                    level="H4"
+                                                    class="panierItemPrice" />
+                                                <!-- SUBTOTAL -->
+                                                <HBox 
+                                                    id="subRow" 
+                                                    justifyContent="SpaceBetween" 
+                                                    alignItems="Center"
+                                                    class="panierSummaryRow">
+                                                    <Text id="subd" text="SubTotal" class="panierSummaryLabel" />
+                                                    <Text id="pSub" text="{products>grossAmount}" class="panierSummaryValue" />
+                                                    <Text id="pDevise" text="{products>currency}"/>
+                                                </HBox>
+                                                
+                                            </HBox>
+                                        </VBox>
+
+                                        <!-- DELETE BUTTON -->
+                                        <Button 
+                                            id="delBtn"
+                                            icon="sap-icon://delete" 
+                                            type="Transparent"
+                                            class="panierDeleteBtn"
+                                            press=".onDelete" 
+                                            tooltip="Supprimer" />
+                                    </HBox>
+
+                                    <!-- QUANTITY CONTROLS -->
+                                    <HBox 
+                                        id="quantityControls"
+                                        alignItems="Center"
+                                        class="panierQuantityControls">
+                                        
+                                        <Button 
+                                            id="decreaseBtn" 
+                                            icon="sap-icon://less" 
+                                            type="Transparent"
+                                            class="panierQtyBtn"
+                                            press=".onDecreaseQuantity" />
+                                        
+                                        <Input 
+                                            id="pQuantity" 
+                                            value="{products>quantity}" 
+                                            type="Number" 
+                                            class="panierQtyInput"
+                                            change=".onQuantityChange"
+                                            editable="false" />
+                                        
+                                        <Button 
+                                            id="increaseBtn" 
+                                            icon="sap-icon://add" 
+                                            type="Transparent"
+                                            class="panierQtyBtn"
+                                            press=".onIncreaseQuantity" />
+                                    </HBox>
+                                </VBox>
+                            </CustomListItem>
+                        </items>
+                    </List>
+                </VBox>
+
+                <!-- SUMMARY SECTION -->
+                <VBox id="summaryContainer" class="panierSummaryBox" >
+                    
+                    <!-- SHIPPING -->
+                    <HBox 
+                        id="shippingRow" 
+                        justifyContent="SpaceBetween" 
+                        alignItems="Center"
+                        class="panierSummaryRow">
+                        <Text id="pLi" text="" class="panierSummaryLabel" />
+                        <ObjectStatus 
+                            id="pOb"
+                            state="Success"
+                            class="panierShippingStatus" />
+                    </HBox>
+
+                    
+
+                    <!-- TOTAL -->
+                    <HBox 
+                        id="totalRow" 
+                        justifyContent="SpaceBetween" 
+                        alignItems="Center"
+                        class="panierTotalRow">
+                        <Title  id ="pT" text="TOTAL" level="H3" class="panierTotalLabel" />
+                        <Title 
+                            id="totVal" 
+                            text="{products>/totalAmount}"
+                            level="H3" 
+                            class="panierTotalValue" />
+                    </HBox>
+
+                    <!-- CHECKOUT BUTTON -->
+                    <Button 
+                        id="checkoutBtn" 
+                        text="ORDER" 
+                        width="100%"
+                        type="Emphasized"
+                        class="panierCheckoutBtn"
+                        press=".onCheckout" />
+
+                    <!-- SECURITY BADGE -->
+                    <HBox 
+                        id="paiementId"
+                        justifyContent="Center" 
+                        alignItems="Center"
+                        class="panierSecurityBadge">
+                        <core:Icon 
+                        id="icon"
+                            src="sap-icon://private" 
+                            class="panierSecurityIcon" />
+                        <Text id="test" text="Secure payment" class="panierSecurityText" />
+                    </HBox>
+                </VBox>
+
+            </VBox>
+                
+        </HBox>
+
+
+		<content> 
+            <FlexBox id="pMessageTitle" direction="Column" alignItems="Center" width="auto"  displayInline="false"
+              class=" productTitleMessage  sapUiShadow sapUiMediumMarginBegin sapUiMediumMarginEnd  sapUiMediumMarginBottom"
+            >
+              <Title id="pMessage"
+                text="Produits disponibles"
+                level="H2"
+                class="sapThemeText sapUiTinyMarginBottom" />
+
+              <Text
+                    id="pDescription"
+                    text="Voici la liste complète de nos articles en stock actuellement."
+                    textAlign="Center"
+                    class="sapThemeText" />
+
+            </FlexBox>
+            
+			<FlexBox
+				id="pCards"	
+				direction="Row"
+				wrap="Wrap"
+                class="productGrid"
+				items="{products>/products}">
+                
+				<items>
+					<VBox class="sapUiSmallMarginBottom card itemContent" id="pCard" >
+						
+						    <VBox id="cardHeader"  >
+
+							
+                                <Image
+                                    id="PImage"
+                                    src="{products>ImageUrl}"
+                                    width="100%"
+                                    height="200px"
+                                    densityAware="false"
+                                    decorative="true"
+                                     />
+                            </VBox>
+
+							<!-- Content Section -->
+							<VBox id="cardBody"  class=" sapUiSmallMarginBegin  bodyCard">
+
+								<!-- Product Name -->
+								<Title
+									id="pTitle"
+									text="{products>Productname}"
+									level="H3"
+									class="sapUiTinyMarginBottom titleBlack"/>
+
+								<!-- Price and Action -->
+								<HBox
+									id="pPriceInfo"
+									justifyContent="SpaceBetween"
+									alignItems="Center"
+									class="sapUiSmallMarginTop">
+
+									<!-- Prix Badge Dark -->
+                                    <ObjectStatus
+                                        id="pP"
+                                        text="{
+                                            parts: [
+                                                {path: 'products>Price'},
+                                                {path: 'products>Currency'}
+                                            ],
+                                            type: 'sap.ui.model.type.Currency',
+                                            formatOptions: { showMeasure: true }
+                                        }"
+                                        state="Indication10" 
+                                        inverted="true"
+                                        class="priceBadge" />
+
+									
+								  </HBox>
+
+                                  <HBox id="cardFooter"  gap="0.5rem"  class="sapUiSmallMarginTop">
+                                        <Button
+                                            id="productLink"
+                                            text="Voir plus"  
+                                            press=".onNavigateToProduct"
+                                            class="cardButton" />
+                                        <Button
+                                        id="pAdd"
+                                        text="Ajouter"
+                                        press=".addToCard"
+                                        enabled="{products>inStock}"
+                                         class="cardButton" />
+                                  </HBox>
+                            </VBox>
+                            
+							
+					</VBox>
+				</items>
+
+			</FlexBox>
+		</content>
+         <!--<core:Fragment fragmentName="com.kenne.orderapp.Fragments.Header" type="XML"/>-->
+        <core:Fragment fragmentName="comkenneorderapp.Fragments.Footer" type="XML"/>
+        
+
+	</Page>
+
+</mvc:View>
+	  

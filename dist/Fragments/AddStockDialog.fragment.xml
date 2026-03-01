@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns="sap.m">
+    
+    <Dialog id="AddStockDialog" title="Stock Management" contentWidth="450px">
+        <content>
+            <f:SimpleForm id="AddStockForm"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                labelSpanL="4"
+                labelSpanM="4"
+                columnsL="1"
+                columnsM="1">
+                <f:content>
+                     <Label text="IDStock" id="AddStockLabel1"/>
+
+            <Input id="AddStockInput1" />
+            <Label id="AddStockLabel2" text="ID Produit" />
+            <Input   id="AddStockInput2"  placeholder="product" />
+            <Label id="AddStockLabel3" text="SKU" />
+            <Input  id="AddStockInput3" placeholder="sku"  />
+            <Label id="AddStockLabel4"  text="Quantity"  />
+            <Input   id="AddStockInput4" placeholder="Quantity" />
+            <Label id="AddStockLabel5" text="Unit" />
+            <Input   id="AddStockInput5"  placeholder="unit"/>
+            <Label id="AddStockLabel6" text="Quantité Disponible" />
+            <Input
+                id="AddStockInput6"
+                type="Number"
+                editable="true"
+                valueLiveUpdate="true"
+                placeholder="Entrez la quantité disponible..." />
+                </f:content>
+            </f:SimpleForm>
+        </content>
+
+        <beginButton>
+            <Button 
+                id="AddStocktId"
+                text="Enregistrer" 
+                type="Emphasized" 
+                icon="sap-icon://save" 
+                press="onAddStock" />
+        </beginButton>
+        <endButton>
+            <Button 
+                id="closedStockId"
+                text="Annuler" 
+                press="onCloseDialogAddStock" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,1 @@
+{"version":3,"file":"IOrder_ItemStorageRepository-dbg.js","names":[],"sources":["IOrder_ItemStorageRepository.ts"],"sourcesContent":["\r\nexport interface IorderItemStorage{\r\n      getOrderItem(key:string): string | null,\r\n      setOrderItem(key:string,orderItem:any): void,\r\n      clearOrderItem(key:string): void ,\r\n}\r\n\r\n"],"mappings":"","ignoreList":[]}

@@ -1,0 +1,2 @@
+sap.ui.define(["./BatchService","./executors/BachExecutor","./parsers/ResponseParser","./builders/PathBuilder","./builders/QueryParameterBuilder"],function(e,r,t,a,s){"use strict";const c=e["BatchServiceProcess"];const u=r["ODataBatchExecutor"];const n=t["BatchResponseParser"];const o=a["ODataPathBuilder"];const i=s["ODataQueryParameterBuilder"];function B(e,r){e.setDeferredGroups(["OrderBatchGroup"]);return new c(new u(e),new n,new o,new i)}var d={__esModule:true};d.createBatchService=B;return d});
+//# sourceMappingURL=CreateBatchService.js.map

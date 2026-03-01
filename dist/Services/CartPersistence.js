@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class t{constructor(t){this.storage=t}save(t,e,r){this.storage.setOrderItem("myCart",JSON.stringify(t));this.storage.setOrderItem("myTotal",e);this.storage.setOrderItem("myCount",String(r))}}var e={__esModule:true};e.CartPersistence=t;return e});
+//# sourceMappingURL=CartPersistence.js.map

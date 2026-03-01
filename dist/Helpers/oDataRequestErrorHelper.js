@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class r{customizeError(r){let e="Erreur inconnue";let s;try{s=Number(r.statusCode);this.errorInfo.push(s);if(r.responseText){const s=JSON.parse(r.responseText);e=s?.error?.message?.value||e;this.errorInfo.push(e);return this.errorInfo}}catch(s){e=r.message;this.errorInfo.push(e);return this.errorInfo}return[]}}var e={__esModule:true};e.ODataRequestErrorHelper=r;return e});
+//# sourceMappingURL=oDataRequestErrorHelper.js.map

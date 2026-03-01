@@ -1,0 +1,50 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+    <Dialog 
+        id="idLoginDialog" 
+        title="Authentification Requise" 
+        type="Message" 
+        state="Information">
+        <content>
+            <VBox id="idLoginVBox" class="sapUiSmallMargin" >
+                <Text 
+                    id="idLoginInstruction" 
+                    text="Veuillez confirmer votre identité pour continuer." 
+                    class="sapUiSmallMarginBottom" />
+                <f:SimpleForm 
+                    id="idLoginForm" 
+                    editable="true" 
+                    layout="ResponsiveGridLayout">
+                    <f:content>
+                        <Label id="idLabelUser" text="Identifiant" />
+                        <Input 
+                            id="loginUser" 
+                            placeholder="Nom d'utilisateur" 
+                            type="Text" />
+                        
+                        <Label id="idLabelPass" text="Mot de passe" />
+                        <Input 
+                            id="loginPassword" 
+                            placeholder="Mot de passe" 
+                            type="Password" />
+                    </f:content>
+                </f:SimpleForm>
+            </VBox>
+        </content>
+        <beginButton>
+            <Button 
+                id="idConfirmAuthBtn" 
+                text="Confirmer" 
+                type="Emphasized" 
+                press=".onConfirmAuth" />
+        </beginButton>
+        <endButton>
+            <Button 
+                id="idCancelAuthBtn" 
+                text="Annuler" 
+                press=".onCloseLogin" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

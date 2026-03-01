@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Order App</title>
+    <style>
+        html, body {
+        height: 100% !important;
+        background-color: #ffffff !important; /* Force le fond blanc */
+        margin: 0 !important;
+        padding: 0 !important;
+        scroll-behavior: smooth;
+       }
+       .sapUiBusy, .sapUiLocalBusyIndicator, #sap-ui-static {
+        display: none !important;
+       }
+    </style>
+    <script
+
+        id="sap-ui-bootstrap"
+        src="resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-resource-roots='{
+            "comkenneorderapp": "./"
+        }'
+        data-sap-ui-on-init="module:sap/ui/core/ComponentSupport"
+        data-sap-ui-compat-version="edge"
+        data-sap-ui-async="true"
+        data-sap-ui-frame-options="trusted"
+
+    ></script>
+    
+</head>
+<body class="sapUiBody sapUiSizeCompact" id="content">
+    <div
+        data-sap-ui-component
+        data-name="comkenneorderapp"
+        data-id="container"
+        data-settings='{"id" : "comkenneorderapp"}'
+        data-handle-validation="true"
+    >
+    </div>
+</body>
+</html>

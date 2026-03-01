@@ -1,0 +1,1423 @@
+
+
+
+/* Enter your custom styles here */
+
+.testpage {
+    background-color: black !important;
+}
+
+.pageContent {
+    gap: 1rem; 
+                      /* espace entre les cartes */
+
+}
+
+.itemContent{
+    /* width: 280px;  */
+}
+
+.card {
+    border-radius: 0.75rem; /* Tes bords arrondis */
+    border: 1px solid var(--sapGroup_BorderColor);
+    overflow: hidden; /* C'est magique : cela force l'image à suivre l'arrondi du parent */
+    background-color: #fff;
+    flex: 1 1 calc(25% - 1.5rem);
+    min-width: 220px;
+    max-width: calc(25% - 1.5rem);
+    margin: 0.75rem;
+    box-sizing: border-box;
+}
+
+#PImage {
+     display: block; /*  Évite un petit espace blanc sous l'image */
+     object-fit: cover; /* Optionnel : assure que l'image remplit bien les 200px sans se déformer */
+}
+.bodyCard{
+   background-color: var(--sapList_Background);
+
+}
+
+.productTitleMessage{
+   background-color: #d0d1dc !important ;
+   padding: 5rem !important;
+
+}
+
+.cardButton{
+    color:#2a2a2a !important
+}
+.titleBlack {
+    color: #000000 !important;
+    font-weight: bold; /* Optionnel : pour renforcer l'impact */
+}
+
+.productCard {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+
+/**  addedProducts to Card css **/
+
+.addedProductCard{
+     background-color: #ffffff;
+     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+     position:fixed;
+     z-index: 15;
+
+}
+
+.productCard:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+}
+
+.productImage {
+    object-fit: cover;
+}
+
+.sapUiResponsiveContentPadding {
+    background-color: #f5f5f5;
+}
+
+/* landing page Backgroung.........................................................*/
+/* Landing Page avec image de fond */
+.landingPage {
+    background-image: url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+
+}
+
+.landingPage .sapMPageBgStandard {
+    background: transparent;
+}
+
+.landing-content {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    margin-top: 40px;
+    border-radius: 50px 50px;
+    background: linear-gradient(
+        135deg, 
+        rgba(0, 0, 0, 0.7) 0%, 
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 0.6) 100%
+    );
+}
+
+
+
+/* header style ...................................*/
+
+        .customHeader {
+            background-color: #000000 !important;
+            display: flex;
+            position: sticky;
+            z-index: 2;
+            flex-direction: row;
+            justify-content: space-around !important;
+            align-items: center !important;
+            height: 5.5rem !important;
+            row-gap: 1.5rem;
+            margin-bottom: 32px;
+            top:0;
+            left:0;
+            right:0;
+
+        }
+        
+        .logoContainer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logoBox {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logoIcon {
+            font-size: 10px;
+            color: white;
+        }
+        
+        .appTitle {
+            color: white !important;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            text-decoration: none;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-weight: 500;
+           
+        }
+        
+        .navButton {
+            color: white !important;  
+            background-color: #000000;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+          
+        }
+        
+        .navButton:hover {
+            color: #22c55e !important;
+        }
+        
+        .loginButton {
+            color: white !important;  
+            background-color: #000000;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .loginButton:hover {
+            color: #22c55e !important;
+            border-color: #22c55e !important;
+        }
+        
+        .signupButton {
+            color: white !important;
+            background-color: #22c55e !important;
+        }
+        
+        .signupButton:hover {
+            background-color: #16a34a !important;
+        }
+
+    
+    /* Section principale du body */
+.body-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 60px;
+    
+    margin-left: 60px;
+    margin-right: 60px;
+  
+}
+
+/* Top Section - Titres et Description */
+.body-top {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+/* Hero Titles Container */
+.hero-titles {
+    gap: 16px;
+}
+
+.main-title {
+    font-size: 4rem;
+    font-weight: 900;
+    color: #FFFFFF !important;
+    line-height: 1.1;
+    text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.9);
+    letter-spacing: -1px;
+}
+
+.sub-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #FFFFFF !important;
+    line-height: 1.2;
+    text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.9);
+    opacity: 0.95;
+}
+
+/* Hero Description */
+.hero-description {
+    margin-top: 20px;
+    max-width: 800px;
+}
+
+.description-text {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #FFFFFF !important;
+    line-height: 1.6;
+    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.8);
+    opacity: 0.9;
+}
+
+/* Bottom Section - Boutons */
+.body-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* Action Buttons Container */
+.action-buttons {
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.contact-btn {
+    min-width: 180px;
+    height: 56px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000000 !important;
+    background: #FFFFFF !important;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    padding: 0 32px;
+    border: none;
+}
+
+.show-product-btn {
+    min-width: 180px;
+    height: 56px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #FFF !important;
+    background: transparent !important;
+    border-radius: 50px;
+    box-sizing: border-box;
+    border: solid #e5e7eb !important;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    padding: 0 32px;
+}
+
+
+.contact-btn:hover,
+.show-product-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.5);
+ 
+}
+
+/* Reason Section */
+.reason-section {
+    margin-top: 20px;
+}
+
+.why-btn {
+    min-width: 250px;
+    height: 52px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #FFF !important;
+    background: transparent !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    border-radius: 8px;
+    box-sizing: border-box;
+    border: solid #e5e7eb !important;
+    padding: 0 24px;
+    transition: all 0.3s ease;
+}
+
+.why-btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    transform: translateX(5px);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .body-section {
+        padding: 60px 30px;
+    }
+    
+    .main-title {
+        font-size: 3rem;
+    }
+    
+    .sub-title {
+        font-size: 2.5rem;
+    }
+    
+    .description-text {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .body-section {
+        padding: 40px 20px;
+        gap: 40px;
+    }
+    
+    .main-title {
+        font-size: 2.5rem;
+    }
+    
+    .sub-title {
+        font-size: 2rem;
+    }
+    
+    .description-text {
+        font-size: 1.1rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .contact-btn,
+    .show-product-btn,
+    .why-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 2rem;
+    }
+    
+    .sub-title {
+        font-size: 1.5rem;
+    }
+    
+    .description-text {
+        font-size: 1rem;
+    }
+}
+
+
+
+/*****admin page***************************************************************************/
+
+/* Changer la couleur de fond de l'entête du tableau */
+/* Style pour le conteneur du tableau */
+
+.myCustomTable {
+    /* Marges gauche et droite */
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+    
+    /* Largeur automatique pour respecter les marges */
+    width: calc(100% - 40px) !important; 
+    
+    /* Bordure extérieure du tableau */
+    border: 0px solid #0854a0 !important;
+    border-radius: 8px; /* Optionnel : arrondit les coins */
+    overflow: hidden;
+}
+
+/* Bordures pour les cellules et l'entête */
+.myCustomTable .sapMListTblHeader .sapMListTblCell, 
+.myCustomTable .sapMListTblRow .sapMListTblCell {
+    border-bottom: 1px solid #d3d3d3 !important;
+    border-right: 1px solid #d3d3d3 !important;
+}
+
+/* Supprimer la bordure droite de la dernière colonne */
+.myCustomTable .sapMListTblCell:last-child {
+    border-right: none !important;
+}
+
+/* Style de l'entête pour le rendre plus distinct */
+.myCustomTable .sapMListTblHeader {
+    background-color: #f4f7f6 !important;
+    border-bottom: 2px solid #0854a0 !important;
+}
+
+
+/* Mise en évidence au survol des lignes */
+.myCustomTable .sapMListTblRow:hover {
+    background-color: #e3f2fd !important;
+    transition: background-color 0.3s ease;
+   
+}
+
+/* Style spécifique pour les quantités critiques */
+.sapMObjStatusError {
+    font-weight: bold;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.7; }
+}
+
+/**  product style ..........................          ........ **/
+
+
+/* Fond noir pour le conteneur principal */
+.customBlackBackground {
+    background-color: #121212 !important;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.sapUiSmallMargin{
+
+    margin-top: 60px;
+}
+
+
+
+/* Rendre la liste transparente pour voir le fond noir */
+
+
+/* Style des items de la liste pour mode sombre */
+.customListBackground .sapMLIB {
+    background-color: #1e1e1e !important;
+    border-bottom: 1px solid #333 !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+
+/* 2. Forcer le prix en vert (Success) bien vif */
+.customListItemPrice .sapMObjectNumberText,
+.customListItemPrice .sapMObjectNumberUnit {
+    color: #87af87  !important; /* Vert SAP Standard */
+    font-weight: bold !important;
+}
+
+/* Pour un titre en gris-bleu (ton code actuel) */
+.customListItemTitle .sapMText.sapMObjLTitle {
+    color: #b8bcc1 !important; /* Un bleu-gris foncé très élégant et lisible */
+}
+
+.customListBackground .sapMObjectTitle, 
+.customListBackground .sapMObjectAttributeText {
+    color: #e0e0e0 !important;
+}
+
+/* --- RONDRE LES IMAGES --- */
+.customRoundImage .sapMImg {
+    border-radius: 50% !important;
+    border: 2px solid #39a139; /* Optionnel: petit cercle vert */
+    object-fit: cover;
+    width: 3rem !important;
+    height: 3rem !important;
+}
+
+.myImage{
+    border-radius: 50% !important;
+    border: 2px solid #39a139; /* Optionnel: petit cercle vert */
+    object-fit: cover;
+    width: 3rem !important;
+    height: 3rem !important;
+}
+
+/* Responsive : Ajustement pour mobile */
+@media (max-width: 600px) {
+    .customBlackBackground {
+        margin: 0 !important;
+        padding: 0.5rem;
+    }
+}
+
+/**  card ....................
+
+/* Style global de la liste */
+.asosCartList {
+    background-color: #ffffff !important;
+    border: none !important;
+}
+
+/* Image rectangulaire haute (style mode) */
+.asosProductImage {
+    border-radius: 50% !important;
+    border: 2px solid #39a139; /* Optionnel: petit cercle vert */
+    object-fit: cover;
+    width: 3rem !important;
+    height: 3rem !important;
+}
+
+/* Titre du produit : Noir, gras, sans empattement */
+.asosTitle .sapMText, .asosTitle {
+    font-weight: 700 !important;
+    color: #2d2d2d !important;
+    font-size: 1.1rem !important;
+    text-transform: uppercase;
+}
+
+/* Sous-titre gris */
+.asosSubtitle {
+    color: #666666 !important;
+    font-size: 0.9rem !important;
+}
+
+/* Prix : Très visible */
+.asosPrice .sapMText, .asosPrice {
+    font-weight: 800 !important;
+    color: #2d2d2d !important;
+}
+
+/* Box de résumé à droite */
+.asosSummaryBox {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border: 1px solid #eeeeee;
+}
+
+/* Bouton commander : Noir (Style ASOS classique) */
+.asosCheckoutButton {
+    height: 50px !important;
+    background-color: #018849 !important; /* Vert ASOS pour valider */
+    border: none !important;
+}
+
+.asosCheckoutButton .sapMBtnInner {
+    background-color: #018849 !important;
+    color: white !important;
+    border-radius: 0 !important; /* Bouton carré */
+    font-weight: bold !important;
+}
+
+/* Séparateur discret */
+.asosDivider {
+    border: 0;
+    border-top: 1px solid #dddddd;
+    margin: 10px 0;
+}
+
+
+/* ================================================
+   PANIER DROPDOWN - DESIGN PROFESSIONNEL & MODERNE
+   ================================================ */
+
+:root {
+    /* Colors */
+    --panier-bg: #ffffff;
+    --panier-border: #e8e8e8;
+    --panier-text: #1a1a1a;
+    --panier-text-secondary: #666666;
+    --panier-accent: #2c2c2c;
+    --panier-hover: #f5f5f5;
+    --panier-success: #4caf50;
+    --panier-danger: #f44336;
+    --panier-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --panier-shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+    
+    /* Typography */
+    --panier-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --panier-font-weight-regular: 400;
+    --panier-font-weight-medium: 500;
+    --panier-font-weight-bold: 600;
+    
+    /* Spacing */
+    --panier-spacing-xs: 4px;
+    --panier-spacing-sm: 8px;
+    --panier-spacing-md: 12px;
+    --panier-spacing-lg: 16px;
+    --panier-spacing-xl: 24px;
+    
+    /* Border Radius */
+    --panier-radius-sm: 4px;
+    --panier-radius-md: 8px;
+    --panier-radius-lg: 12px;
+    
+    /* Transitions */
+    --panier-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ================================================
+   CONTAINER & WRAPPER
+   ================================================ */
+
+.panierWrapper {
+    position: relative;
+    z-index: 100;
+}
+
+.panierHeader {
+    padding: var(--panier-spacing-md);
+    border-bottom: 1px solid var(--panier-border);
+}
+
+/* ================================================
+   TOGGLE BUTTON
+   ================================================ */
+
+.panierToggleBtn {
+    position: relative;
+    min-width: 140px !important;
+    border-radius: var(--panier-radius-md) !important;
+   
+    color: white !important;
+    font-weight: var(--panier-font-weight-bold) !important;
+    font-size: 0.9rem !important;
+   
+    border: none !important;
+    transition: var(--panier-transition);
+    box-shadow: var(--panier-shadow-light);
+}
+
+.panierToggleBtn:hover {
+    background-color: #000000 !important;
+    box-shadow: var(--panier-shadow);
+    transform: translateY(-2px);
+}
+
+.panierToggleBtn:active {
+    transform: translateY(0);
+}
+
+/* ================================================
+   DROPDOWN CONTAINER
+   ================================================ */
+
+.panierDropdown {
+    background-color: var(--panier-bg);
+    border: 1px solid var(--panier-border);
+    border-radius: var(--panier-radius-lg);
+    box-shadow: var(--panier-shadow);
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+    animation: slideDown 0.3s ease-out;
+    position: absolute !important;
+    right: 0;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================================
+   CART ITEMS LIST
+   ================================================ */
+/* Container principal avec position relative */
+
+.panierListContainer {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: var(--panier-spacing-lg);
+    border-bottom: 1px solid var(--panier-border);
+    min-height: 100px;
+    max-height: 400px;
+}
+
+/* Custom Scrollbar */
+.panierListContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.panierListContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.panierListContainer::-webkit-scrollbar-thumb {
+    background: var(--panier-border);
+    border-radius: var(--panier-radius-sm);
+    transition: background 0.3s ease;
+}
+
+.panierListContainer::-webkit-scrollbar-thumb:hover {
+    background: var(--panier-text-secondary);
+}
+
+.panierList {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.panierList .sapMListModeMultiSelect .sapMListItemBase {
+    padding: 0 !important;
+}
+
+/* ================================================
+   CART ITEM
+   ================================================ */
+
+.panierItemWrapper {
+    padding: var(--panier-spacing-lg) 0;
+    gap: var(--panier-spacing-lg);
+    transition: background-color 0.2s ease;
+}
+
+.panierItemWrapper:hover {
+    background-color: var(--panier-hover);
+    border-radius: var(--panier-radius-md);
+    padding: var(--panier-spacing-lg);
+}
+
+.panierItemHeader {
+    gap: var(--panier-spacing-lg);
+    width: 100%;
+    position: relative;
+}
+
+/* Product Image */
+.panierProductImage {
+    object-fit: cover;
+    border-radius: var(--panier-radius-md);
+    border: 1px solid var(--panier-border);
+    flex-shrink: 0;
+    transition: var(--panier-transition);
+}
+
+.panierProductImage:hover {
+    box-shadow: var(--panier-shadow-light);
+}
+
+/* Product Details */
+.panierItemDetails {
+    flex: 1;
+    min-width: 0;
+    gap: var(--panier-spacing-md);
+}
+
+.panierItemMeta {
+    gap: var(--panier-spacing-xs);
+}
+
+.panierItemName {
+    margin: 0 !important;
+    font-size: 0.95rem !important;
+    font-weight: var(--panier-font-weight-bold) !important;
+    color: var(--panier-text) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.panierItemCategory {
+    font-size: 0.8rem;
+    color: var(--panier-text-secondary);
+    font-weight: var(--panier-font-weight-regular);
+}
+
+.panierItemFooter {
+    gap: var(--panier-spacing-md);
+    margin-top: var(--panier-spacing-md);
+}
+
+.panierQtyText {
+    font-size: 0.85rem;
+    color: var(--panier-text-secondary);
+    font-weight: var(--panier-font-weight-medium);
+}
+
+.panierItemPrice {
+    margin: 0 !important;
+    font-size: 0.95rem !important;
+    font-weight: var(--panier-font-weight-bold) !important;
+    color: var(--panier-accent) !important;
+}
+
+/* Delete Button */
+.panierDeleteBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: var(--panier-danger) !important;
+    padding: 6px !important;
+    transition: var(--panier-transition);
+    opacity: 0.7;
+}
+
+.panierDeleteBtn:hover {
+    opacity: 1;
+    background-color: rgba(244, 67, 54, 0.1) !important;
+}
+
+/* ================================================
+   QUANTITY CONTROLS
+   ================================================ */
+
+.panierQuantityControls {
+    gap: var(--panier-spacing-sm);
+    align-items: center;
+    padding: var(--panier-spacing-md) 0;
+    width: 100%;
+}
+
+.panierQtyBtn {
+    color: var(--panier-text) !important;
+    border: 1px solid var(--panier-border) !important;
+    border-radius: var(--panier-radius-sm) !important;
+    padding: 6px 8px !important;
+    min-width: auto !important;
+    width: 36px !important;
+    height: 36px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: var(--panier-transition);
+    background-color: var(--panier-bg) !important;
+}
+
+.panierQtyBtn:hover {
+    background-color: var(--panier-hover) !important;
+    border-color: var(--panier-accent) !important;
+    color: var(--panier-accent) !important;
+}
+
+.panierQtyBtn:active {
+    transform: scale(0.95);
+}
+
+.panierQtyInput {
+    width: 50px !important;
+    text-align: center !important;
+    font-weight: var(--panier-font-weight-bold) !important;
+    border: 1px solid var(--panier-border) !important;
+    border-radius: var(--panier-radius-sm) !important;
+    padding: 8px 0 !important;
+    margin: 0 var(--panier-spacing-sm) !important;
+}
+
+.panierQtyInput .sapMInputBase {
+    border-radius: var(--panier-radius-sm) !important;
+}
+
+/* ================================================
+   DIVIDERS
+   ================================================ */
+
+.panierItemDivider {
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--panier-border) 50%, 
+        transparent 100%);
+    margin: var(--panier-spacing-lg) 0;
+    opacity: 0.5;
+}
+
+.panierSummaryDivider {
+    height: 1px;
+    background: var(--panier-border);
+    margin: var(--panier-spacing-lg) 0;
+}
+
+/* ================================================
+   SUMMARY SECTION
+   ================================================ */
+
+.panierSummaryBox {
+    padding: var(--panier-spacing-xl);
+    background: linear-gradient(135deg, 
+        var(--panier-bg) 0%, 
+        rgba(0, 0, 0, 0.02) 100%);
+    gap: var(--panier-spacing-md);
+    border-top: 1px solid var(--panier-border);
+}
+
+.panierSummaryRow {
+    gap: var(--panier-spacing-md);
+}
+
+.panierSummaryLabel {
+    font-size: 0.9rem;
+    color: var(--panier-text-secondary);
+    font-weight: var(--panier-font-weight-medium);
+}
+
+.panierSummaryValue {
+    font-size: 0.9rem;
+    font-weight: var(--panier-font-weight-bold);
+    color: var(--panier-text);
+}
+
+.panierShippingStatus {
+    font-size: 0.85rem !important;
+    font-weight: var(--panier-font-weight-bold) !important;
+    color: var(--panier-success) !important;
+}
+
+/* Total Row */
+.panierTotalRow {
+    gap: var(--panier-spacing-lg);
+    padding: var(--panier-spacing-md) 0;
+}
+
+.panierTotalLabel {
+    margin: 0 !important;
+    font-size: 1rem !important;
+    font-weight: var(--panier-font-weight-bold) !important;
+    color: var(--panier-text) !important;
+}
+
+.panierTotalValue {
+    margin: 0 !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    color: var(--panier-accent) !important;
+    letter-spacing: -0.5px;
+}
+
+/* ================================================
+   CHECKOUT BUTTON
+   ================================================ */
+
+.panierCheckoutBtn {
+    /*background: linear-gradient(135deg, var(--panier-accent) 0%, #000000 100%) !important;*/
+    color: white !important;
+    font-weight: var(--panier-font-weight-bold) !important;
+    font-size: 0.95rem !important;
+    border: none !important;
+    border-radius: var(--panier-radius-md) !important;
+    padding: 12px 24px !important;
+    margin-top: var(--panier-spacing-lg) !important;
+    transition: var(--panier-transition);
+    box-shadow: var(--panier-shadow-light);
+    cursor: pointer;
+}
+
+.panierCheckoutBtn:hover {
+    box-shadow: var(--panier-shadow);
+    transform: translateY(-2px);
+}
+
+.panierCheckoutBtn:active {
+    transform: translateY(0);
+}
+
+/* ================================================
+   SECURITY BADGE
+   ================================================ */
+
+.panierSecurityBadge {
+    gap: var(--panier-spacing-sm);
+    margin-top: var(--panier-spacing-lg);
+    padding-top: var(--panier-spacing-lg);
+    border-top: 1px solid var(--panier-border);
+    justify-content: center;
+}
+
+.panierSecurityIcon {
+    color: var(--panier-success);
+    font-size: 1rem;
+}
+
+.panierSecurityText {
+    font-size: 0.8rem;
+    color: var(--panier-text-secondary);
+    font-weight: var(--panier-font-weight-medium);
+}
+
+/* ================================================
+   RESPONSIVE DESIGN
+   ================================================ */
+
+/* TABLET - Medium screens (600px - 1023px) */
+@media (max-width: 1023px) {
+    .panierDropdown {
+        max-height: 500px;
+    }
+
+    .panierListContainer {
+        max-height: 350px;
+        padding: var(--panier-spacing-md);
+    }
+
+    .panierProductImage {
+        width: 80px !important;
+        height: 100px !important;
+    }
+
+    .panierItemName {
+        font-size: 0.9rem !important;
+    }
+
+    .panierSummaryBox {
+        padding: var(--panier-spacing-lg);
+    }
+
+    .panierTotalValue {
+        font-size: 1.1rem !important;
+    }
+}
+
+/* MOBILE - Small screens (max 599px) */
+@media (max-width: 599px) {
+    .panierWrapper {
+        width: 100%;
+        padding: 0;
+    }
+
+    .panierHeader {
+        padding: var(--panier-spacing-md);
+    }
+
+    .panierToggleBtn {
+        width: 100% !important;
+        min-width: unset !important;
+        font-size: 0.85rem !important;
+    }
+
+    .panierDropdown {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        max-height: 80vh;
+        border-radius: var(--panier-radius-lg) var(--panier-radius-lg) 0 0;
+        z-index: 1000;
+    }
+
+    .panierListContainer {
+        max-height: 50vh;
+        padding: var(--panier-spacing-md);
+    }
+
+    .panierItemHeader {
+        flex-wrap: wrap;
+    }
+
+    .panierProductImage {
+        width: 70px !important;
+        height: 90px !important;
+    }
+
+    .panierItemDetails {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .panierItemName {
+        font-size: 0.85rem !important;
+    }
+
+    .panierItemFooter {
+        width: 100%;
+        margin-top: var(--panier-spacing-sm);
+    }
+
+    .panierQtyText {
+        font-size: 0.75rem;
+    }
+
+    .panierItemPrice {
+        font-size: 0.9rem !important;
+    }
+
+    .panierDeleteBtn {
+        position: static;
+        margin-left: auto;
+    }
+
+    .panierDropdown {
+        position: absolute;
+    
+        z-index: 101;
+        
+   }
+    .panierQuantityControls {
+        padding: var(--panier-spacing-md) 0;
+    }
+
+    .panierSummaryBox {
+        padding: var(--panier-spacing-lg) var(--panier-spacing-md);
+    }
+
+    .panierTotalRow {
+        flex-direction: column;
+        gap: var(--panier-spacing-sm);
+    }
+
+    .panierTotalValue {
+        font-size: 1.1rem !important;
+        width: 100%;
+        text-align: right;
+    }
+
+    .panierCheckoutBtn {
+        padding: 14px 16px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* ================================================
+   ACCESSIBILITY & INTERACTIONS
+   ================================================ */
+
+/* Focus states for keyboard navigation */
+.panierToggleBtn:focus,
+.panierQtyBtn:focus,
+.panierCheckoutBtn:focus {
+    outline: 2px solid var(--panier-accent);
+    outline-offset: 2px;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .panierToggleBtn,
+    .panierQtyBtn,
+    .panierCheckoutBtn,
+    .panierProductImage,
+    .panierDropdown {
+        transition: none !important;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --panier-bg: #1e1e1e;
+        --panier-border: #333333;
+        --panier-text: #ffffff;
+        --panier-text-secondary: #b0b0b0;
+        --panier-accent: #ffffff;
+        --panier-hover: #2a2a2a;
+    }
+
+    .panierProductImage {
+        border-color: var(--panier-border);
+    }
+
+    .panierSummaryBox {
+        background: linear-gradient(135deg, 
+            #1e1e1e 0%, 
+            rgba(255, 255, 255, 0.05) 100%);
+    }
+}
+
+/* ================================================
+   PRINT STYLES
+   ================================================ */
+
+@media print {
+    .panierToggleBtn,
+    .panierDropdown {
+        display: none;
+    }
+}
+
+
+
+/* Masque totalement le header généré par la Page SAPUI5 */
+.sapMPageHeader {
+    display: none !important;
+    height: 0 !important;
+}
+
+/* S'assure que la section de contenu remonte tout en haut */
+.sapMPageContent {
+    top: 0 !important;
+}
+
+/* Pour cibler précisément votre vue Main */
+[id*="Main--page-intHeader"] {
+    display: none !important;
+}
+
+/******************************************NAVBARFRAGMENT***************************************************************************************************************************************************************************/
+
+.navHeader {
+    background-color: #000000 !important;
+    border-bottom: 1px solid #1a1a1a;
+    padding: 0 2rem;
+     height: 5.5rem !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+        
+       
+
+/* Logo icon — vert */
+.navLogoIcon {
+    font-size: 1.8rem;
+    color: #00c853 !important;
+    margin-right: 0.4rem;
+    
+}
+
+/* App title — blanc */
+.navAppTitle  {
+    color: white !important;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    text-decoration: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 500;
+}
+
+/* Nav links — blanc + hover vert  navLinkBtn.sapMBtn:hover > .sapMBtnInner  navLinkBtn.sapMBtn > .sapMBtnInner  */
+.navLinkBtn.sapMBtn > .sapMBtnInner {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    border: none !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+.navLinkBtn.sapMBtn:hover > .sapMBtnInner {
+    color: #00c853 !important;
+    background-color: transparent !important;
+}
+
+/* Ghost button Sign Up — blanc + hover vert */
+.navGhostBtn.sapMBtn > .sapMBtnInner {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    font-size: 0.875rem;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+.navGhostBtn.sapMBtn:hover > .sapMBtnInner {
+    color: #00c853 !important;
+    border-color: #00c853 !important;
+    background-color: transparent !important;
+}
+
+/* Primary button Login — blanc + hover vert */
+.navPrimaryBtn.sapMBtn > .sapMBtnInner {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-radius: 0.5rem;
+    padding: 0 1rem;
+    border: none !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.navPrimaryBtn.sapMBtn:hover > .sapMBtnInner {
+    background-color: #00c853 !important;
+    color: #ffffff !important;
+}
+
+/* Cart button — blanc, pas de hover vert */
+.navCartBtn.sapMBtn > .sapMBtnInner {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+.navCartBtn.sapMBtn > .sapMBtnInner .sapMBtnIcon,
+.navCartBtn.sapMBtn > .sapMBtnInner .sapMBtnText {
+    color: #ffffff !important;
+}
+
+/* Hamburger — blanc + hover vert .sapMBtnTransparent > .sapMBtnIcon {
+    color: var(--sapButton_Lite_TextColor);
+} */
+
+html body .navHamburgerBtn .sapMBtnIcon {
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+html body .navHamburgerBtn .sapMBtnIcon:hover {
+    color: #00c853 !important;
+    background-color: transparent !important;
+}
+/*
+.navHamburgerBtn.sapMBtnTransparent > .sapMBtnIcon {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    border: none !important;
+    transition: color 0.2s ease;
+}
+   
+.navHamburgerBtn.sapMBtn:hover > .sapMBtnInner {
+    color: #00c853 !important;
+}
+     */
+
+/*********************************** body productGrid**********************************************************************************************************
+
+/* Grille responsive qui occupe toujours toute la largeur */
+.productGrid {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.productGrid .sapMFlexItem {
+    /*
+    flex: 1 1 calc(25% - 1.5rem);
+    min-width: 220px;
+    max-width: calc(25% - 1.5rem);
+    margin: 0.75rem;
+    box-sizing: border-box;*/
+}
+
+ 
+@media (max-width: 1024px) {
+    .card{
+        flex: 1 1 calc(50% - 1.5rem);
+        max-width: calc(50% - 1.5rem);
+    }
+}
+
+/* Mobile : 1 colonne pleine largeur */
+@media (max-width: 600px) {
+    .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin: 0.75rem 0;
+    }
+
+    .productGrid {
+        margin: 0 !important;
+    }
+}
+
+/***********************************+footer**************************************************************************************************************/
+
+
+.appFooter {
+    width: 100%;
+    padding: 1rem 2rem;
+    background-color: #181717;
+    border-top: 1px solid #e0e0e0;
+    box-sizing: border-box;
+    position:sticky;
+    bottom: 0;
+}
+
+.footerText {
+    color: #f3e9e9;
+    font-size: 0.85rem;
+}
+
+.footerLink {
+    color: #e9e3e3 !important;
+    font-size: 0.85rem;
+}
+
+.footerSeparator {
+    color: #ccc;
+    margin: 0 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .appFooter {
+        flex-direction: column !important;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 1rem;
+    }
+}

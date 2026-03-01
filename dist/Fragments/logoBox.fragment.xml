@@ -1,0 +1,22 @@
+
+<core:FragmentDefinition
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+
+  <FlexBox id="logoNameContainer" class="logoContainer"  direction="Row">
+    
+    <VBox id="logo" class="logoBox" >
+     <core:Icon
+          id="iconid"
+          src="sap-icon://product"
+          class="LogoIcon"/>
+    </VBox>
+
+    <Title id="companyname"
+      text="StockManagement"
+      level="H1"
+      class="appTitle" />
+
+</FlexBox>
+
+</core:FragmentDefinition>

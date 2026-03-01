@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class t{constructor(t){this.productRepo=t}async getAllProducts(){return this.productRepo.findAll()}}var r={__esModule:true};r.ProductService=t;return r});
+//# sourceMappingURL=ProductService.js.map

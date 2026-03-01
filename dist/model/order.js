@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class t{constructor(t){this.OrderUuid=t.OrderUuid;this.OrderId=t.OrderId;this.CustomerId=t.CustomerId;this.TotalAmount=t.TotalAmount;this.Currency=t.Currency;this.Status=t.Status;this.TotalAmount=t.TotalAmount}}var r={__esModule:true};r.Order=t;return r});
+//# sourceMappingURL=order.js.map

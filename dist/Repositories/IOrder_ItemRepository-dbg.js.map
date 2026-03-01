@@ -1,0 +1,1 @@
+{"version":3,"file":"IOrder_ItemRepository-dbg.js","names":[],"sources":["IOrder_ItemRepository.ts"],"sourcesContent":["import { OrderItem } from \"../model/Order_items\";\r\n\r\nexport interface IOrderItemRepo{\r\n   saveOrderItem(orderItems: OrderItem,orderUuid: string): Promise<OrderItem>;\r\n   findAll(): Promise<OrderItem[]>;    \r\n}"],"mappings":"","ignoreList":[]}

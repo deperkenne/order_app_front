@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class r extends Error{constructor(r,e){super(r);this.statusCode=e}}var e={__esModule:true};e.ODataRequestError=r;return e});
+//# sourceMappingURL=oDataRequestError.js.map

@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class e{getOrderItem(e){return localStorage.getItem(e)}setOrderItem(e,r){try{localStorage.setItem(e,r)}catch(e){console.error("Erreur sauvegarde cart:",e)}}clearOrderItem(e){localStorage.removeItem(e)}}var r={__esModule:true};r.OrderItemStorage=e;return r});
+//# sourceMappingURL=Order_ItemStrorage_impl.js.map
