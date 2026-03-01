@@ -1,0 +1,10 @@
+<mvc:View
+    controllerName="comkenneorderappcontroller.DashboardAdmin"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+     xmlns:core="sap.ui.core">
+    
+    <Page title="Gestion de Stock - Entrepôt Central" id = "Dadmin" >
+        <Text id="Dmytext" text="Une description ici"/>
+    </Page>
+</mvc:View>

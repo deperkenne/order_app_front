@@ -1,0 +1,99 @@
+_schema-version: "3.1"
+ID: com-kenne-orderapp
+version: 1.0.0
+description: Order Management App
+
+modules:
+  # ── UI5 App ──────────────────────────────────────────
+  - name: com-kenne-orderapp-app
+    type: html5
+    path: .
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - npm run build:cf
+      supported-platforms: []
+
+  # ── App Deployer ────────────────────────────────────
+  - name: com-kenne-orderapp-app-deployer
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: com-kenne-orderapp-html5-repo-host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - name: com-kenne-orderapp-app
+          artifacts:
+            - com-kenne-orderapp.zip
+          target-path: resources/
+
+  # ── Destination Content ─────────────────────────────
+  - name: com-kenne-orderapp-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: com-kenne-orderapp-destination-service
+        parameters:
+          content-target: true
+      - name: com-kenne-orderapp-html5-repo-host
+        parameters:
+          service-key:
+            name: com-kenne-orderapp-html5-repo-host-key
+      - name: com-kenne-orderapp-xsuaa
+        parameters:
+          service-key:
+            name: com-kenne-orderapp-xsuaa-key
+    parameters:
+      content:
+        instance:                        # ✅ instance pas subaccount
+          destinations:
+            # ── HTML5 Repo Host ────────────────────────
+            - Name: com_kenne_orderapp_html5_repo
+              ServiceInstanceName: com-kenne-orderapp-html5-repo-host
+              ServiceKeyName: com-kenne-orderapp-html5-repo-host-key
+              sap.cloud.service: com.kenne.orderapp  # ✅ avec points
+
+            # ── XSUAA ──────────────────────────────────
+            - Name: com_kenne_orderapp_uaa
+              Authentication: OAuth2UserTokenExchange
+              ServiceInstanceName: com-kenne-orderapp-xsuaa
+              ServiceKeyName: com-kenne-orderapp-xsuaa-key
+            # ── Backend ABAP ───────────────────────────
+          existing_destinations_policy: update
+    build-parameters:
+      no-source: true
+resources:
+  # ── XSUAA ───────────────────────────────────────────
+  - name: com-kenne-orderapp-xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        xsappname: com-kenne-orderapp
+        tenant-mode: dedicated
+
+  # ── HTML5 Repo Host ─────────────────────────────────
+  - name: com-kenne-orderapp-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: com-kenne-orderapp-html5-repo-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+  # ── Destination Service ─────────────────────────────
+  - name: com-kenne-orderapp-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+      config:
+        HTML5Runtime_enabled: true

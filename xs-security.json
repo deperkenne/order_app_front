@@ -1,0 +1,27 @@
+{
+  "xsappname": "com-kenne-orderapp",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    { "name": "$XSAPPNAME.admin" },
+    { "name": "$XSAPPNAME.customer" }
+  ],
+  "role-templates": [
+    { "name": "Admin", "scope-references": ["$XSAPPNAME.admin"] },
+    { "name": "Customer", "scope-references": ["$XSAPPNAME.customer"] }
+  ],
+  "role-collections": [
+    {
+      "name": "com-kenne-OrderApp-Admin",
+      "role-template-references": ["$XSAPPNAME.Admin"]
+    },
+    {
+      "name": "com-kenne-OrderApp-Customer",
+      "role-template-references": ["$XSAPPNAME.Customer"]
+    }
+  ],
+  "oauth2-configuration": {
+    "token-validity": 3600,
+    "refresh-token-validity": 2592000,
+    "credential-types": ["binding-secret", "x509"]
+  }  
+}

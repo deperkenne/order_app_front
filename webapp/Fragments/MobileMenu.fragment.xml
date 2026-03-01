@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Popover
+        id="oMobileMenu1"
+        title="Menu"
+        placement="Bottom"
+        showHeader="true">
+        
+
+        <content>
+            <List id="listId">
+                <StandardListItem
+                    id="btnMenuSolution1"
+                    title="Solution"
+                    icon="sap-icon://lightbulb"
+                    type="Navigation"
+                    press=".onSolutionPress" />
+
+                <StandardListItem
+                    id="btnMenuResource1"
+                    title="Resource"
+                    icon="sap-icon://attachment"
+                    type="Navigation"
+                    press=".onResourcePress" />
+
+                <StandardListItem
+                    id="btnMenuResource2"
+                    title="Entreprise"
+                    icon="sap-icon://building"
+                    type="Navigation"
+                    press=".onEntreprisePress" />
+
+                <StandardListItem
+                    id="btnMenuEntreprise1"
+                    title="Sign Up"
+                    icon="sap-icon://add-contact"
+                    type="Navigation"
+                    press=".onSignUpPress" />
+
+                <StandardListItem
+                    id="btnMenuLogin1"
+                    title="Login"
+                    icon="sap-icon://log"
+                    type="Navigation"
+                    press=".onLoginPress" />
+            </List>
+        </content>
+
+    </Popover>
+
+</core:FragmentDefinition>

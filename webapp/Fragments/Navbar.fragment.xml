@@ -1,0 +1,99 @@
+<core:FragmentDefinition id="navfragment" xmlns="sap.m" xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+
+    <!-- ===== DESKTOP NAVBAR ===== -->
+    <OverflowToolbar id="desktopNav" class="navHeader sapUiHideOnPhone sapUiMediumMarginBottom" >
+        <!-- LEFT: Logo + Title -->
+        <core:Icon
+            id="navIcon"
+            src="sap-icon://product"
+            tooltip="Logo StockManagement"
+            class="navLogoIcon" />
+        <Title
+            id="navTitle"
+            text="StockManagement"
+            level="H5"
+            class="navAppTitle" />
+        <ToolbarSpacer id="navspace1" />
+        <!-- MIDDLE: Navigation Links -->
+        <Button id="navBtn1"   text="Solution"   type="Transparent" press="onSolutionPress"   class="navLinkBtn" />
+        <Button id="navBtn2"   text="Resource"   type="Transparent" press="onResourcePress"   class="navLinkBtn" />
+        <Button id="navBtn3" text="Entreprise" type="Transparent" press="onEntreprisePress" class="navLinkBtn" />
+        <ToolbarSpacer  id="navspace2" />
+        
+        <!-- Icônes -->
+        <Button
+            id="searchBtn"
+            icon="sap-icon://search"
+            type="Transparent"
+            press=".onSearchPress"
+            class="navCartBtn" />
+
+        <Button
+            id="profileBtn"
+            icon="sap-icon://person-placeholder"
+            type="Transparent"
+            press=".onProfilePress"
+             class="navCartBtn" />
+
+        <Button
+            id="wishlistBtn"
+            icon="sap-icon://unfavorite"
+            type="Transparent"
+            press="onLoginPress"
+            class="navCartBtn" />
+        <Button
+            id="navAddCart"
+            icon="sap-icon://cart"
+            text="{products>/countSelectedProduct}"
+            type="Transparent"
+            press=".toggleDisplay"
+            class="navCartBtn" />
+
+    </OverflowToolbar>
+
+    <!-- ===== MOBILE NAVBAR ===== -->
+    <OverflowToolbar id="mobileNavBar" class="navHeader sapUiHideOnDesktop sapUiHideOnTablet sapUiMediumMarginBottom">
+        <!-- Logo -->
+        <core:Icon id="navMobileIcon" src="sap-icon://product" class="navLogoIcon" />
+        <Title id="navMobileTitle" text="StockManagement" level="H5" class="navAppTitle" />
+        <ToolbarSpacer id="navspace3" />
+        <!-- Cart -->
+        <!-- Icônes -->
+        <Button
+            id="searchBtnM"
+            icon="sap-icon://search"
+            type="Transparent"
+            press=".onSearchPress"
+            class="navCartBtn" />
+
+        <Button
+            id="profileBtnM"
+            icon="sap-icon://person-placeholder"
+            type="Transparent"
+            press=".onProfilePress"
+            class="navCartBtn" />
+
+        <Button
+            id="wishlistBtnM"
+            icon="sap-icon://favorite"
+            type="Transparent"
+            press=".onWishlistPress"
+            class="navCartBtn" />
+        <Button
+            id="navAddCartM"
+            icon="sap-icon://cart"
+            text="{products>/countSelectedProduct}"
+            type="Transparent"
+            press=".toggleDisplay"
+            class="navCartBtn" />
+        <!-- Hamburger -->
+        <Button
+            id="mobilehamburgerBtnM"
+            icon="sap-icon://menu2"
+            type="Transparent"
+            press=".onHamburgerPress"
+            class="navHamburgerBtn" />
+    </OverflowToolbar>
+
+</core:FragmentDefinition>
