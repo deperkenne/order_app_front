@@ -9,7 +9,7 @@ on:
       - main
   workflow_dispatch:
 
-jobs:          
+jobs:
   docker:
     name: Containerization
     runs-on: ubuntu-latest
