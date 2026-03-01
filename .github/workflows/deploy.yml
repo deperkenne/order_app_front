@@ -29,8 +29,8 @@ jobs:
           push: true
           tags: kennetchofo/order_app:${{ github.sha }}
           build-args: |
-                VITE_APP_GOOGLE_CLIENT_ID=${{ vars.VITE_APP_GOOGLE_CLIENT_ID }}
-
+              VITE_APP_GOOGLE_CLIENT_ID=${{ vars.VITE_APP_GOOGLE_CLIENT_ID }}
+               
       - name: Docker Image Test
         run: |
           echo " Images construites :"
