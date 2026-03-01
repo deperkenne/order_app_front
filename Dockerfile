@@ -10,7 +10,9 @@ RUN npm install
 # Copier le code source
 COPY . .
 
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+RUN echo "📦 Installation des dépendances..."
+
+ENV NODE_OPTIONS="--max-old-space-size=4096 --stack-size=65536"
 
 # Build de production
 RUN npm run build
