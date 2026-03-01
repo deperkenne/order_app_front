@@ -12,7 +12,10 @@ COPY . .
 
 RUN echo "📦 Installation des dépendances..."
 
-ENV NODE_OPTIONS="--max-old-space-size=4096 --stack-size=65536"
+RUN node --stack-size=65536 node_modules/@ui5/cli/bin/ui5.js build \
+    --config=ui5.yaml \
+    --clean-dest \
+    --dest dist
 
 # Build de production
 RUN npm run build
