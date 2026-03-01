@@ -12,7 +12,7 @@ COPY . .
 
 RUN echo "📦 Installation des dépendances..."
 
-RUN node --stack-size=65536 node_modules/@ui5/cli/bin/ui5.js build \
+RUN node --stack-size=65536 node_modules/.bin/ui5 build \
     --config=ui5.yaml \
     --clean-dest \
     --dest dist
