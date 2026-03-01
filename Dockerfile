@@ -1,5 +1,5 @@
 # Étape 1 : Build de l'app UI5
-FROM node:18-alpine AS builder
+FROM node:22.0 AS builder
 
 WORKDIR /app
 
