@@ -1,5 +1,5 @@
 <mvc:View
-    controllerName="comkenneorderappcontroller.DashboardAdmin"
+    controllerName="comkenneorderapp.controller.DashboardAdmin"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
      xmlns:core="sap.ui.core">

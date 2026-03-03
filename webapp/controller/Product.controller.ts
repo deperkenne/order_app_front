@@ -30,6 +30,8 @@ import Popover from "sap/m/Popover";
 import Button from "sap/m/Button";
 import Event from "sap/ui/base/Event";
 import UIComponent from "sap/ui/core/UIComponent";
+import { ProductStorageHelper } from "../Helpers/ProductStorageHelper";
+import { CartStorageHelper } from "../Helpers/CartStorageHelper";
 
 export default class ProductsController extends Controller {
     private orderService : OrderService
@@ -69,7 +71,7 @@ export default class ProductsController extends Controller {
             this.orderBatchService = new BatchService(this.oODataModel, this._oDataRequestErrorHelper);
             this.iOrderItemStorageRepo = new OrderItemStorage();
             this.batchServicep = createBatchService(this.oODataModel, this._oDataRequestErrorHelper);
-             this._bExpanded = false;
+            this._bExpanded = false;
             //this.iOrderItemStorageRepo.clearOrderItem("myCart")
             //this.iOrderItemStorageRepo.clearOrderItem("myCount")
             //this.iOrderItemStorageRepo.clearOrderItem("myTotal")
@@ -192,9 +194,9 @@ export default class ProductsController extends Controller {
             )
 
             this.handleAuthCallback();  
-            this.getCartItemsFromMemory();
-            this.initializeOrder();
-            this.loadAndInitialize() ;  
+            this.setCartModelFromMemory(oModel);
+            this.initializeOrder(); // create order
+            this.setProductsWithFallback(oModel);  
                   // ici parceque l'app vas redemarer grace a la redirection 
     }
     
@@ -308,8 +310,7 @@ private async exchangeCodeForToken(code: string): Promise<void> {
     } catch (error) {
         console.error("Erreur lors de l'échange du token", error);
     }
-}
-
+    }
 
     public navigateToAdmin(): void{
         console.log("start navigation.....")
@@ -318,8 +319,26 @@ private async exchangeCodeForToken(code: string): Promise<void> {
 
     }
     
-    private getProductFromMemory(): void{
-        const oModel = this.getView()?.getModel("products") as JSONModel;
+    private setProductModelFromMemory(oModel: JSONModel): void {
+        const products = ProductStorageHelper.resolveProductsFromStorage(this.iOrderItemStorageRepo);
+        oModel.setProperty("/products", products);
+    }
+
+
+    private setCartModelFromMemory(oModel: JSONModel): void {
+        const { items, totalAmount, count } = CartStorageHelper.resolveCartFromStorage(
+            this.iOrderItemStorageRepo
+        );
+
+        oModel.setProperty("/filteredItems", items);
+        oModel.setProperty("/totalAmount", totalAmount.toFixed(2));
+        oModel.setProperty("/countSelectedProduct", count);
+    }
+
+    /*
+    
+    private getProductFromMemory(oModel:any): void{
+        //const oModel = this.getView()?.getModel("products") as JSONModel;
         let sProduct = this.iOrderItemStorageRepo.getOrderItem("myProducts");
         let mProduct: any[] = [];
          if((typeof sProduct  === "string")){
@@ -346,12 +365,14 @@ private async exchangeCodeForToken(code: string): Promise<void> {
         }
         
         oModel.setProperty("/products", mProduct);
-    
-
     }
+   
+    */
 
-    private getCartItemsFromMemory(): void{
-        const oModel = this.getView()?.getModel("products") as JSONModel;
+
+    /*
+   
+    private getCartItemsFromMemory(oModel: JSONModel): void{
         let sCart = this.iOrderItemStorageRepo.getOrderItem("myCart");
         const sTotalAmount = this.iOrderItemStorageRepo.getOrderItem("myTotal");
         const sCountCart = this.iOrderItemStorageRepo.getOrderItem("myCount");
@@ -410,18 +431,20 @@ private async exchangeCodeForToken(code: string): Promise<void> {
         oModel.setProperty("/totalAmount",nTotalAmount.toFixed(2));
         oModel.setProperty("/countSelectedProduct",nCount);
     }
+    */
 
+    // this methode make many thing it need refactory
     private async  initializeOrder(): Promise<void> {
         this.iorderStorage = new OrderStorageImpl();
         this.OrderUuid = this.iorderStorage.getOrderUuid() || '';
-
+        
+        // verify order in localstorage
         if (this.OrderUuid) {
            console.log('Commande existante:', this.OrderUuid);
            return;
 
         }
-
-                     
+            
         this.iorderRepo = new OrderImpl(this.oODataModel, this._oDataRequestErrorHelper);
         this.orderService  = new OrderService (this.iorderRepo,this.iorderStorage);
 
@@ -439,38 +462,37 @@ private async exchangeCodeForToken(code: string): Promise<void> {
     }
    
 
-    private async loadAndInitialize():Promise<void> {
+    private async setProductsWithFallback(oModel:JSONModel):Promise<void> {
         const sProducts = this.iOrderItemStorageRepo.getOrderItem("myProducts");
 
         if (!sProducts || sProducts === "null" || sProducts === "undefined" || sProducts.trim() === "") {
             try {
                 // load data from backend
-                await this.getProducts();
-                
+                const dProduct =  await this.getProductFromDb();
+                const sProducts = JSON.stringify(dProduct);
+                this.iOrderItemStorageRepo.setOrderItem("myProducts",sProducts)
+                    
                 //  RÉCUPÉRER le modèle d'abord
-                const oModel = this.getView()?.getModel("products") as JSONModel;
+                // const oModel = this.getView()?.getModel("products") as JSONModel;
 
                 // On met à jour le modèle existant
                 oModel.setProperty("/products", this.products);
-                
-                console.log('Modèles créés avec', this.products[0].Price, 'produits');
                 console.log('Modèles créés avec', this.products);
             } catch (error) {
                 console.error('Erreur initialisation:', error);
             }
         }else{
-              this.getProductFromMemory();
+              this.setProductModelFromMemory(oModel);
         }
     }
     
-    private async getProducts(): Promise<void>{
+    private async getProductFromDb(): Promise<Zproduct[]>{
         try {
     
             const db_products = await this.productService.getAllProducts();
-
+            
             if (!db_products) {
                 this.products = [];
-                return;
             }
 
             this.products = db_products.map((product: Zproduct, index: number) => {
@@ -478,10 +500,9 @@ private async exchangeCodeForToken(code: string): Promise<void> {
             return product;
             });
             
-            const sProducts = JSON.stringify(this.products);
-            this.iOrderItemStorageRepo.setOrderItem("myProducts",sProducts)
-            
-            console.log('Produits chargés:', this.products.length);
+            return this.products
+            //const sProducts = JSON.stringify(this.products);
+            //this.iOrderItemStorageRepo.setOrderItem("myProducts",sProducts)
         } catch (error) {
             console.error('Erreur:', error);
             throw error;  
