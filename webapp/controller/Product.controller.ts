@@ -32,6 +32,8 @@ import Event from "sap/ui/base/Event";
 import UIComponent from "sap/ui/core/UIComponent";
 import { ProductStorageHelper } from "../Helpers/ProductStorageHelper";
 import { CartStorageHelper } from "../Helpers/CartStorageHelper";
+import { CreateOrderDependencies } from "../Helpers/CreateOrderDependencies";
+import { OrderStorageHelper } from "../Helpers/OrderStorageHelper";
 
 export default class ProductsController extends Controller {
     private orderService : OrderService
@@ -71,13 +73,22 @@ export default class ProductsController extends Controller {
             this.orderBatchService = new BatchService(this.oODataModel, this._oDataRequestErrorHelper);
             this.iOrderItemStorageRepo = new OrderItemStorage();
             this.batchServicep = createBatchService(this.oODataModel, this._oDataRequestErrorHelper);
+            CreateOrderDependencies.initializeOrderDependencies(
+                this.oODataModel, 
+                this._oDataRequestErrorHelper,
+                this.iorderRepo,
+                this.iorderStorage,
+                this.orderService
+            )    
+            
             this._bExpanded = false;
             //this.iOrderItemStorageRepo.clearOrderItem("myCart")
             //this.iOrderItemStorageRepo.clearOrderItem("myCount")
             //this.iOrderItemStorageRepo.clearOrderItem("myTotal")
             //this.iOrderItemStorageRepo.clearOrderItem("myProducts")
+             
             
- 
+            
             const oModelUi  = new JSONModel({
                 isCartVisible: false 
 
@@ -195,7 +206,8 @@ export default class ProductsController extends Controller {
 
             this.handleAuthCallback();  
             this.setCartModelFromMemory(oModel);
-            this.initializeOrder(); // create order
+            this.saveOrder();
+            //this.initializeOrder(); // create order
             this.setProductsWithFallback(oModel);  
                   // ici parceque l'app vas redemarer grace a la redirection 
     }
@@ -253,9 +265,9 @@ public async onLoginPress(): Promise<void> {
         + `&redirect_uri=${encodeURIComponent(sRedirectUri)}`
         + `&scope=openid%20profile%20email`
         + `&code_challenge=${sChallenge}`
-        + `&code_challenge_method=S256`;
-         
+        + `&code_challenge_method=S256`;     
 }
+
 
 // PARTIE 3 : Échanger le code
 private async exchangeCodeForToken(code: string): Promise<void> {
@@ -433,6 +445,26 @@ private async exchangeCodeForToken(code: string): Promise<void> {
     }
     */
 
+    private async saveOrder(): Promise<void> {
+
+        if(OrderStorageHelper.hasExistingOrder(this.iorderStorage)){
+           console.log('Commande existante:', this.OrderUuid);
+           return;
+        }
+
+         const newOrder: IOrder = {
+            "OrderId": "2026003",
+            "CustomerId": "0000000014",
+            "TotalAmount": 0,
+            "Currency": "EUR",
+            "Status": "PENDING"
+        };
+
+        const response = await this.orderService.saveOrder(newOrder) ;
+
+    }
+    
+    /** 
     // this methode make many thing it need refactory
     private async  initializeOrder(): Promise<void> {
         this.iorderStorage = new OrderStorageImpl();
@@ -445,8 +477,8 @@ private async exchangeCodeForToken(code: string): Promise<void> {
 
         }
             
-        this.iorderRepo = new OrderImpl(this.oODataModel, this._oDataRequestErrorHelper);
-        this.orderService  = new OrderService (this.iorderRepo,this.iorderStorage);
+        //this.iorderRepo = new OrderImpl(this.oODataModel, this._oDataRequestErrorHelper);
+        //this.orderService  = new OrderService (this.iorderRepo,this.iorderStorage);
 
         const newOrder: IOrder = {
             "OrderId": "2026003",
@@ -460,7 +492,7 @@ private async exchangeCodeForToken(code: string): Promise<void> {
         console.log("new order value", response)
 
     }
-   
+   */
 
     private async setProductsWithFallback(oModel:JSONModel):Promise<void> {
         const sProducts = this.iOrderItemStorageRepo.getOrderItem("myProducts");
@@ -516,28 +548,15 @@ private async exchangeCodeForToken(code: string): Promise<void> {
         const oContext = oButton.getBindingContext("products"); // products is given model name
         const oCartItem = oContext.getObject() as ICartItem;
        
-
-         /**
-        this.cartService = new CartService(
-            oModel,
-            oDataModel,
-            this.iOrderItemStorageRepo,
-            this.iorderStorage,
-            this.orderBatchService,
-            this.batchServicep
-        );
-         */
-       
         if(oCartItem){
-          // this.cartService.deleteToCart(oProduct);
+            //https://abapcloud.com/sap-event-mesh-abap-cloud/
           this.cartserviceProcess.deleteFromCart(oCartItem);
         }
 
     }
-//https://abapcloud.com/sap-event-mesh-abap-cloud/
+
    
     addToCard(oEvent:any):void{
-        console.log("ajouter au panier ");
             const oButton = oEvent.getSource();
             const oContext = oButton.getBindingContext("products");
             const oProduct = oContext.getObject() as Zproduct ;
