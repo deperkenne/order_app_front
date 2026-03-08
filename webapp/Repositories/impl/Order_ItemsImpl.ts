@@ -31,8 +31,7 @@ export class OrderItemImpl implements IOrderItemRepo{
                 this.oModel.create(sPath, oPayload, {
                     success: (oData: any) => {
                         // On retourne le nouvel objet créé (souvent enrichi par le backend)
-                        resolve(new OrderItem(oData));
-                        
+                        resolve(new OrderItem(oData));  
                     },
                     error: (oError: any) => {
 
@@ -59,4 +58,31 @@ export class OrderItemImpl implements IOrderItemRepo{
         return []
       }
 
+      async decrease_qty(itemUuid:string): Promise<OrderItem> {
+            const sPath = `/decrease_quantity(ItemUuid=guid'${itemUuid}',IsActiveEntity=false)`;
+            return new Promise((resolve, reject) => {
+                      this.oModel.read(sPath, {
+                          success: (oData: any) => {
+                              
+                              resolve(oData);
+                          },
+                          error: (oError: any) => {
+                             let message = "Erreur inconnue";
+                        let statusCode; 
+
+                        try {
+                            statusCode = Number(oError.statusCode);
+                            if (oError.responseText) {
+                                const oResponse = JSON.parse(oError.responseText);
+                                message = oResponse?.error?.message?.value || message;
+                            }
+                        } catch (e) {
+                            message = oError.message;
+                        }
+                        
+                        reject(new ODataRequestError(message, statusCode));
+                          }
+                      });
+                  });
+        }
 }

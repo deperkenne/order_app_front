@@ -9,20 +9,25 @@ export class OrderItemService {
                 this.orderItemRepo = orderItemRepo;
                 this.iorderstorageRepo = iorderstorageRepo
     }
-async CreateOrderItem(orderItem: OrderItem): Promise<OrderItem | null> {
-    
-    this.orderUuid = this.iorderstorageRepo.getOrderUuid() ?? "";
+    async CreateOrderItem(orderItem: OrderItem): Promise<OrderItem | null> {
+        
+        this.orderUuid = this.iorderstorageRepo.getOrderUuid() ?? "";
 
-    if (this.orderUuid !== "") {
-        try {
-            const savedItem = await this.orderItemRepo.saveOrderItem(orderItem, this.orderUuid);
-            return savedItem;
-        } catch (error) {
-            console.error("Erreur lors de la sauvegarde de l'item:", error);
-            return null;
-        }
-    } 
-    console.error("Impossible de créer l'item : OrderUuid est manquant.");
-    return null;
-}
+        if (this.orderUuid !== "") {
+            try {
+                const savedItem = await this.orderItemRepo.saveOrderItem(orderItem, this.orderUuid);
+                return savedItem;
+            } catch (error) {
+                console.error("Erreur lors de la sauvegarde de l'item:", error);
+                return null;
+            }
+        } 
+        console.error("Impossible de créer l'item : OrderUuid est manquant.");
+        return null;
+    }
+
+
+    async decrease_qty(itemUuid:string): Promise<OrderItem | null>{
+         return await this.orderItemRepo.decrease_qty(itemUuid)
+    }
 }

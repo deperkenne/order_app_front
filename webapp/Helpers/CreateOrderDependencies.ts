@@ -16,8 +16,10 @@ export class CreateOrderDependencies {
         iOrderStorageRepo: IOrderStorageRepo,
         orderService: OrderService
     ): void {
+         _oDataRequestErrorHelper = new ODataRequestErrorHelper();
          iOrderStorageRepo = new OrderStorageImpl();
          iOrderRepository = new OrderImpl(oModel, _oDataRequestErrorHelper);
          orderService  = new OrderService ( iOrderRepository,iOrderStorageRepo);
+
     }
 }

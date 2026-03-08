@@ -11,17 +11,15 @@ import { createBatchService } from "./CreateBatchService";
 import { OrderStorageImpl } from "../Repositories/impl/OrderStorageImpl";
  
 
-    export function CreateCartServiceProcess(oModel: ODataModel, productModel:JSONModel,
-        _oDataRequestErrorHelper: ODataRequestErrorHelper,iOrderItemStorage:IorderItemStorage): CartServiceProcess{
-          
-         const  batchServiceProcess = createBatchService(oModel,_oDataRequestErrorHelper)
-         return new CartServiceProcess(
-               new CartStore(productModel as any),
-               new CartCalculator(),
-               new CartPersistence(iOrderItemStorage),
-               new OrderStorageImpl(),
-               batchServiceProcess
-     
-        );
-
-    }
+export function CreateCartServiceProcess(oModel: ODataModel, productModel:JSONModel,
+    _oDataRequestErrorHelper: ODataRequestErrorHelper,iOrderItemStorage:IorderItemStorage): CartServiceProcess{
+        _oDataRequestErrorHelper = new ODataRequestErrorHelper();
+        const  batchServiceProcess = createBatchService(oModel,_oDataRequestErrorHelper)
+        return new CartServiceProcess(
+            new CartStore(productModel as any),
+            new CartCalculator(),
+            new CartPersistence(iOrderItemStorage),
+            new OrderStorageImpl(),
+            batchServiceProcess
+    );
+}

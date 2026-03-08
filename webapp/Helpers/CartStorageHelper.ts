@@ -1,3 +1,4 @@
+import { OrderItemStorage } from "../Repositories/impl/Order_ItemStrorage_impl";
 import { IorderItemStorage } from "../Repositories/IOrder_ItemStorageRepository";
 
 // CartStorageHelper.ts
@@ -63,10 +64,11 @@ export class CartStorageHelper {
         totalAmount: number;
         count: number;
     } {
+       // storage = new  OrderItemStorage()
         const sCart = storage.getOrderItem("myCart") ?? "";        
         const sTotalAmount = storage.getOrderItem("myTotal") ?? ""; 
         const sCountCart = storage.getOrderItem("myCount") ?? ""; 
-
+        
         console.log("start total", sTotalAmount);
 
         return {

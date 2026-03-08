@@ -136,6 +136,13 @@
             "TargetTest"
           ]
         },
+         {
+          "name": "RouteProductManagement",
+          "pattern": "ProductManagement",
+          "target": [
+            "TargetProductManagement"
+          ]
+        },
 
          {
           "name": "RouteAdmin",
@@ -163,6 +170,11 @@
           "id": "Product",
           "name": "Product"
         },
+        "TargetProductManagement": {
+          "id": "ProductManagement",
+          "name": "ProductManagement"
+        },
+
         "TargetAdmin": {
           "id": "Admin",
           "name": "Admin"

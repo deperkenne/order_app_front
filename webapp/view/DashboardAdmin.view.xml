@@ -2,9 +2,317 @@
     controllerName="comkenneorderapp.controller.DashboardAdmin"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-     xmlns:core="sap.ui.core">
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core">
     
-    <Page title="Gestion de Stock - Entrepôt Central" id = "Dadmin" >
-        <Text id="Dmytext" text="Une description ici"/>
-    </Page>
+     <App id="mainApp">
+        <pages>
+            <!--
+                showHeader="false"  → pas de toolbar Fiori standard,
+                                      on a notre propre layout.
+                enableScrolling="false" → le défilement est géré par
+                                          le ScrollContainer interne.
+            -->
+            <Page id="dashboardPage"
+                  showHeader="false"
+                  enableScrolling="false"
+                  class="dashboardPage">
+                <content>
+
+                    <!-- ════════════════════════════════════════
+                         OVERLAY MOBILE (fond semi-transparent)
+                         Visible uniquement quand le menu mobile
+                         est ouvert. Clic → ferme le menu.
+                         Équivalent : <AnimatePresence> + motion.div
+                         ════════════════════════════════════════ -->
+                    <HBox id="sidebarOverlay"
+                          class="sidebarOverlay"
+                          visible="false"
+                          press="onOverlayPress">
+                    </HBox>
+
+                    <!-- ════════════════════════════════════════
+                         CONTENEUR PRINCIPAL (sidebar + contenu)
+                         Équivalent au div flex racine de React.
+                         ════════════════════════════════════════ -->
+                    <HBox id="appShell" class="appShell">
+
+                        <!-- ╔══════════════════════════════╗
+                             ║         S I D E B A R        ║
+                             ╚══════════════════════════════╝ -->
+                        <VBox id="sidebar" class="sidebar">
+
+                            <!-- ── En-tête : avatar + nom compagnie ── -->
+                            <HBox  id="avatarid" class="sidebarBrand" alignItems="Center">
+                                <!--
+                                    sap.m.Avatar : remplace l'<img> React.
+                                    initials et backgroundColor sont
+                                    bindés depuis le modèle "dashboard".
+                                -->
+                                <Avatar id="companyAvatar"
+                                        initials="{dashboard>/company/initials}"
+                                        backgroundColor="{dashboard>/company/accent}"
+                                        displaySize="S"
+                                        class="companyAvatar"/>
+                                <VBox id="brandid" class="brandTextBox">
+                                    <Text id="companyN" text="{dashboard>/company/name}"
+                                          class="brandName"
+                                          wrapping="false"/>
+                                    <Text  id="Admin"  text="Admin"
+                                          class="brandRole"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- ── Liste de navigation ──
+                                 Binding sur le tableau navItems du modèle dashboard.
+                                 mode="SingleSelectMaster" : sélection immédiate
+                                 sans checkbox/radio (style pur CSS).
+                                 Équivalent : les <Link> du sidebar React.
+                            -->
+                            <List id="navList"
+                                  items="{dashboard>/navItems}"
+                                  mode="SingleSelectMaster"
+                                  selectionChange="onNavItemSelect"
+                                  showSeparators="None"
+                                  class="navList">
+                                <items>
+                                    <StandardListItem
+                                    id="titleid"
+                                        title="{dashboard>title}"
+                                        icon="{dashboard>icon}"
+                                        type="Active"
+                                        selected="{dashboard>active}"
+                                        class="navListItem"/>
+                                </items>
+                            </List>
+
+                            <!-- Séparateur flexible (pousse le footer en bas) -->
+                            <core:HTML  id="separatorId" content="&lt;div class='sidebarSpacer'&gt;&lt;/div&gt;"/>
+
+                            <!-- ── Footer : bouton déconnexion ── -->
+                            <VBox  id="sidebarFoot" class="sidebarFooter">
+                                <Button id="logoutBtn"
+                                        icon="sap-icon://log"
+                                        text="Déconnexion"
+                                        press="onLogout"
+                                        type="Transparent"
+                                        class="logoutBtn"/>
+                            </VBox>
+
+                        </VBox>
+                        <!-- FIN SIDEBAR -->
+
+
+                        <!-- ╔══════════════════════════════╗
+                             ║      CONTENU PRINCIPAL        ║
+                             ╚══════════════════════════════╝ -->
+                        <VBox id="mainContent" class="mainContent">
+
+                            <!-- ── Header mobile (masqué sur desktop via CSS) ──
+                                 Équivalent au <div class="lg:hidden"> React.
+                            -->
+                            <HBox id="mobileHeader"
+                                  class="mobileHeader"
+                                  justifyContent="SpaceBetween"
+                                  alignItems="Center">
+
+                                <HBox alignItems="Center" class="mobileBrand">
+                                    <Avatar id="mobileAvatar"
+                                            initials="{dashboard>/company/initials}"
+                                            backgroundColor="{dashboard>/company/accent}"
+                                            displaySize="XS"
+                                            class="mobileCompanyAvatar"/>
+                                    <Text text="{dashboard>/company/name}"
+                                          class="mobileBrandName"
+                                          wrapping="false"/>
+                                </HBox>
+
+                                <!-- Bouton hamburger (☰ / ✕) -->
+                                <Button id="menuToggleBtn"
+                                        icon="sap-icon://menu2"
+                                        press="onToggleMobileMenu"
+                                        type="Transparent"
+                                        class="menuToggleBtn"/>
+
+                            </HBox>
+
+                            <!-- ── Zone scrollable principale ── -->
+                            <ScrollContainer id="contentScroll"
+                                             vertical="true"
+                                             horizontal="false"
+                                             class="contentScroll">
+
+                                <VBox  id="contentWrapper" class="contentWrapper">
+
+                                    <!-- PAGE HEADER : titre + bouton settings -->
+                                    <HBox id="pageT" class="pageTitleRow"
+                                          justifyContent="SpaceBetween"
+                                          alignItems="Start">
+                                        <VBox  id="pBox" class="pageTitleBox">
+                                            <Title id="welcom" text="Bienvenue sur votre tableau de bord"
+                                                   level="H1"
+                                                   class="pageMainTitle"
+                                                   wrapping="true"/>
+                                            <Text id="pageS" text="Gérez votre compagnie de transport en toute simplicité"
+                                                  class="pageSubtitle"/>
+                                        </VBox>
+                                        <Button id="iconB" icon="sap-icon://action-settings"
+                                                type="Transparent"
+                                                class="settingsBtn"
+                                                tooltip="Paramètres"/>
+                                    </HBox>
+
+                                    <!-- ══════════════════════════════════════
+                                         CARTES STATISTIQUES
+                                         sap.ui.layout.Grid : responsive natif.
+                                         defaultSpan="L3 M6 S12" →
+                                           4 colonnes sur Large (3/12 = 25%)
+                                           2 colonnes sur Medium (6/12 = 50%)
+                                           1 colonne  sur Small  (12/12 = 100%)
+                                         Équivalent :
+                                           grid-cols-1 sm:grid-cols-2 lg:grid-cols-4
+                                         ══════════════════════════════════════ -->
+                                    <l:Grid id="statsGrid"
+                                                 defaultSpan="L3 M6 S12"
+                                                 class="statsGrid"
+                                                 hSpacing="1"
+                                                 vSpacing="1">
+                                        <l:content>
+
+                                            <!-- Stat 1 – Voyages actifs -->
+                                            <VBox id="sCard" class="statCard statCardBlue animate-card">
+                                                <HBox  id="sCardT" justifyContent="SpaceBetween"
+                                                      alignItems="Center"
+                                                      class="statCardTop">
+                                                    <core:Icon id="ic" src="sap-icon://bus-public-transport"
+                                                               class="statIcon statIconBlue"/>
+                                                    <Text id="va" text="24" class="statValue"/>
+                                                </HBox>
+                                                <Text id="Voya" text="Voyages actifs" class="statLabel"/>
+                                            </VBox>
+
+                                            <!-- Stat 2 – Véhicules -->
+                                            <VBox class="statCard statCardGreen animate-card animate-delay-1">
+                                                <HBox justifyContent="SpaceBetween"
+                                                      alignItems="Center"
+                                                      class="statCardTop">
+                                                    <core:Icon src="sap-icon://car-rental"
+                                                               class="statIcon statIconGreen"/>
+                                                    <Text text="18" class="statValue"/>
+                                                </HBox>
+                                                <Text text="Véhicules" class="statLabel"/>
+                                            </VBox>
+
+                                            <!-- Stat 3 – Agences -->
+                                            <VBox class="statCard statCardPurple animate-card animate-delay-2">
+                                                <HBox justifyContent="SpaceBetween"
+                                                      alignItems="Center"
+                                                      class="statCardTop">
+                                                    <core:Icon src="sap-icon://map"
+                                                               class="statIcon statIconPurple"/>
+                                                    <Text text="8" class="statValue"/>
+                                                </HBox>
+                                                <Text text="Agences" class="statLabel"/>
+                                            </VBox>
+
+                                            <!-- Stat 4 – Employés -->
+                                            <VBox class="statCard statCardOrange animate-card animate-delay-3">
+                                                <HBox justifyContent="SpaceBetween"
+                                                      alignItems="Center"
+                                                      class="statCardTop">
+                                                    <core:Icon src="sap-icon://group"
+                                                               class="statIcon statIconOrange"/>
+                                                    <Text text="45" class="statValue"/>
+                                                </HBox>
+                                                <Text text="Employés" class="statLabel"/>
+                                            </VBox>
+
+                                        </l:content>
+                                    </l:Grid>
+
+                                    <!-- ══════════════════════════════════════
+                                         ACTIONS RAPIDES
+                                         Grid : L4 M6 S12 →
+                                           3 colonnes sur Large
+                                           2 colonnes sur Medium
+                                           1 colonne  sur Small
+                                         Les cartes utilisent CustomListItem
+                                         pour obtenir un retour visuel au clic
+                                         (equivalent de whileTap de Framer).
+                                         ══════════════════════════════════════ -->
+                                    <VBox class="actionsSection">
+                                        <Title text="Actions rapides"
+                                               level="H2"
+                                               class="sectionTitle"/>
+
+                                        <l:Grid id="actionsGrid"
+                                                     defaultSpan="L4 M6 S12"
+                                                     class="actionsGrid"
+                                                     hSpacing="1"
+                                                     vSpacing="1">
+                                            <l:content>
+
+                                                <!-- Action 1 – Ajouter un voyage -->
+                                                <VBox class="actionCard actionCardGreen animate-card animate-delay-4"
+                                                      press="onAddTrip">
+                                                    <HBox alignItems="Center" class="actionCardInner">
+                                                        <VBox class="actionIconWrap actionIconWrapGreen">
+                                                            <core:Icon src="sap-icon://bus-public-transport"
+                                                                       class="actionIcon"/>
+                                                        </VBox>
+                                                        <Title text="Ajouter un voyage"
+                                                               level="H3"
+                                                               class="actionTitle"/>
+                                                    </HBox>
+                                                </VBox>
+
+                                                <!-- Action 2 – Ajouter un véhicule -->
+                                                <VBox class="actionCard actionCardPurple animate-card animate-delay-5"
+                                                      press="onAddVehicle">
+                                                    <HBox alignItems="Center" class="actionCardInner">
+                                                        <VBox class="actionIconWrap actionIconWrapPurple">
+                                                            <core:Icon src="sap-icon://car-rental"
+                                                                       class="actionIcon"/>
+                                                        </VBox>
+                                                        <Title text="Ajouter un véhicule"
+                                                               level="H3"
+                                                               class="actionTitle"/>
+                                                    </HBox>
+                                                </VBox>
+
+                                                <!-- Action 3 – Voir les réservations -->
+                                                <VBox class="actionCard actionCardCyan animate-card animate-delay-6"
+                                                      press="onViewReservations">
+                                                    <HBox alignItems="Center" class="actionCardInner">
+                                                        <VBox class="actionIconWrap actionIconWrapCyan">
+                                                            <core:Icon src="sap-icon://calendar"
+                                                                       class="actionIcon"/>
+                                                        </VBox>
+                                                        <Title text="Voir les réservations"
+                                                               level="H3"
+                                                               class="actionTitle"/>
+                                                    </HBox>
+                                                </VBox>
+
+                                            </l:content>
+                                        </l:Grid>
+                                    </VBox>
+                                    <!-- FIN ACTIONS RAPIDES -->
+
+                                </VBox>
+                                <!-- FIN contentWrapper -->
+
+                            </ScrollContainer>
+                            <!-- FIN ScrollContainer -->
+
+                        </VBox>
+                        <!-- FIN MAIN CONTENT -->
+
+                    </HBox>
+                    <!-- FIN appShell -->
+
+                </content>
+            </Page>
+        </pages>
+    </App>
 </mvc:View>

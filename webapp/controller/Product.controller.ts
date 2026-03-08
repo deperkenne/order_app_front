@@ -17,7 +17,7 @@ import { IOrder } from "../model/IOrder";
 import { IOrderItem } from "../model/IOrder_item";
 import { BatchService } from "../Services/OrderBatchService";
 import {  BatchServiceProcess } from "../Services/BatchService";
-import CartService from "../Services/CartService";
+//import {CartService} from "../Services/CartService";
 import { IorderItemStorage } from "../Repositories/IOrder_ItemStorageRepository";
 import { OrderItemStorage } from "../Repositories/impl/Order_ItemStrorage_impl";
 import { createBatchService } from "../Services/CreateBatchService";
@@ -34,10 +34,14 @@ import { ProductStorageHelper } from "../Helpers/ProductStorageHelper";
 import { CartStorageHelper } from "../Helpers/CartStorageHelper";
 import { CreateOrderDependencies } from "../Helpers/CreateOrderDependencies";
 import { OrderStorageHelper } from "../Helpers/OrderStorageHelper";
+import {AuthService}  from  "../auth/authService";
+import { OrderDependencies } from "../Helpers/OrderDependencies";
+import { InitService } from "../Helpers/InitService";
+
 
 export default class ProductsController extends Controller {
     private orderService : OrderService
-    private cartService : CartService
+    //private cartService : CartService
     private batchServicep :  BatchServiceProcess
     private iOrderItemStorageRepo: IorderItemStorage
     private iorderStorage : IOrderStorageRepo
@@ -45,9 +49,11 @@ export default class ProductsController extends Controller {
     private productService : ProductService
     private iproductrepo : IProductRepos
     private orderBatchService:  BatchService;
+    private authService: AuthService;
     private oODataModel : ODataModel
     private _oDataRequestErrorHelper : ODataRequestErrorHelper  
     private cartserviceProcess : CartServiceProcess   
+    private orderDependencies : OrderDependencies
     private _oMobileMenu: Popover | null = null;
     private _pendingAction: any; // Pour stocker l'action (delete ou edit)
     private _mDialogs: Map<string, Promise<any>> = new Map();
@@ -66,20 +72,30 @@ export default class ProductsController extends Controller {
         ];
     
     onInit(): void {
-            this._oDataRequestErrorHelper = new ODataRequestErrorHelper();
+          
+    
+           // this._oDataRequestErrorHelper = new ODataRequestErrorHelper();
             this.oODataModel = this.getOwnerComponent()?.getModel() as ODataModel;
-            this.iproductrepo = new ZProductImpl(this.oODataModel, this._oDataRequestErrorHelper);
-            this.productService = new ProductService(this.iproductrepo)
-            this.orderBatchService = new BatchService(this.oODataModel, this._oDataRequestErrorHelper);
-            this.iOrderItemStorageRepo = new OrderItemStorage();
-            this.batchServicep = createBatchService(this.oODataModel, this._oDataRequestErrorHelper);
-            CreateOrderDependencies.initializeOrderDependencies(
-                this.oODataModel, 
+            //this.iproductrepo = new ZProductImpl(this.oODataModel, this._oDataRequestErrorHelper);
+            //this.productService = new ProductService(this.iproductrepo)
+            //this.orderBatchService = new BatchService(this.oODataModel, this._oDataRequestErrorHelper);
+            //this.iOrderItemStorageRepo = new OrderItemStorage();
+             
+            this.orderDependencies = InitService
+            (
+                this.iproductrepo, 
+                this.oODataModel,
                 this._oDataRequestErrorHelper,
+                this.iOrderItemStorageRepo,
+                this.productService,
                 this.iorderRepo,
                 this.iorderStorage,
                 this.orderService
-            )    
+            )
+            
+            this.batchServicep = createBatchService(this.oODataModel, this._oDataRequestErrorHelper);
+            
+            this.authService = AuthService.getInstance()
             
             this._bExpanded = false;
             //this.iOrderItemStorageRepo.clearOrderItem("myCart")
@@ -201,10 +217,10 @@ export default class ProductsController extends Controller {
                 this.oODataModel, 
                 oModel,
                 this._oDataRequestErrorHelper,
-                this.iOrderItemStorageRepo,
+                this.orderDependencies.iOrderItemStorage,
             )
 
-            this.handleAuthCallback();  
+            this.authService.handleAuthCallback() 
             this.setCartModelFromMemory(oModel);
             this.saveOrder();
             //this.initializeOrder(); // create order
@@ -212,10 +228,13 @@ export default class ProductsController extends Controller {
                   // ici parceque l'app vas redemarer grace a la redirection 
     }
     
+   public async onLoginPress(): Promise<void>{
+       this.authService.onLoginPress()  
     
+   }
+/*
 
-
-    // --- PARTIE 2 : GÉRER LE RETOUR DE SAP (AU CHARGEMENT DE LA PAGE) ---
+// --- PARTIE 2 : GÉRER LE RETOUR DE SAP (AU CHARGEMENT DE LA PAGE) ---
 public handleAuthCallback(): void {
     const urlParams = new URLSearchParams(window.location.search);
     const sAuthCode = urlParams.get('code');
@@ -323,7 +342,7 @@ private async exchangeCodeForToken(code: string): Promise<void> {
         console.error("Erreur lors de l'échange du token", error);
     }
     }
-
+    */
     public navigateToAdmin(): void{
         console.log("start navigation.....")
         const oRouter = UIComponent.getRouterFor(this);  
@@ -339,7 +358,7 @@ private async exchangeCodeForToken(code: string): Promise<void> {
 
     private setCartModelFromMemory(oModel: JSONModel): void {
         const { items, totalAmount, count } = CartStorageHelper.resolveCartFromStorage(
-            this.iOrderItemStorageRepo
+            this.orderDependencies.iOrderItemStorage
         );
 
         oModel.setProperty("/filteredItems", items);
@@ -460,7 +479,12 @@ private async exchangeCodeForToken(code: string): Promise<void> {
             "Status": "PENDING"
         };
 
-        const response = await this.orderService.saveOrder(newOrder) ;
+        if(!this.orderService){
+            console.log("class pas creer")
+
+        }
+
+        const response = await this.orderDependencies.orderService.saveOrder(newOrder) ;
 
     }
     
@@ -495,14 +519,14 @@ private async exchangeCodeForToken(code: string): Promise<void> {
    */
 
     private async setProductsWithFallback(oModel:JSONModel):Promise<void> {
-        const sProducts = this.iOrderItemStorageRepo.getOrderItem("myProducts");
+        const sProducts = this.orderDependencies.iOrderItemStorage.getOrderItem("myProducts");
 
         if (!sProducts || sProducts === "null" || sProducts === "undefined" || sProducts.trim() === "") {
             try {
                 // load data from backend
                 const dProduct =  await this.getProductFromDb();
                 const sProducts = JSON.stringify(dProduct);
-                this.iOrderItemStorageRepo.setOrderItem("myProducts",sProducts)
+                this.orderDependencies.iOrderItemStorage.setOrderItem("myProducts",sProducts)
                     
                 //  RÉCUPÉRER le modèle d'abord
                 // const oModel = this.getView()?.getModel("products") as JSONModel;
@@ -521,7 +545,7 @@ private async exchangeCodeForToken(code: string): Promise<void> {
     private async getProductFromDb(): Promise<Zproduct[]>{
         try {
     
-            const db_products = await this.productService.getAllProducts();
+            const db_products = await this.orderDependencies.productService.getAllProducts();
             
             if (!db_products) {
                 this.products = [];
@@ -560,7 +584,6 @@ private async exchangeCodeForToken(code: string): Promise<void> {
             const oButton = oEvent.getSource();
             const oContext = oButton.getBindingContext("products");
             const oProduct = oContext.getObject() as Zproduct ;
-           
             this.cartserviceProcess.addToCart(oProduct);
     }
 

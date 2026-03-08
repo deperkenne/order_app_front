@@ -1421,3 +1421,1516 @@ html body .navHamburgerBtn .sapMBtnIcon:hover {
         padding: 1rem;
     }
 }
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   style.css – Company Dashboard UI5 Freestyle
+   ═══════════════════════════════════════════════════════════════════
+   Organisation :
+     1. Variables CSS (design tokens)
+     2. Reset / base page
+     3. Overlay mobile
+     4. App Shell (conteneur racine)
+     5. Sidebar
+     6. Navigation List
+     7. Mobile Header
+     8. Main Content & Scroll
+     9. Titre de page
+    10. Cartes statistiques (Stats Grid)
+    11. Section actions rapides
+    12. Animations (remplace Framer Motion)
+    13. Media queries responsive
+
+   Approche :
+     - Pas de framework CSS externe (Tailwind, Bootstrap…).
+     - Variables CSS pour faciliter le theming.
+     - Transitions CSS pour les animations (translateX sidebar,
+       fadeInUp cartes) en remplacement de framer-motion.
+   ═══════════════════════════════════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════════════
+   1. VARIABLES CSS (design tokens)
+   Correspondent aux couleurs et espacements
+   utilisés dans le code Tailwind React.
+   ══════════════════════════════════════════════ */
+:root {
+    --clr-primary:        #0070f3;   /* Bleu principal */
+    --clr-primary-dark:   #0051c3;
+    --clr-bg:             #f9fafb;   /* bg-gray-50 */
+    --clr-surface:        #ffffff;   /* bg-white */
+    --clr-border:         #e5e7eb;   /* border-gray-200 */
+    --clr-text-main:      #111827;   /* text-gray-900 */
+    --clr-text-muted:     #6b7280;   /* text-gray-500 */
+    --clr-text-light:     #9ca3af;   /* text-gray-400 */
+    --clr-red:            #dc2626;
+    --clr-red-bg:         #fef2f2;
+
+    --clr-blue:           #2563eb;
+    --clr-blue-light:     #eff6ff;
+    --clr-green:          #16a34a;
+    --clr-green-light:    #f0fdf4;
+    --clr-green-grad:     linear-gradient(135deg, #22c55e, #16a34a);
+    --clr-purple:         #9333ea;
+    --clr-purple-light:   #faf5ff;
+    --clr-purple-grad:    linear-gradient(135deg, #a855f7, #9333ea);
+    --clr-orange:         #ea580c;
+    --clr-orange-light:   #fff7ed;
+    --clr-cyan:           #0891b2;
+    --clr-cyan-light:     #ecfeff;
+    --clr-cyan-grad:      linear-gradient(135deg, #22d3ee, #0891b2);
+
+    --sidebar-width:      256px;
+    --radius-card:        12px;
+    --shadow-card:        0 1px 4px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+    --shadow-card-hover:  0 8px 24px rgba(0,0,0,.12);
+    --transition-fast:    0.2s ease;
+    --transition-normal:  0.3s ease;
+}
+
+
+/* ══════════════════════════════════════════════
+   2. RESET / BASE
+   ══════════════════════════════════════════════ */
+* { box-sizing: border-box; }
+
+body.sapUiBody {
+    background: var(--clr-bg);
+    margin: 0;
+    padding: 0;
+    font-family: "72", "72full", Arial, Helvetica, sans-serif;
+}
+
+/* Force la page UI5 à occuper toute la hauteur */
+.dashboardPage > .sapMPageInner {
+    height: 100vh !important;
+    background: var(--clr-bg);
+}
+.dashboardPage > .sapMPageInner > .sapMPageScroll {
+    height: 100% !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+/* Empêche le décalage par défaut de sap.m.Page */
+.dashboardPage .sapMPageScrollContent {
+    height: 100%;
+}
+
+
+/* ══════════════════════════════════════════════
+   3. OVERLAY MOBILE
+   Fond semi-transparent qui couvre le contenu
+   quand le menu mobile est ouvert.
+   Équivalent : <motion.div className="fixed inset-0 bg-black/50">
+   ══════════════════════════════════════════════ */
+.sidebarOverlay {
+    position: fixed !important;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    cursor: pointer;
+    animation: fadeIn 0.2s ease;
+}
+/* HBox a display:flex par défaut, l'overlay doit bloquer les clics */
+.sidebarOverlay > .sapMFlexBox {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* ══════════════════════════════════════════════
+   4. APP SHELL (conteneur flex racine)
+   Équivalent : <div className="min-h-screen flex">
+   ══════════════════════════════════════════════ */
+.appShell {
+    display: flex !important;
+    height: 100vh;
+    overflow: hidden;
+    width: 100%;
+}
+/* Retire le padding interne du HBox UI5 */
+.appShell.sapMFlexBox { padding: 0; }
+
+
+/* ══════════════════════════════════════════════
+   5. SIDEBAR
+   Panneau de navigation gauche.
+   Sur desktop : toujours visible (position static).
+   Sur mobile : masqué (translateX(-100%)),
+   révélé avec la classe .sidebarOpen.
+   Équivalent :
+     <aside className="fixed h-full bg-white ...
+       lg:translate-x-0 lg:w-64
+       ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}">
+   ══════════════════════════════════════════════ */
+.sidebar {
+    width: var(--sidebar-width) !important;
+    min-width: var(--sidebar-width) !important;
+    height: 100%;
+    background: var(--clr-surface) !important;
+    border-right: 1px solid var(--clr-border);
+    display: flex !important;
+    flex-direction: column !important;
+    flex-shrink: 0;
+    overflow: hidden;
+    z-index: 300;
+    transition: transform var(--transition-normal);
+}
+
+/* ── En-tête sidebar : avatar + nom ── */
+.sidebarBrand {
+    padding: 20px 24px !important;
+    border-bottom: 1px solid var(--clr-border);
+    flex-shrink: 0;
+    gap: 12px;
+}
+.sidebarBrand.sapMFlexBox { gap: 12px; }
+
+.companyAvatar { flex-shrink: 0; }
+
+.brandTextBox { gap: 2px; }
+.brandTextBox.sapMFlexBox { gap: 2px; }
+
+.brandName .sapMText {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--clr-text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+}
+.brandRole .sapMText {
+    font-size: 0.75rem;
+    color: var(--clr-text-muted);
+}
+
+/* ── Espace élastique entre nav et footer ── */
+.sidebarSpacer { flex: 1; min-height: 16px; }
+
+/* ── Footer sidebar ── */
+.sidebarFooter {
+    padding: 12px !important;
+    border-top: 1px solid var(--clr-border);
+    flex-shrink: 0;
+    background: var(--clr-surface);
+}
+
+/* Bouton déconnexion */
+.logoutBtn.sapMBtn {
+    width: 100%;
+    border-radius: 8px;
+    color: var(--clr-red) !important;
+    background: transparent;
+    transition: background var(--transition-fast);
+}
+.logoutBtn.sapMBtn:hover {
+    background: var(--clr-red-bg) !important;
+}
+.logoutBtn .sapMBtnContent {
+    color: var(--clr-red) !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.logoutBtn .sapMBtnIcon { color: var(--clr-red) !important; }
+
+
+/* ══════════════════════════════════════════════
+   6. LISTE DE NAVIGATION
+   Équivalent des <Link className="..."> React.
+   .sapMLIBSelected est ajouté par UI5 sur l'item
+   actif → simule le bg-primary de React.
+   ══════════════════════════════════════════════ */
+.navList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px !important;
+    background: transparent !important;
+}
+.navList .sapMListUl { background: transparent !important; }
+
+/* Item nav inactif */
+.navListItem.sapMLIB {
+    border-radius: 8px !important;
+    margin-bottom: 2px;
+    background: transparent;
+    transition: background var(--transition-fast);
+    min-height: 44px;
+}
+.navListItem.sapMLIB:hover {
+    background: var(--clr-bg) !important;
+}
+/* Texte de l'item */
+.navListItem .sapMSLITitle {
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    color: var(--clr-text-main);
+}
+/* Icône de l'item */
+.navListItem .sapUiIcon {
+    color: var(--clr-text-muted) !important;
+    font-size: 1.1rem;
+}
+
+/* Item nav ACTIF (sapMLIBSelected ajouté par UI5) */
+.navListItem.sapMLIBSelected {
+    background: var(--clr-primary) !important;
+    border-radius: 8px !important;
+}
+.navListItem.sapMLIBSelected .sapMSLITitle {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+.navListItem.sapMLIBSelected .sapUiIcon {
+    color: #ffffff !important;
+}
+/* Supprime le style de sélection par défaut Horizon */
+.navListItem.sapMLIBSelected::after { display: none; }
+.navListItem.sapMLIBSelected .sapMLIBFocusHelper { display: none; }
+
+
+/* ══════════════════════════════════════════════
+   7. HEADER MOBILE
+   Visible uniquement sur mobile (< 1024px).
+   Équivalent : <div className="lg:hidden ...">
+   ══════════════════════════════════════════════ */
+.mobileHeader {
+    display: none !important;    /* masqué par défaut (desktop) */
+    padding: 12px 16px !important;
+    background: var(--clr-surface);
+    border-bottom: 1px solid var(--clr-border);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.mobileBrand.sapMFlexBox { gap: 10px; align-items: center; }
+.mobileCompanyAvatar { flex-shrink: 0; }
+.mobileBrandName .sapMText {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--clr-text-main);
+}
+.menuToggleBtn.sapMBtn {
+    padding: 8px !important;
+    border-radius: 8px;
+    transition: background var(--transition-fast);
+}
+.menuToggleBtn.sapMBtn:hover { background: var(--clr-bg) !important; }
+
+
+/* ══════════════════════════════════════════════
+   8. MAIN CONTENT & SCROLL
+   Équivalent : <main className="lg:ml-64 p-4 sm:p-6 lg:p-8">
+   ══════════════════════════════════════════════ */
+.mainContent {
+    flex: 1 !important;
+    min-width: 0;   /* évite le débordement flex */
+    height: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    background: var(--clr-bg);
+    overflow: hidden;
+}
+
+.contentScroll {
+    flex: 1 !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+}
+.contentScroll .sapMScrollCont { height: 100% !important; }
+
+.contentWrapper {
+    padding: 32px !important;
+    max-width: 1400px;
+    width: 100%;
+}
+.contentWrapper.sapMFlexBox { gap: 0; }
+
+
+/* ══════════════════════════════════════════════
+   9. TITRE DE PAGE
+   Équivalent :
+     <h1 className="text-3xl font-bold">
+     <p className="text-gray-600">
+   ══════════════════════════════════════════════ */
+.pageTitleRow {
+    margin-bottom: 32px !important;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.pageTitleBox { flex: 1; gap: 6px; }
+.pageTitleBox.sapMFlexBox { gap: 6px; }
+
+.pageMainTitle .sapMTitle {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+    line-height: 1.2;
+}
+.pageSubtitle .sapMText {
+    font-size: 0.9375rem;
+    color: var(--clr-text-muted);
+    margin-top: 4px;
+}
+
+.settingsBtn.sapMBtn {
+    border-radius: 8px;
+    color: var(--clr-text-muted) !important;
+    transition: background var(--transition-fast);
+    flex-shrink: 0;
+}
+.settingsBtn.sapMBtn:hover { background: var(--clr-border) !important; }
+
+
+/* ══════════════════════════════════════════════
+   10. CARTES STATISTIQUES
+   4 cartes en grille responsive.
+   Équivalent :
+     grid-cols-1 sm:grid-cols-2 lg:grid-cols-4
+   Gérées nativement par sap.ui.layout.Grid
+   (defaultSpan="L3 M6 S12").
+   ══════════════════════════════════════════════ */
+.statsGrid { margin-bottom: 32px; }
+
+/* Carte de base */
+.statCard {
+    background: var(--clr-surface) !important;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-card) !important;
+    padding: 20px 24px !important;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+    height: 100%;
+    width: 100%;
+}
+.statCard:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+}
+.statCard.sapMFlexBox { gap: 8px; }
+
+.statCardTop { margin-bottom: 8px; }
+.statCardTop.sapMFlexBox { width: 100%; }
+
+/* Valeur numérique en grand */
+.statValue .sapMText {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+    line-height: 1;
+}
+.statLabel .sapMText {
+    font-size: 0.8125rem;
+    color: var(--clr-text-muted);
+}
+
+/* Icônes colorées par carte */
+.statIcon { font-size: 2rem !important; }
+.statIconBlue   { color: var(--clr-blue) !important; }
+.statIconGreen  { color: var(--clr-green) !important; }
+.statIconPurple { color: var(--clr-purple) !important; }
+.statIconOrange { color: var(--clr-orange) !important; }
+
+/* Bordure colorée gauche pour différencier les cartes */
+.statCardBlue   { border-left: 4px solid var(--clr-blue) !important; }
+.statCardGreen  { border-left: 4px solid var(--clr-green) !important; }
+.statCardPurple { border-left: 4px solid var(--clr-purple) !important; }
+.statCardOrange { border-left: 4px solid var(--clr-orange) !important; }
+
+
+/* ══════════════════════════════════════════════
+   11. SECTION ACTIONS RAPIDES
+   Équivalent :
+     <div className="grid grid-cols-1
+       sm:grid-cols-2 lg:grid-cols-3 gap-4">
+   sap.ui.layout.Grid defaultSpan="L4 M6 S12"
+   ══════════════════════════════════════════════ */
+.actionsSection.sapMFlexBox { gap: 16px; }
+
+.sectionTitle .sapMTitle {
+    font-size: 1.125rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+    margin-bottom: 16px;
+}
+
+.actionsGrid { margin-bottom: 0; }
+
+/* Carte action de base */
+.actionCard {
+    background: var(--clr-surface) !important;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-card) !important;
+    padding: 20px 24px !important;
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow var(--transition-fast),
+                transform var(--transition-fast);
+}
+.actionCard:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-4px);
+}
+/* Pseudo-element pour le gradient hover (opacity-0 → opacity-10) */
+.actionCard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    border-radius: var(--radius-card);
+}
+.actionCard:hover::before { opacity: 1; }
+.actionCardGreen::before  { background: var(--clr-green-grad); }
+.actionCardPurple::before { background: var(--clr-purple-grad); }
+.actionCardCyan::before   { background: var(--clr-cyan-grad); }
+
+.actionCardInner {
+    position: relative;
+    gap: 16px;
+}
+.actionCardInner.sapMFlexBox { gap: 16px; align-items: center; }
+
+/* Icône enveloppée dans un carré dégradé */
+.actionIconWrap {
+    width: 48px !important;
+    min-width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0;
+}
+.actionIconWrapGreen  { background: var(--clr-green-grad) !important; }
+.actionIconWrapPurple { background: var(--clr-purple-grad) !important; }
+.actionIconWrapCyan   { background: var(--clr-cyan-grad) !important; }
+
+.actionIcon { color: #ffffff !important; font-size: 1.4rem !important; }
+
+.actionTitle .sapMTitle {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+    line-height: 1.3;
+}
+
+
+/* ══════════════════════════════════════════════
+   12. ANIMATIONS
+   Remplace les animations Framer Motion :
+     initial={{ opacity: 0, y: 20 }}
+     animate={{ opacity: 1, y: 0 }}
+     transition={{ delay: index * 0.1, duration: 0.5 }}
+   ══════════════════════════════════════════════ */
+
+/* Entrée en fondu + glissement vers le haut */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Entrée en fondu simple (pour l'overlay) */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.animate-card {
+    animation: fadeInUp 0.5s ease both;
+}
+/* Délais échelonnés (delay: index * 0.1s) */
+.animate-delay-1 { animation-delay: 0.1s; }
+.animate-delay-2 { animation-delay: 0.2s; }
+.animate-delay-3 { animation-delay: 0.3s; }
+.animate-delay-4 { animation-delay: 0.4s; }
+.animate-delay-5 { animation-delay: 0.5s; }
+.animate-delay-6 { animation-delay: 0.6s; }
+
+
+/* ══════════════════════════════════════════════
+   13. MEDIA QUERIES RESPONSIVE
+   ══════════════════════════════════════════════ */
+
+/* ── TABLETTE et MOBILE (< 1024px) ──
+   Sur ces tailles :
+   - Le sidebar passe en position fixe et se masque
+   - Le header mobile devient visible
+   - Le contenu prend toute la largeur
+   ─────────────────────────────────────────────
+   Équivalent des préfixes "lg:" de Tailwind
+*/
+@media (max-width: 1023px) {
+
+    /* Sidebar se positionne en overlay fixe */
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        height: 100% !important;
+        transform: translateX(-100%);
+        box-shadow: none;
+        transition: transform var(--transition-normal),
+                    box-shadow var(--transition-normal);
+        z-index: 300;
+    }
+    /* Classe CSS ajoutée par le contrôleur quand le menu est ouvert */
+    .sidebar.sidebarOpen {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Affiche le header mobile */
+    .mobileHeader { display: flex !important; }
+
+    /* Réduit le padding du contenu sur tablette */
+    .contentWrapper { padding: 24px !important; }
+}
+
+/* ── MOBILE (< 640px) ── */
+@media (max-width: 639px) {
+
+    /* Réduit encore le padding */
+    .contentWrapper { padding: 16px !important; }
+
+    /* Titre de page plus petit */
+    .pageMainTitle .sapMTitle {
+        font-size: 1.375rem !important;
+    }
+    .pageSubtitle .sapMText { font-size: 0.875rem; }
+
+    /* Valeur stat plus petite sur mobile */
+    .statValue .sapMText { font-size: 1.625rem !important; }
+
+    /* Sections plus serrées */
+    .statsGrid  { margin-bottom: 24px; }
+    .pageTitleRow { margin-bottom: 20px !important; }
+}
+
+/* ── GRAND ÉCRAN (>= 1280px) ── */
+@media (min-width: 1280px) {
+    .pageMainTitle .sapMTitle {
+        font-size: 2rem !important;
+    }
+}
+
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   style.css – Company Dashboard UI5 Freestyle
+   ═══════════════════════════════════════════════════════════════════
+   Organisation :
+     1. Variables CSS (design tokens)
+     2. Reset / base page
+     3. Overlay mobile
+     4. App Shell (conteneur racine)
+     5. Sidebar
+     6. Navigation List
+     7. Mobile Header
+     8. Main Content & Scroll
+     9. Titre de page
+    10. Cartes statistiques (Stats Grid)
+    11. Section actions rapides
+    12. Animations (remplace Framer Motion)
+    13. Media queries responsive
+
+   Approche :
+     - Pas de framework CSS externe (Tailwind, Bootstrap…).
+     - Variables CSS pour faciliter le theming.
+     - Transitions CSS pour les animations (translateX sidebar,
+       fadeInUp cartes) en remplacement de framer-motion.
+   ═══════════════════════════════════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════════════
+   1. VARIABLES CSS (design tokens)
+   Correspondent aux couleurs et espacements
+   utilisés dans le code Tailwind React.
+   ══════════════════════════════════════════════ */
+:root {
+    --clr-primary:        #0070f3;   /* Bleu principal */
+    --clr-primary-dark:   #0051c3;
+    --clr-bg:             #f9fafb;   /* bg-gray-50 */
+    --clr-surface:        #ffffff;   /* bg-white */
+    --clr-border:         #e5e7eb;   /* border-gray-200 */
+    --clr-text-main:      #111827;   /* text-gray-900 */
+    --clr-text-muted:     #6b7280;   /* text-gray-500 */
+    --clr-text-light:     #9ca3af;   /* text-gray-400 */
+    --clr-red:            #dc2626;
+    --clr-red-bg:         #fef2f2;
+
+    --clr-blue:           #2563eb;
+    --clr-blue-light:     #eff6ff;
+    --clr-green:          #16a34a;
+    --clr-green-light:    #f0fdf4;
+    --clr-green-grad:     linear-gradient(135deg, #22c55e, #16a34a);
+    --clr-purple:         #9333ea;
+    --clr-purple-light:   #faf5ff;
+    --clr-purple-grad:    linear-gradient(135deg, #a855f7, #9333ea);
+    --clr-orange:         #ea580c;
+    --clr-orange-light:   #fff7ed;
+    --clr-cyan:           #0891b2;
+    --clr-cyan-light:     #ecfeff;
+    --clr-cyan-grad:      linear-gradient(135deg, #22d3ee, #0891b2);
+
+    --sidebar-width:      256px;
+    --radius-card:        12px;
+    --shadow-card:        0 1px 4px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+    --shadow-card-hover:  0 8px 24px rgba(0,0,0,.12);
+    --transition-fast:    0.2s ease;
+    --transition-normal:  0.3s ease;
+}
+
+
+/* ══════════════════════════════════════════════
+   2. RESET / BASE
+   ══════════════════════════════════════════════ */
+* { box-sizing: border-box; }
+
+body.sapUiBody {
+    background: var(--clr-bg);
+    margin: 0;
+    padding: 0;
+    font-family: "72", "72full", Arial, Helvetica, sans-serif;
+}
+
+/* Force la page UI5 à occuper toute la hauteur */
+.dashboardPage > .sapMPageInner {
+    height: 100vh !important;
+    background: var(--clr-bg);
+}
+.dashboardPage > .sapMPageInner > .sapMPageScroll {
+    height: 100% !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+}
+/* Empêche le décalage par défaut de sap.m.Page */
+.dashboardPage .sapMPageScrollContent {
+    height: 100%;
+}
+
+
+/* ══════════════════════════════════════════════
+   3. OVERLAY MOBILE
+   Fond semi-transparent qui couvre le contenu
+   quand le menu mobile est ouvert.
+   Équivalent : <motion.div className="fixed inset-0 bg-black/50">
+   ══════════════════════════════════════════════ */
+.sidebarOverlay {
+    position: fixed !important;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    cursor: pointer;
+    animation: fadeIn 0.2s ease;
+}
+/* HBox a display:flex par défaut, l'overlay doit bloquer les clics */
+.sidebarOverlay > .sapMFlexBox {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* ══════════════════════════════════════════════
+   4. APP SHELL (conteneur flex racine)
+   Équivalent : <div className="min-h-screen flex">
+   ══════════════════════════════════════════════ */
+.appShell {
+    display: flex !important;
+    height: 100vh;
+    overflow: hidden;
+    width: 100%;
+}
+/* Retire le padding interne du HBox UI5 */
+.appShell.sapMFlexBox { padding: 0; }
+
+
+/* ══════════════════════════════════════════════
+   5. SIDEBAR
+   Panneau de navigation gauche.
+   Sur desktop : toujours visible (position static).
+   Sur mobile : masqué (translateX(-100%)),
+   révélé avec la classe .sidebarOpen.
+   Équivalent :
+     <aside className="fixed h-full bg-white ...
+       lg:translate-x-0 lg:w-64
+       ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}">
+   ══════════════════════════════════════════════ */
+.sidebar {
+    width: var(--sidebar-width) !important;
+    min-width: var(--sidebar-width) !important;
+    height: 100%;
+    background: var(--clr-surface) !important;
+    border-right: 1px solid var(--clr-border);
+    display: flex !important;
+    flex-direction: column !important;
+    flex-shrink: 0;
+    overflow: hidden;
+    z-index: 300;
+    transition: transform var(--transition-normal);
+}
+
+/* ── En-tête sidebar : avatar + nom ── */
+.sidebarBrand {
+    padding: 20px 24px !important;
+    border-bottom: 1px solid var(--clr-border);
+    flex-shrink: 0;
+    gap: 12px;
+}
+.sidebarBrand.sapMFlexBox { gap: 12px; }
+
+.companyAvatar { flex-shrink: 0; }
+
+.brandTextBox { gap: 2px; }
+.brandTextBox.sapMFlexBox { gap: 2px; }
+
+.brandName .sapMText {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--clr-text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+}
+.brandRole .sapMText {
+    font-size: 0.75rem;
+    color: var(--clr-text-muted);
+}
+
+/* ── Espace élastique entre nav et footer ── */
+.sidebarSpacer { flex: 1; min-height: 16px; }
+
+/* ── Footer sidebar ── */
+.sidebarFooter {
+    padding: 12px !important;
+    border-top: 1px solid var(--clr-border);
+    flex-shrink: 0;
+    background: var(--clr-surface);
+}
+
+/* Bouton déconnexion */
+.logoutBtn.sapMBtn {
+    width: 100%;
+    border-radius: 8px;
+    color: var(--clr-red) !important;
+    background: transparent;
+    transition: background var(--transition-fast);
+}
+.logoutBtn.sapMBtn:hover {
+    background: var(--clr-red-bg) !important;
+}
+.logoutBtn .sapMBtnContent {
+    color: var(--clr-red) !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.logoutBtn .sapMBtnIcon { color: var(--clr-red) !important; }
+
+
+/* ══════════════════════════════════════════════
+   6. LISTE DE NAVIGATION
+   Équivalent des <Link className="..."> React.
+   .sapMLIBSelected est ajouté par UI5 sur l'item
+   actif → simule le bg-primary de React.
+   ══════════════════════════════════════════════ */
+.navList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px !important;
+    background: transparent !important;
+}
+.navList .sapMListUl { background: transparent !important; }
+
+/* Item nav inactif */
+.navListItem.sapMLIB {
+    border-radius: 8px !important;
+    margin-bottom: 2px;
+    background: transparent;
+    transition: background var(--transition-fast);
+    min-height: 44px;
+}
+.navListItem.sapMLIB:hover {
+    background: var(--clr-bg) !important;
+}
+/* Texte de l'item */
+.navListItem .sapMSLITitle {
+    font-size: 0.875rem !important;
+    font-weight: 500;
+    color: var(--clr-text-main);
+}
+/* Icône de l'item */
+.navListItem .sapUiIcon {
+    color: var(--clr-text-muted) !important;
+    font-size: 1.1rem;
+}
+
+/* Item nav ACTIF (sapMLIBSelected ajouté par UI5) */
+.navListItem.sapMLIBSelected {
+    background: var(--clr-primary) !important;
+    border-radius: 8px !important;
+}
+.navListItem.sapMLIBSelected .sapMSLITitle {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+.navListItem.sapMLIBSelected .sapUiIcon {
+    color: #ffffff !important;
+}
+/* Supprime le style de sélection par défaut Horizon */
+.navListItem.sapMLIBSelected::after { display: none; }
+.navListItem.sapMLIBSelected .sapMLIBFocusHelper { display: none; }
+
+
+/* ══════════════════════════════════════════════
+   7. HEADER MOBILE
+   Visible uniquement sur mobile (< 1024px).
+   Équivalent : <div className="lg:hidden ...">
+   ══════════════════════════════════════════════ */
+.mobileHeader {
+    display: none !important;    /* masqué par défaut (desktop) */
+    padding: 12px 16px !important;
+    background: var(--clr-surface);
+    border-bottom: 1px solid var(--clr-border);
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.mobileBrand.sapMFlexBox { gap: 10px; align-items: center; }
+.mobileCompanyAvatar { flex-shrink: 0; }
+.mobileBrandName .sapMText {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--clr-text-main);
+}
+.menuToggleBtn.sapMBtn {
+    padding: 8px !important;
+    border-radius: 8px;
+    transition: background var(--transition-fast);
+}
+.menuToggleBtn.sapMBtn:hover { background: var(--clr-bg) !important; }
+
+
+/* ══════════════════════════════════════════════
+   8. MAIN CONTENT & SCROLL
+   Équivalent : <main className="lg:ml-64 p-4 sm:p-6 lg:p-8">
+   ══════════════════════════════════════════════ */
+.mainContent {
+    flex: 1 !important;
+    min-width: 0;   /* évite le débordement flex */
+    height: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    background: var(--clr-bg);
+    overflow: hidden;
+}
+
+.contentScroll {
+    flex: 1 !important;
+    height: 100% !important;
+    overflow-y: auto !important;
+}
+.contentScroll .sapMScrollCont { height: 100% !important; }
+
+.contentWrapper {
+    padding: 32px !important;
+    max-width: 1400px;
+    width: 100%;
+}
+.contentWrapper.sapMFlexBox { gap: 0; }
+
+
+/* ══════════════════════════════════════════════
+   9. TITRE DE PAGE
+   Équivalent :
+     <h1 className="text-3xl font-bold">
+     <p className="text-gray-600">
+   ══════════════════════════════════════════════ */
+.pageTitleRow {
+    margin-bottom: 32px !important;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.pageTitleBox { flex: 1; gap: 6px; }
+.pageTitleBox.sapMFlexBox { gap: 6px; }
+
+.pageMainTitle .sapMTitle {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+    line-height: 1.2;
+}
+.pageSubtitle .sapMText {
+    font-size: 0.9375rem;
+    color: var(--clr-text-muted);
+    margin-top: 4px;
+}
+
+.settingsBtn.sapMBtn {
+    border-radius: 8px;
+    color: var(--clr-text-muted) !important;
+    transition: background var(--transition-fast);
+    flex-shrink: 0;
+}
+.settingsBtn.sapMBtn:hover { background: var(--clr-border) !important; }
+
+
+/* ══════════════════════════════════════════════
+   10. CARTES STATISTIQUES
+   FlexBox wrap="Wrap" remplace sap.ui.layout.Grid.
+   La responsivité est assurée par flex-basis sur
+   les wrappers ".statGridItem" et ".actionGridItem".
+
+   Desktop  (≥1024px) : 4 colonnes → basis 25%
+   Tablette ( ≥640px) : 2 colonnes → basis 50%
+   Mobile   ( <640px) : 1 colonne  → basis 100%
+   ══════════════════════════════════════════════ */
+
+/* Conteneur FlexBox stats */
+.statsGrid {
+    margin-bottom: 32px;
+    margin-left: -8px !important;
+    margin-right: -8px !important;
+}
+.statsGrid.sapMFlexBox { flex-wrap: wrap; gap: 0; }
+
+/* Wrapper de chaque carte stat */
+.statGridItem {
+    flex: 0 0 25%;          /* 4 colonnes sur desktop */
+    max-width: 25%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.statGridItem.sapMFlexBox { flex-direction: column; width: 100%; }
+
+/* Carte de base */
+.statCard {
+    background: var(--clr-surface) !important;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-card) !important;
+    padding: 20px 24px !important;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+    height: 100%;
+    width: 100%;
+}
+.statCard:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+}
+.statCard.sapMFlexBox { gap: 8px; }
+
+.statCardTop { margin-bottom: 8px; }
+.statCardTop.sapMFlexBox { width: 100%; }
+
+/* Valeur numérique en grand */
+.statValue .sapMText {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+    line-height: 1;
+}
+.statLabel .sapMText {
+    font-size: 0.8125rem;
+    color: var(--clr-text-muted);
+}
+
+/* Icônes colorées par carte */
+.statIcon { font-size: 2rem !important; }
+.statIconBlue   { color: var(--clr-blue) !important; }
+.statIconGreen  { color: var(--clr-green) !important; }
+.statIconPurple { color: var(--clr-purple) !important; }
+.statIconOrange { color: var(--clr-orange) !important; }
+
+/* Bordure colorée gauche pour différencier les cartes */
+.statCardBlue   { border-left: 4px solid var(--clr-blue) !important; }
+.statCardGreen  { border-left: 4px solid var(--clr-green) !important; }
+.statCardPurple { border-left: 4px solid var(--clr-purple) !important; }
+.statCardOrange { border-left: 4px solid var(--clr-orange) !important; }
+
+
+/* ══════════════════════════════════════════════
+   11. SECTION ACTIONS RAPIDES
+   FlexBox wrap="Wrap" — même mécanique.
+   Desktop  : 3 colonnes → basis 33.33%
+   Tablette : 2 colonnes → basis 50%
+   Mobile   : 1 colonne  → basis 100%
+   ══════════════════════════════════════════════ */
+.actionsSection.sapMFlexBox { gap: 16px; }
+
+.sectionTitle .sapMTitle {
+    font-size: 1.125rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+    margin-bottom: 16px;
+}
+
+/* Conteneur FlexBox actions */
+.actionsGrid {
+    margin-left: -8px !important;
+    margin-right: -8px !important;
+}
+.actionsGrid.sapMFlexBox { flex-wrap: wrap; gap: 0; }
+
+/* Wrapper de chaque carte action */
+.actionGridItem {
+    flex: 0 0 33.333%;      /* 3 colonnes sur desktop */
+    max-width: 33.333%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+.actionGridItem.sapMFlexBox { flex-direction: column; width: 100%; }
+
+/* Carte action de base */
+.actionCard {
+    background: var(--clr-surface) !important;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-card) !important;
+    padding: 20px 24px !important;
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow var(--transition-fast),
+                transform var(--transition-fast);
+}
+.actionCard:hover {
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-4px);
+}
+/* Pseudo-element pour le gradient hover (opacity-0 → opacity-10) */
+.actionCard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    border-radius: var(--radius-card);
+}
+.actionCard:hover::before { opacity: 1; }
+.actionCardGreen::before  { background: var(--clr-green-grad); }
+.actionCardPurple::before { background: var(--clr-purple-grad); }
+.actionCardCyan::before   { background: var(--clr-cyan-grad); }
+
+.actionCardInner {
+    position: relative;
+    gap: 16px;
+}
+.actionCardInner.sapMFlexBox { gap: 16px; align-items: center; }
+
+/* Icône enveloppée dans un carré dégradé */
+.actionIconWrap {
+    width: 48px !important;
+    min-width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0;
+}
+.actionIconWrapGreen  { background: var(--clr-green-grad) !important; }
+.actionIconWrapPurple { background: var(--clr-purple-grad) !important; }
+.actionIconWrapCyan   { background: var(--clr-cyan-grad) !important; }
+
+.actionIcon { color: #ffffff !important; font-size: 1.4rem !important; }
+
+.actionTitle .sapMTitle {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+    line-height: 1.3;
+}
+
+
+/* ══════════════════════════════════════════════
+   12. ANIMATIONS
+   Remplace les animations Framer Motion :
+     initial={{ opacity: 0, y: 20 }}
+     animate={{ opacity: 1, y: 0 }}
+     transition={{ delay: index * 0.1, duration: 0.5 }}
+   ══════════════════════════════════════════════ */
+
+/* Entrée en fondu + glissement vers le haut */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Entrée en fondu simple (pour l'overlay) */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.animate-card {
+    animation: fadeInUp 0.5s ease both;
+}
+/* Délais échelonnés (delay: index * 0.1s) */
+.animate-delay-1 { animation-delay: 0.1s; }
+.animate-delay-2 { animation-delay: 0.2s; }
+.animate-delay-3 { animation-delay: 0.3s; }
+.animate-delay-4 { animation-delay: 0.4s; }
+.animate-delay-5 { animation-delay: 0.5s; }
+.animate-delay-6 { animation-delay: 0.6s; }
+
+
+/* ══════════════════════════════════════════════
+   13. MEDIA QUERIES RESPONSIVE
+   ══════════════════════════════════════════════ */
+
+/* ── TABLETTE et MOBILE (< 1024px) ──
+   Sur ces tailles :
+   - Le sidebar passe en position fixe et se masque
+   - Le header mobile devient visible
+   - Le contenu prend toute la largeur
+   - Les grilles passent à 2 colonnes
+   ─────────────────────────────────────────────
+   Équivalent des préfixes "lg:" de Tailwind
+*/
+@media (max-width: 1023px) {
+
+    /* Sidebar se positionne en overlay fixe */
+    .sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        height: 100% !important;
+        transform: translateX(-100%);
+        box-shadow: none;
+        transition: transform var(--transition-normal),
+                    box-shadow var(--transition-normal);
+        z-index: 300;
+    }
+    /* Classe CSS ajoutée par le contrôleur quand le menu est ouvert */
+    .sidebar.sidebarOpen {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Affiche le header mobile */
+    .mobileHeader { display: flex !important; }
+
+    /* Réduit le padding du contenu sur tablette */
+    .contentWrapper { padding: 24px !important; }
+
+    /* Grilles → 2 colonnes sur tablette */
+    .statGridItem   { flex: 0 0 50%; max-width: 50%; }
+    .actionGridItem { flex: 0 0 50%; max-width: 50%; }
+}
+
+/* ── MOBILE (< 640px) ── */
+@media (max-width: 639px) {
+
+    /* Réduit encore le padding */
+    .contentWrapper { padding: 16px !important; }
+
+    /* Titre de page plus petit */
+    .pageMainTitle .sapMTitle { font-size: 1.375rem !important; }
+    .pageSubtitle .sapMText   { font-size: 0.875rem; }
+
+    /* Valeur stat plus petite sur mobile */
+    .statValue .sapMText { font-size: 1.625rem !important; }
+
+    /* Sections plus serrées */
+    .statsGrid  { margin-bottom: 24px; }
+    .pageTitleRow { margin-bottom: 20px !important; }
+
+    /* Grilles → 1 colonne sur mobile */
+    .statGridItem   { flex: 0 0 100%; max-width: 100%; }
+    .actionGridItem { flex: 0 0 100%; max-width: 100%; }
+}
+
+/* ── GRAND ÉCRAN (>= 1280px) ── */
+@media (min-width: 1280px) {
+    .pageMainTitle .sapMTitle {
+        font-size: 2rem !important;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   USER MANAGEMENT – styles spécifiques
+   ─────────────────────────────────────────────────────────────────
+   Équivalences Tailwind → CSS :
+     bg-gray-50 p-4 sm:p-6    → umPage + umPageWrapper
+     rounded-2xl shadow-lg    → umTableCard
+     bg-purple-100 text-...   → ObjectStatus états (géré par UI5 theme)
+   ═══════════════════════════════════════════════════════════════════ */
+
+
+/* ── Page wrapper ── */
+.umPage > .sapMPageInner { background: var(--clr-bg) !important; }
+
+.umPageWrapper {
+    padding: 24px 32px !important;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 0;
+}
+.umPageWrapper.sapMFlexBox { gap: 0; }
+
+
+/* ── En-tête : lien retour + titre ──
+   Équivalent :
+     <Link className="text-primary"> ← Retour </Link>
+     <h1 className="text-3xl font-bold"> */
+.umHeader {
+    margin-bottom: 20px !important;
+    gap: 6px;
+}
+.umHeader.sapMFlexBox { gap: 6px; }
+
+.umBackLink.sapMLnk {
+    color: var(--clr-primary) !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color var(--transition-fast);
+    margin-bottom: 8px;
+}
+.umBackLink.sapMLnk:hover { color: var(--clr-primary-dark) !important; }
+
+.umPageTitle .sapMTitle {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+}
+
+
+/* ── Barre d'outils : bouton Ajouter ── */
+.umToolbar {
+    margin-bottom: 20px !important;
+}
+
+.umAddBtn.sapMBtn {
+    border-radius: 8px !important;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0 20px !important;
+    height: 40px;
+    box-shadow: 0 2px 8px rgba(0,112,243,.25);
+    transition: box-shadow var(--transition-fast),
+                transform var(--transition-fast);
+}
+.umAddBtn.sapMBtn:hover {
+    box-shadow: 0 4px 16px rgba(0,112,243,.35);
+    transform: scale(1.02);
+}
+.umAddBtn.sapMBtn:active { transform: scale(0.98); }
+
+
+/* ── Barre de recherche ──
+   Équivalent :
+     <input className="w-full sm:max-w-md pl-10 rounded-lg border ..."> */
+.umSearchField {
+    margin-bottom: 20px !important;
+    max-width: 420px;
+    width: 100%;
+}
+.umSearchField.sapMSF {
+    border-radius: 8px !important;
+    border: 1px solid var(--clr-border) !important;
+    background: var(--clr-surface) !important;
+    box-shadow: none !important;
+    height: 40px;
+}
+.umSearchField.sapMSF:focus-within {
+    border-color: var(--clr-primary) !important;
+    box-shadow: 0 0 0 2px rgba(0,112,243,.15) !important;
+}
+
+
+/* ── Carte tableau ──
+   Équivalent :
+     <div className="bg-white rounded-2xl shadow-lg border ..."> */
+.umTableCard {
+    background: var(--clr-surface) !important;
+    border-radius: 16px !important;
+    border: 1px solid var(--clr-border);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+}
+.umTableCard.sapMFlexBox { gap: 0; }
+
+/* Titre carte + compteur */
+.umTableCardHeader {
+    padding: 16px 24px !important;
+    border-bottom: 1px solid var(--clr-border);
+}
+.umTableCardTitle .sapMTitle {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: var(--clr-text-main) !important;
+}
+
+
+/* ── Table sap.m.Table ──
+   Équivalent de la <table> HTML avec thead/tbody */
+.umTable.sapMList {
+    border: none !important;
+    background: transparent !important;
+}
+/* En-têtes de colonnes */
+.umColHeader.sapMText {
+    font-size: 0.6875rem !important;
+    font-weight: 600 !important;
+    color: var(--clr-text-muted) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+/* Ligne hover */
+.umRow.sapMLIB:hover {
+    background: var(--clr-bg) !important;
+}
+
+/* Cellule Nom */
+.umCellNom.sapMFlexBox { gap: 2px; }
+.umUserName.sapMText {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    color: var(--clr-text-main) !important;
+}
+/* Email sous le nom, visible uniquement sur mobile */
+.umUserEmailMobile.sapMText {
+    font-size: 0.75rem !important;
+    color: var(--clr-text-muted) !important;
+    display: none; /* affiché via media query mobile */
+}
+
+/* Cellule Email (colonne desktop) */
+.umUserEmail.sapMText {
+    font-size: 0.875rem !important;
+    color: var(--clr-text-muted) !important;
+}
+
+/* Badge rôle via ObjectStatus ──
+   Équivalent du span bg-purple-100 / bg-blue-100 / bg-gray-100.
+   UI5 theme Horizon gère les couleurs via state="Warning/Information/None".
+   On affine l'aspect pill avec border-radius. */
+.umRoleBadge.sapMObjStatus {
+    border-radius: 999px !important;
+    padding: 2px 10px !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+}
+
+/* Cellule Actions */
+.umActions.sapMFlexBox { gap: 4px; }
+.umEditBtn.sapMBtn {
+    color: var(--clr-primary) !important;
+    border-radius: 6px;
+    transition: background var(--transition-fast);
+}
+.umEditBtn.sapMBtn:hover { background: var(--clr-blue-light) !important; }
+
+.umDeleteBtn.sapMBtn {
+    color: var(--clr-red) !important;
+    border-radius: 6px;
+    transition: background var(--transition-fast);
+}
+.umDeleteBtn.sapMBtn:hover { background: var(--clr-red-bg) !important; }
+
+
+/* ── Dialog d'ajout ──
+   Équivalent :
+     <motion.div className="bg-white rounded-2xl shadow-xl max-w-md p-6"> */
+.umDialog.sapMDialog {
+    border-radius: 16px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,.15) !important;
+    min-width: 360px;
+}
+.umDialog .sapMDialogTitle { font-weight: 700 !important; }
+
+.umDialogContent.sapMFlexBox {
+    gap: 16px;
+    padding: 4px 0;
+}
+
+/* Champ de formulaire */
+.umFormField.sapMFlexBox { gap: 6px; }
+
+.umLabel.sapMLabel {
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: var(--clr-text-main) !important;
+}
+
+.umInput.sapMInputBase {
+    border-radius: 8px !important;
+    border: 1px solid var(--clr-border) !important;
+    height: 44px !important;
+    font-size: 0.9375rem !important;
+}
+.umInput.sapMInputBase:focus-within {
+    border-color: var(--clr-primary) !important;
+    box-shadow: 0 0 0 2px rgba(0,112,243,.15) !important;
+}
+
+.umSelect.sapMSelect {
+    border-radius: 8px !important;
+    height: 44px !important;
+    width: 100% !important;
+}
+
+/* Boutons dialog */
+.umConfirmBtn.sapMBtn { border-radius: 8px !important; font-weight: 600; }
+.umCancelBtn.sapMBtn  { border-radius: 8px !important; font-weight: 600; }
+
+
+/* ── Responsive UserManagement ── */
+
+@media (max-width: 1023px) {
+    .umPageWrapper { padding: 20px 24px !important; }
+}
+
+@media (max-width: 639px) {
+    .umPageWrapper { padding: 16px !important; }
+
+    .umPageTitle .sapMTitle { font-size: 1.375rem !important; }
+
+    /* Affiche l'email sous le nom sur mobile */
+    .umUserEmailMobile.sapMText { display: block !important; }
+
+    /* Champ de recherche pleine largeur */
+    .umSearchField { max-width: 100%; }
+
+    /* Dialog pleine largeur sur mobile */
+    .umDialog.sapMDialog { min-width: 90vw !important; }
+
+    /* Padding réduit dans la carte */
+    .umTableCardHeader { padding: 12px 16px !important; }
+}

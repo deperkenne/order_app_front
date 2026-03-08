@@ -46,6 +46,7 @@ export class BatchServiceProcess {
             BATCH_GROUP_ID
         );
 
+        // soumettre tous les api dans un submitBatch
         const responses = await this.executor.submitBatch(BATCH_GROUP_ID);
         return this.responseParser.parseDeleteResponse(responses);
     }

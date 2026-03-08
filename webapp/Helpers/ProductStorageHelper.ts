@@ -1,4 +1,5 @@
 
+import { OrderItemStorage } from "../Repositories/impl/Order_ItemStrorage_impl";
 import { IorderItemStorage} from "../Repositories/IOrder_ItemStorageRepository";
 
 export class ProductStorageHelper {
@@ -31,6 +32,7 @@ export class ProductStorageHelper {
     }
 
     static resolveProductsFromStorage(storage: IorderItemStorage): any[] {
+        storage = new OrderItemStorage()
         const sProduct = this.getRawProductString(storage);
 
         if (!this.isValidProductString(sProduct)) {

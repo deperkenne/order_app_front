@@ -3,7 +3,7 @@ import { ICartStore,
          ICartCalculator,
          ICartPersistence,
          ICartNotifier,
-         ICartItem }          from "./Interfaces/IcartService";
+         ICartItem }  from "./Interfaces/IcartService";
 import { IOrderItem } from "./Interfaces/IBatchProcessing";
 import { IOrderStorageRepo }  from "../Repositories/IOrderStorageRepository";
 import { BatchService }       from "../Services/OrderBatchService";
@@ -28,7 +28,7 @@ export class CartServiceProcess {
         const updated  = this.upsertItem(items, product);
         this.commitToStore(updated);
 
-        // call a  backend
+        // call a  backend with batch process
         const orderUuid = this.orderStorage.getOrderUuid() || "";
         const newItem: IOrderItem = {
                         ProductId:   product.ProductId,
@@ -40,7 +40,21 @@ export class CartServiceProcess {
 
         try {
             const result = await this.batchService.addProductAndRefresh(orderUuid,newItem);
-            this.reconcile(result, product.Productname, product.ImageUrl);
+            if (!this.isDataSynced(result)) {
+                const lastItem = updated [updated.length - 1];
+
+
+                // attribu la valeur a itemUuid pour qu'il ne soit pas vide
+                lastItem.itemUuid = result.newItems[result.newItems.length -1].ItemUuid
+
+                // Si on a trouvé un tel article, on le supprime
+                if (lastItem) {
+                    console.warn(`Suppression de l'article orphelin : ${lastItem.productId}`);
+                    this.deleteFromCart(lastItem);
+                }
+            }
+            
+            //this.reconcile(result, product.Productname, product.ImageUrl);
         } catch {
             this.rollback(product.ProductId);
         }
@@ -62,6 +76,24 @@ export class CartServiceProcess {
         } catch {
             this.rollback(cartItem.productId);
         }
+    }
+
+    isDataSynced(backendData: any): boolean {
+       const oTotalAmount = Number(this.store.getTotal()); 
+        const backendTotalAmount = Number(backendData?.totalOrder || 0); 
+
+        // On calcule la différence absolue
+        const difference = Math.abs(oTotalAmount - backendTotalAmount);
+
+        // On définit un seuil de tolérance (ex: 0.05 pour couvrir les arrondis à l'unité)
+        const tolerance = 0.11;
+
+        if (difference > tolerance) {
+            console.warn(`Vraie désynchronisation : Écart de ${difference}`);
+            return false;
+        }
+
+        return true;
     }
 
     // Synchronize data with the backend
@@ -139,7 +171,6 @@ export class CartServiceProcess {
     }
     
    // Commit the data to the store and persist it in browser memory
-
     private commitToStore(items: ICartItem[], backendTotal?: number): void {
         const total = backendTotal !== undefined
             ? String(backendTotal)

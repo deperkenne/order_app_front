@@ -1,0 +1,273 @@
+
+<mvc:View
+    controllerName="comkenneorderapp.controller.ProductManagement"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <!-- ════════════════════════════════════════════════
+         PAGE PRINCIPALE
+         enableScrolling="true" : le scroll est géré
+         par sap.m.Page directement (pas de ScrollContainer
+         imbriqué ici — la page est plus simple).
+         ════════════════════════════════════════════════ -->
+    <Page id="umPage"
+          showHeader="false"
+          enableScrolling="true"
+          class="umPage">
+        <content>
+
+            <VBox class="umPageWrapper">
+
+                <!-- ══════════════════════════════════════
+                     EN-TÊTE : lien retour + titre
+                     Équivalent :
+                       <Link to={...}><ArrowLeft/>Retour</Link>
+                       <h1>Gestion des Utilisateurs</h1>
+                     ══════════════════════════════════════ -->
+                <VBox class="umHeader">
+                    <Link text="← Retour au tableau de bord"
+                          press="onNavBack"
+                          class="umBackLink"
+                          wrapping="false"/>
+                    <Title text="Gestion des Utilisateurs"
+                           level="H1"
+                           class="umPageTitle"/>
+                </VBox>
+
+                <!-- ══════════════════════════════════════
+                     BARRE D'OUTILS : bouton Ajouter
+                     Équivalent : motion.button onClick
+                     ══════════════════════════════════════ -->
+                <HBox class="umToolbar">
+                    <Button id="addUserBtn"
+                            icon="sap-icon://add"
+                            text="Ajouter un utilisateur"
+                            type="Emphasized"
+                            press="onOpenAddDialog"
+                            class="umAddBtn"/>
+                </HBox>
+
+                <!-- ══════════════════════════════════════
+                     BARRE DE RECHERCHE
+                     liveChange déclenche le filtrage en
+                     temps réel (équivalent onChange React).
+                     ══════════════════════════════════════ -->
+                <SearchField id="umSearch"
+                             placeholder="Rechercher un utilisateur..."
+                             liveChange="onSearch"
+                             search="onSearch"
+                             class="umSearchField"/>
+
+                <!-- ══════════════════════════════════════
+                     CARTE TABLEAU UTILISATEURS
+                     sap.m.Table gère nativement le
+                     responsive : les colonnes masquées
+                     sur mobile via minScreenWidth.
+                     Équivalent :
+                       <div class="bg-white rounded-2xl ...">
+                         <table>...</table>
+                       </div>
+                     ══════════════════════════════════════ -->
+                <VBox class="umTableCard">
+
+                    <!-- Titre de la carte + compteur -->
+                    <HBox class="umTableCardHeader" alignItems="Center">
+                        <Title id="umTableTitle"
+                               text="Liste des utilisateurs (0)"
+                               level="H2"
+                               class="umTableCardTitle"/>
+                    </HBox>
+
+                    <!--
+                        sap.m.Table :
+                        - mode="None"            : pas de sélection checkbox
+                        - alternateRowColors     : lecture facilitée
+                        - noDataText             : message liste vide
+                        - items binding          : sur /filteredUsers du modèle "um"
+                        - Column minScreenWidth  : masque "Email" sur Phone
+                          (équivalent hidden sm:table-cell)
+                    -->
+                    <Table id="umTable"
+                           items="{um>/filteredUsers}"
+                           mode="None"
+                           alternateRowColors="true"
+                           noDataText="Aucun utilisateur trouvé"
+                           class="umTable">
+
+                        <columns>
+                            <!-- Colonne Nom (toujours visible) -->
+                            <Column class="umColNom">
+                                <Text text="Nom" class="umColHeader"/>
+                            </Column>
+
+                            <!-- Colonne Email : masquée sur mobile -->
+                            <Column minScreenWidth="Tablet"
+                                    demandPopin="false"
+                                    class="umColEmail">
+                                <Text text="Email" class="umColHeader"/>
+                            </Column>
+
+                            <!-- Colonne Rôle (toujours visible) -->
+                            <Column class="umColRole">
+                                <Text text="Rôle" class="umColHeader"/>
+                            </Column>
+
+                            <!-- Colonne Actions (alignée à droite) -->
+                            <Column hAlign="End" class="umColActions">
+                                <Text text="Actions" class="umColHeader"/>
+                            </Column>
+                        </columns>
+
+                        <items>
+                            <!--
+                                ColumnListItem : une ligne du tableau.
+                                type="Inactive" : désactive la navigation
+                                par clic sur la ligne entière.
+                            -->
+                            <ColumnListItem type="Inactive" class="umRow">
+                                <cells>
+
+                                    <!-- Cellule Nom (+ email en sous-texte mobile) -->
+                                    <VBox class="umCellNom">
+                                        <Text text="{um>name}"
+                                              class="umUserName"
+                                              wrapping="false"/>
+                                        <!--
+                                            Email visible UNIQUEMENT sur mobile
+                                            (hidden sur tablette/desktop via CSS).
+                                            Équivalent : <div class="sm:hidden">
+                                        -->
+                                        <Text text="{um>email}"
+                                              class="umUserEmailMobile"
+                                              wrapping="false"/>
+                                    </VBox>
+
+                                    <!-- Cellule Email (colonne masquée mobile) -->
+                                    <Text text="{um>email}"
+                                          class="umUserEmail"
+                                          wrapping="false"/>
+
+                                    <!-- Cellule Rôle : badge coloré via ObjectStatus -->
+                                    <ObjectStatus
+                                        text="{um>role}"
+                                        state="{um>roleState}"
+                                        class="umRoleBadge"/>
+
+                                    <!-- Cellule Actions : Éditer + Supprimer -->
+                                    <HBox class="umActions" justifyContent="End">
+                                        <Button icon="sap-icon://edit"
+                                                type="Transparent"
+                                                press="onEditUser"
+                                                tooltip="Modifier"
+                                                class="umEditBtn"/>
+                                        <Button icon="sap-icon://delete"
+                                                type="Transparent"
+                                                press="onDeleteUser"
+                                                tooltip="Supprimer"
+                                                class="umDeleteBtn"/>
+                                    </HBox>
+
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+
+                    </Table>
+
+                </VBox>
+                <!-- FIN umTableCard -->
+
+            </VBox>
+            <!-- FIN umPageWrapper -->
+
+        </content>
+    </Page>
+
+
+    <!-- ════════════════════════════════════════════════════════
+         DIALOG : AJOUTER UN UTILISATEUR
+         Équivalent de la modale React (AnimatePresence + motion.div).
+         sap.m.Dialog fournit nativement :
+           - fond semi-transparent
+           - animation d'entrée/sortie
+           - fermeture sur Escape
+           - centrage responsive
+         ════════════════════════════════════════════════════════ -->
+    <Dialog id="addUserDialog"
+            title="Ajouter un utilisateur"
+            contentWidth="420px"
+            class="umDialog"
+            afterClose="onDialogClose">
+
+        <content>
+            <VBox class="umDialogContent">
+
+                <!-- Champ Nom complet -->
+                <VBox class="umFormField">
+                    <Label text="Nom complet"
+                           required="true"
+                           labelFor="inputName"
+                           class="umLabel"/>
+                    <Input id="inputName"
+                           placeholder="Ex: Jean Dupont"
+                           value="{um>/newUser/name}"
+                           class="umInput"
+                           liveChange="onFormChange"/>
+                </VBox>
+
+                <!-- Champ Email -->
+                <VBox class="umFormField">
+                    <Label text="Email"
+                           required="true"
+                           labelFor="inputEmail"
+                           class="umLabel"/>
+                    <Input id="inputEmail"
+                           placeholder="jean.dupont@example.com"
+                           value="{um>/newUser/email}"
+                           type="Email"
+                           class="umInput"
+                           liveChange="onFormChange"/>
+                </VBox>
+
+                <!-- Sélecteur Rôle -->
+                <VBox class="umFormField">
+                    <Label text="Rôle"
+                           labelFor="selectRole"
+                           class="umLabel"/>
+                    <Select id="selectRole"
+                            selectedKey="{um>/newUser/role}"
+                            class="umSelect">
+                        <items>
+                            <core:Item key="Employé"        text="Employé"/>
+                            <core:Item key="Gestionnaire"   text="Gestionnaire"/>
+                            <core:Item key="Administrateur" text="Administrateur"/>
+                        </items>
+                    </Select>
+                </VBox>
+
+            </VBox>
+        </content>
+
+        <!--
+            beginButton / endButton : positionnés automatiquement
+            selon le sens de lecture (LTR/RTL) — équivalent des
+            deux <button> en bas du formulaire React.
+        -->
+        <beginButton>
+            <Button id="confirmAddBtn"
+                    text="Ajouter"
+                    type="Emphasized"
+                    press="onConfirmAddUser"
+                    class="umConfirmBtn"
+                    enabled="false"/>
+        </beginButton>
+        <endButton>
+            <Button text="Annuler"
+                    press="onCancelAddUser"
+                    class="umCancelBtn"/>
+        </endButton>
+
+    </Dialog>
+
+</mvc:View>

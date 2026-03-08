@@ -6,6 +6,7 @@ import { ODataPathBuilder }           from "./builders/PathBuilder";
 import { ODataQueryParameterBuilder } from "./builders/QueryParameterBuilder";
 import ODataModel from "sap/ui/model/odata/v2/ODataModel";
 import { ODataRequestErrorHelper } from "../Helpers/oDataRequestErrorHelper";
+
 export function createBatchService(
     oModel: ODataModel,
     _oDataRequestErrorHelper: ODataRequestErrorHelper  

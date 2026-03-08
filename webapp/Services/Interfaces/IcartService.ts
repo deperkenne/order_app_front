@@ -28,6 +28,7 @@ export interface ICartStore {
     setItems(items: ICartItem[]): void;
     setTotal(total: string): void;
     setCount(count: number): void;
+    getTotal(): string;
 }
 
 // Contrat : calculs métier sur le panier
