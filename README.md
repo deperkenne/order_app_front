@@ -58,7 +58,7 @@
 
 
 ## Project Structure
-
+```
 ├── backend/
 │   ├── CDS/
 │   │   ├── ZI_ORDER_K.cds         # Interface view — Orders
@@ -91,7 +91,7 @@
         ├── Product.controller.ts  # Product detail
         ├── ProductManagement.controller.ts  # CRUD management
         └── DashboardAdmin.controller.ts     # Admin dashboard
-
+```
 ## Notable Engineering Decisions
 
 - **Batch over individual calls** — a single `submitBatch` groups the action + 2 reads, avoiding cascading HTTP requests and race conditions
