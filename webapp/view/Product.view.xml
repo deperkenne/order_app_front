@@ -285,15 +285,16 @@
 									
 								  </HBox>
 
+
                                   <HBox id="cardFooter"  gap="0.5rem"  class="sapUiSmallMarginTop">
                                         <Button
                                             id="productLink"
-                                            text="Voir plus"  
+                                            text="See more"  
                                             press=".onNavigateToProduct"
                                             class="cardButton" />
                                         <Button
                                         id="pAdd"
-                                        text="Ajouter"
+                                        text="Addproduct"
                                         press=".addToCard"
                                         enabled="{products>inStock}"
                                          class="cardButton" />

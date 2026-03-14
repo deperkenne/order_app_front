@@ -119,7 +119,8 @@
 ```bash
 npm install
 npm run start        # local dev (ui5 serve)
-npm run build        # production build
+mbt build       # production build
+cf deploy mta_archives/com-kenne-orderapp_1.0.0.mtar --delete-services
 # Deploy to BTP HTML5 Application Repository via MTA
 ```
 

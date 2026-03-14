@@ -3101,7 +3101,7 @@ body.sapUiBody {
     background-color: #1d4ed8 !important;
 }
 
-/* ✅ Fix icon + text alignment inside button */
+/* Fix icon + text alignment inside button */
 .nfHomeBtn .sapMBtnIcon {
     color: #ffffff !important;
     font-size: 1rem !important;
@@ -3115,7 +3115,7 @@ body.sapUiBody {
 
 
 .productLoadingText.sapMText {
-    color: #ffffff !important;
+    color: #1a812c !important;
     font-size: 1.0rem !important;
     font-weight: 100 !important;
 }

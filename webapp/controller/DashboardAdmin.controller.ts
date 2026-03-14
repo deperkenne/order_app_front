@@ -10,7 +10,6 @@ export default class DashboardAdminController extends Controller {
 
       
 
-        // Build the full view model: company info + sidebar navigation items
         var oModel = new JSONModel({
             navItems: [
                 { title: "Home", icon: "sap-icon://home",     link: "RouteMain",              active: false  },
@@ -145,18 +144,4 @@ export default class DashboardAdminController extends Controller {
         }
     }
 
-    // Extracts the companyId segment from the URL hash (e.g. #/dashboard/general)
-    _getCompanyIdFromUrl() {
-        var sHash  = window.location.hash || "";
-        var aMatch = sHash.match(/dashboard\/([^/]+)/);
-        return aMatch ? aMatch[1] : null;
-    }
-
-    // Closes the mobile menu automatically when the viewport reaches desktop width
-    _onResize(oEvent: any) {
-        var iWidth = oEvent.size.width;
-        if (iWidth >= 1024 && this._bMenuOpen) {
-            this._closeMobileMenu();
-        }
-    }
 }
