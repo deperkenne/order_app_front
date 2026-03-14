@@ -7,7 +7,7 @@
 ![OAuth2](https://img.shields.io/badge/Auth-OAuth2%20PKCE%20%2F%20IAS-red?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=flat-square)
 
-> Full-stack SAP BTP application for cart and order management — built with **RAP (ABAP RESTful Application Programming)**, **Draft Handling**, **OData V2 Batch**, and secured via **IAS OAuth2 PKCE**.
+## Full-stack SAP BTP application for cart and order management — built with **RAP (ABAP RESTful Application Programming)**, **Draft Handling**, **OData V2 Batch**, and secured via **IAS OAuth2 PKCE**. Includes a **protected Admin Dashboard** for product management (create, update, delete) accessible only after OAuth2 authentication. 
 
 --
 
@@ -23,10 +23,10 @@
 |---|---|
 | ABAP BTP Cloud | SAP UI5 / Fiori Freestyle |
 | RAP — Managed Business Object | TypeScript (strict) |
-| CDS Views + Behavior Definition | OData V4 Batch Requests |
+| CDS Views + Behavior Definition | OData V2 Batch Requests |
 | Draft Handling (active / inactive) | PKCE / OAuth2 / IAS |
 | Function Import `decrease_quantity` | Optimistic UI + Rollback |
-| OData V4 (read, create, function call) | Repository + Interface pattern |
+| OData V2 (read, create, function call) | Repository + Interface pattern |
 
 
 
@@ -97,8 +97,7 @@
 - **Batch over individual calls** — a single `submitBatch` groups the action + 2 reads, avoiding cascading HTTP requests and race conditions
 - **Optimistic UI with typed rollback** — the UI reflects changes instantly; any backend failure triggers a domain-scoped rollback without full page refresh
 - **Draft isolation** — all mutations operate on `IsActiveEntity=false` until explicitly activated, preventing partial data exposure
-- **PKCE without client secret** — the app runs entirely in the browser; PKCE replaces the client secret for the OAuth2 code exchange, compliant with RFC 7636
-
+- **PKCE without client secret** — the app runs entirely in the browser.
 ---
 
 ## Getting Started
@@ -135,39 +134,15 @@ Backend communication currently fails in this environment due to **trial restric
 - The ABAP environment and the Work Zone run on separate subaccounts — cross-subaccount trust configuration is limited on trial plans
 - IAS OAuth2 token propagation to the backend service is not fully supported without a paid Communication Arrangement setup
 
-> The full flow (UI → OData V4 → RAP → Draft tables) works correctly in a **local development environment** (`ui5 serve`) connected directly to the ABAP system via ADT destination.
+> The full flow (UI → OData V2 → RAP → Draft tables) works correctly in a **local development environment** (`ui5 serve`) connected directly to the ABAP system via ADT destination.
 
 This is a known BTP trial constraint, not an application bug.  
 A productive BTP subaccount with proper destination and communication arrangement setup would resolve this.
 
 ## Author
 
-> Built as a hands-on BTP full-stack project to explore RAP draft handling, OData V4 batch patterns, and IAS authentication in a real-world cart management context.
+> Built as a hands-on BTP full-stack project to explore RAP draft handling, OData V2 batch patterns, and IAS authentication in a real-world cart management context.
 
-## Getting Started
-
-### Prerequisites
-- SAP BTP subaccount with ABAP environment instance
-- IAS tenant configured (OAuth2 client with PKCE enabled)
-- BTP destination pointing to the ABAP system
-
-### Backend
-```bash
-# Deploy via abapgit or ADT
-# 1. Import CDS views and behavior definitions
-# 2. Activate service binding ZUI_ORDER_SRV
-# 3. Assign to a communication arrangement
-```
-
-### Frontend
-```bash
-npm install
-npm run start        # local dev (ui5 serve)
-npm run build        # production build
-# Deploy to BTP HTML5 Application Repository via MTA
-```
-
----
 
 ## What I Learned
 
