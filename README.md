@@ -12,10 +12,10 @@
 --
 
 ## Architecture
-![Architecture Diagram](./webapp/images/Sap-BTP-Architecture.jpeg)
-```
 
----
+![Architecture Diagram](webapp/images/Sap-BTP-Architecture.jpeg)
+
+
 
 ## Tech Stack
 
@@ -28,7 +28,7 @@
 | Function Import `decrease_quantity` | Optimistic UI + Rollback |
 | OData V4 (read, create, function call) | Repository + Interface pattern |
 
----
+
 
 ## Key Technical Features
 
@@ -36,10 +36,10 @@
 - **Draft-enabled RAP Business Object** — `Orders` composition to `OrderItems`, full active/inactive entity lifecycle
 - **CDS Root View + Projection** — behavior definition with draft actions (`Edit`, `Activate`, `Discard`)
 - **Custom Function Import** — `decrease_quantity` called via OData batch to decrement item quantity atomically
-- **OData V4 exposure** — all CRUD operations exposed through a single RAP service binding
+- **OData V2 exposure** — all CRUD operations exposed through a single RAP service binding
 
 ### Frontend — Fiori Freestyle / TypeScript
-- **OData V4 Batch** — groups POST + 2× GET into a single HTTP request to minimize round-trips
+- **OData V2 Batch** — groups POST + 2× GET into a single HTTP request to minimize round-trips
 - **Optimistic UI** — cart updates locally before backend confirmation; rolls back on failure
 - **Sync reconciliation** — compares local total vs. backend total after each batch; detects and corrects divergence
 - **Typed error layer** — domain errors (`CartSyncError`, `CartAddError`, `CartDeleteError`) with context payload
@@ -56,162 +56,41 @@
 7. Session validated on each view init (exp check)
 ```
 
----
 
 ## Project Structure
 
-```
 ├── backend/
 │   ├── CDS/
-│   │   ├── ZI_Order.cds              # Interface view (Orders)
-│   │   ├── ZI_OrderItem.cds          # Interface view (Items)
-│   │   ├── ZC_Order.cds              # Consumption view
-│   │   └── ZC_OrderItem.cds
+│   │   ├── ZI_ORDER_K.cds         # Interface view — Orders
+│   │   ├── ZI_LINE_ITEM.cds       # Interface view — Order Items
+│   │   ├── ZI_PRODUCT.cds         # Interface view — Products
+│   │   ├── ZC_ORDER_K.cds         # Consumption view — Orders
+│   │   ├── ZC_LINE_ITEM.cds       # Consumption view — Items
+│   │   └── ZC_PRODUCT.cds         # Consumption view — Products
 │   ├── Behavior/
-│   │   ├── ZI_Order.bdef             # Draft-enabled behavior definition
-│   │   └── ZBP_Order.clas.abap       # Behavior implementation
+│   │   ├── ZI_ORDER_K.bdef        # Draft-enabled behavior definition
+│   │   ├── ZBP_ORDER_K.clas.abap  # Order behavior implementation
+│   │   ├── ZBP_PRODUCT.bdef       # Product behavior definition
+│   │   └── ZBP_PRODUCT.clas.abap  # Product behavior implementation
 │   └── Service/
-│       ├── ZUI_ORDER_SRV.srvd        # Service definition
-│       └── ZUI_ORDER_SRV.srvb        # Service binding (OData V4)
+│       ├── ZUI_ORDER_SRV.srvd     # Service definition
+│       └── ZUI_ORDER_SRV.srvb     # Service binding (OData V2)
 │
 └── frontend/
+    ├── auth/
+    │   └── AuthService.ts         # PKCE / OAuth2 / IAS authentication
     ├── Services/
-    │   ├── CartServiceProcess.ts     # Cart orchestration + optimistic UI
-    │   ├── BatchServiceProcess.ts    # OData batch builder
-    │   └── AuthService.ts            # PKCE / OAuth2 / IAS
+    │   ├── CartServiceProcess.ts  # Cart orchestration + optimistic UI
+    │   └── BatchServiceProcess.ts # OData batch request builder
     ├── Repositories/
-    │   ├── OrderImpl.ts              # OData order calls
-    │   ├── OrderItemImpl.ts          # OData item calls
-    │   └── OrderStorageImpl.ts       # localStorage persistence
+    │   ├── OrderImpl.ts           # OData order calls
+    │   └── OrderItemImpl.ts       # OData order item calls
     ├── Helpers/
-    │   └── CartErrors.ts             # Typed domain errors
+    │   └── oDataRequestError.ts   # Typed domain error handling
     └── Controllers/
-        ├── MainController.ts
-        └── DashboardAdminController.ts
-```
-
----
-
-## Notable Engineering Decisions
-
-- **Batch over individual calls** — a single `submitBatch` groups the action + 2 reads, avoiding cascading HTTP requests and race conditions
-- **Optimistic UI with typed rollback** — the UI reflects changes instantly; any backend failure triggers a domain-scoped rollback without full page refresh
-- **Draft isolation** — all mutations operate on `IsActiveEntity=false` until explicitly activated, preventing partial data exposure
-- **PKCE without client secret** — the app runs entirely in the browser; PKCE replaces the client secret for the OAuth2 code exchange, compliant with RFC 7636
-
----
-
-# 🛒 Order Cart App — SAP BTP Full Stack
-
-![ABAP](https://img.shields.io/badge/ABAP-Cloud-blue?style=flat-square)
-![RAP](https://img.shields.io/badge/RAP-Draft%20Enabled-green?style=flat-square)
-![BTP](https://img.shields.io/badge/SAP-BTP-0070F2?style=flat-square)
-![Fiori](https://img.shields.io/badge/UI5-Fiori%20Freestyle-orange?style=flat-square)
-![OAuth2](https://img.shields.io/badge/Auth-OAuth2%20PKCE%20%2F%20IAS-red?style=flat-square)
-![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=flat-square)
-
-> Full-stack SAP BTP application for cart and order management — built with **RAP (ABAP RESTful Application Programming)**, **Draft Handling**, **OData V4 Batch**, and secured via **IAS OAuth2 PKCE**.
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                     SAP BTP Subaccount                   │
-│                                                          │
-│  ┌──────────────┐    OData V4 Batch    ┌──────────────┐ │
-│  │  Fiori UI5   │ ──────────────────► │  RAP Service  │ │
-│  │  Freestyle   │ ◄────────────────── │  (ABAP Cloud) │ │
-│  │  TypeScript  │                     │               │ │
-│  └──────┬───────┘                     └──────┬────────┘ │
-│         │                                    │          │
-│         │  PKCE / OAuth2                     │  CDS     │
-│         ▼                                    ▼          │
-│  ┌──────────────┐                   ┌──────────────────┐│
-│  │     IAS      │                   │   Draft Tables   ││
-│  │  (Identity   │                   │  Orders + Items  ││
-│  │   Service)   │                   │ Active/Inactive  ││
-│  └──────────────┘                   └──────────────────┘│
-└─────────────────────────────────────────────────────────┘
-```
-
----
-
-## Tech Stack
-
-| Backend | Frontend |
-|---|---|
-| ABAP BTP Cloud | SAP UI5 / Fiori Freestyle |
-| RAP — Managed Business Object | TypeScript (strict) |
-| CDS Views + Behavior Definition | OData V4 Batch Requests |
-| Draft Handling (active / inactive) | PKCE / OAuth2 / IAS |
-| Function Import `decrease_quantity` | Optimistic UI + Rollback |
-| OData V4 (read, create, function call) | Repository + Interface pattern |
-
----
-
-## Key Technical Features
-
-### Backend — RAP / ABAP BTP
-- **Draft-enabled RAP Business Object** — `Orders` composition to `OrderItems`, full active/inactive entity lifecycle
-- **CDS Root View + Projection** — behavior definition with draft actions (`Edit`, `Activate`, `Discard`)
-- **Custom Function Import** — `decrease_quantity` called via OData batch to decrement item quantity atomically
-- **OData V4 exposure** — all CRUD operations exposed through a single RAP service binding
-
-### Frontend — Fiori Freestyle / TypeScript
-- **OData V4 Batch** — groups POST + 2× GET into a single HTTP request to minimize round-trips
-- **Optimistic UI** — cart updates locally before backend confirmation; rolls back on failure
-- **Sync reconciliation** — compares local total vs. backend total after each batch; detects and corrects divergence
-- **Typed error layer** — domain errors (`CartSyncError`, `CartAddError`, `CartDeleteError`) with context payload
-- **Repository pattern** — all OData calls abstracted behind interfaces (`IOrderRepository`, `ICartStore`…)
-
-### Authentication — IAS / OAuth2 PKCE
-```
-1. User clicks Login
-2. App generates code_verifier + code_challenge (SHA-256)
-3. Redirect → IAS Authorization endpoint
-4. IAS returns authorization code
-5. App exchanges code + verifier → id_token
-6. Token stored in sessionStorage + localStorage
-7. Session validated on each view init (exp check)
-```
-
----
-
-## Project Structure
-
-```
-├── backend/
-│   ├── CDS/
-│   │   ├── ZI_Order.cds              # Interface view (Orders)
-│   │   ├── ZI_OrderItem.cds          # Interface view (Items)
-│   │   ├── ZC_Order.cds              # Consumption view
-│   │   └── ZC_OrderItem.cds
-│   ├── Behavior/
-│   │   ├── ZI_Order.bdef             # Draft-enabled behavior definition
-│   │   └── ZBP_Order.clas.abap       # Behavior implementation
-│   └── Service/
-│       ├── ZUI_ORDER_SRV.srvd        # Service definition
-│       └── ZUI_ORDER_SRV.srvb        # Service binding (OData V4)
-│
-└── frontend/
-    ├── Services/
-    │   ├── CartServiceProcess.ts     # Cart orchestration + optimistic UI
-    │   ├── BatchServiceProcess.ts    # OData batch builder
-    │   └── AuthService.ts            # PKCE / OAuth2 / IAS
-    ├── Repositories/
-    │   ├── OrderImpl.ts              # OData order calls
-    │   ├── OrderItemImpl.ts          # OData item calls
-    │   └── OrderStorageImpl.ts       # localStorage persistence
-    ├── Helpers/
-    │   └── CartErrors.ts             # Typed domain errors
-    └── Controllers/
-        ├── MainController.ts
-        └── DashboardAdminController.ts
-```
-
----
+        ├── Product.controller.ts  # Product detail
+        ├── ProductManagement.controller.ts  # CRUD management
+        └── DashboardAdmin.controller.ts     # Admin dashboard
 
 ## Notable Engineering Decisions
 
