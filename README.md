@@ -12,25 +12,7 @@
 --
 
 ## Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                     SAP BTP Subaccount                   │
-│                                                          │
-│  ┌──────────────┐    OData V4 Batch    ┌──────────────┐ │
-│  │  Fiori UI5   │ ──────────────────► │  RAP Service  │ │
-│  │  Freestyle   │ ◄────────────────── │  (ABAP Cloud) │ │
-│  │  TypeScript  │                     │               │ │
-│  └──────┬───────┘                     └──────┬────────┘ │
-│         │                                    │          │
-│         │  PKCE / OAuth2                     │  CDS     │
-│         ▼                                    ▼          │
-│  ┌──────────────┐                   ┌──────────────────┐│
-│  │     IAS      │                   │   Draft Tables   ││
-│  │  (Identity   │                   │  Orders + Items  ││
-│  │   Service)   │                   │ Active/Inactive  ││
-│  └──────────────┘                   └──────────────────┘│
-└─────────────────────────────────────────────────────────┘
+![Architecture Diagram](./webapp/images/Sap_BTP-Architecture.jpg)
 ```
 
 ---
