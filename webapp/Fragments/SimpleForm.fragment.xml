@@ -3,7 +3,7 @@
     xmlns:f="sap.ui.layout.form"
     xmlns="sap.m">
     
-    <Dialog id="StockDialog" title="Stock Management" contentWidth="450px">
+    <Dialog id="ProductEditDialog" title="Stock Management" contentWidth="450px">
         <content>
             <f:SimpleForm id="StockForm"
                 editable="true"
@@ -13,24 +13,14 @@
                 columnsL="1"
                 columnsM="1">
                 <f:content>
-                     <Label text="IDStock" id="StockLabel1"/>
-
-            <Input id="StockInput1" value="{dialogData>/StockId}" editable="false" />
-            <Label id="StockLabel2" text="ID Produit" />
-            <Input   id="StockInput2" value="{dialogData>/ProductId}" editable="false" />
-            <Label id="StockLabel3" text="SKU" />
-            <Input  id="StockInput3" value="{dialogData>/SkuId}" editable="false" />
-            <Label id="StockLabel4" text="Quantité Totale" />
-            <Input   id="StockInput4" value="{dialogData>/Quantity}" editable="false" />
-            <Label id="StockLabel5" text="Unité" />
-            <Input   id="StockInput5" value="{dialogData>/Unit}" editable="false" />
-            <Label id="StockLabel6" text="Quantité Disponible" />
-            <Input
-                id="StockInput6"
-                type="Number"
-                editable="true"
-                valueLiveUpdate="true"
-                placeholder="Entrez la quantité disponible..." />
+                    <Label text="IDProduct" id="ProductLabel1"/>
+                    <Input id="ProductInput1" value="{dialogData>/ProductId}" editable="false" />
+                    <Label id="ProductLabel2" text="ProductName" />
+                    <Input   id="ProductInput2" value="{dialogData>/Productname}" editable="true" />
+                    <Label id="ProductLabel3" text="Currency" />
+                    <Input   id="ProductInput3" value="{dialogData>/Currency}" editable="true" />
+                    <Label id="ProductLabel4" text="Price" />
+                    <Input id="ProductInput4" value="{dialogData>/Price}" editable="true" valueLiveUpdate="true" />
                 </f:content>
             </f:SimpleForm>
         </content>
@@ -41,13 +31,13 @@
                 text="Enregistrer" 
                 type="Emphasized" 
                 icon="sap-icon://save" 
-                press="onUpdateStock" />
+                press="onUpdateProduct" />
         </beginButton>
         <endButton>
             <Button 
                 id="closedId"
-                text="Annuler" 
-                press="onCloseDialogStock" />
+                text="Close" 
+                press="onCloseDialogEdit" />
         </endButton>
     </Dialog>
 </core:FragmentDefinition>

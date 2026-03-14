@@ -9,5 +9,4 @@ export class ODataPathBuilder implements IPathBuilder {
     buildItemsPath(orderUuid: string): string {
         return `${this.buildOrderPath(orderUuid)}/to_Items`;
     }
-
 }

@@ -38,10 +38,9 @@ import {AuthService}  from  "../auth/authService";
 import { OrderDependencies } from "../Helpers/OrderDependencies";
 import { InitService } from "../Helpers/InitService";
 
-
 export default class ProductsController extends Controller {
+
     private orderService : OrderService
-    //private cartService : CartService
     private batchServicep :  BatchServiceProcess
     private iOrderItemStorageRepo: IorderItemStorage
     private iorderStorage : IOrderStorageRepo
@@ -55,10 +54,9 @@ export default class ProductsController extends Controller {
     private cartserviceProcess : CartServiceProcess   
     private orderDependencies : OrderDependencies
     private _oMobileMenu: Popover | null = null;
-    private _pendingAction: any; // Pour stocker l'action (delete ou edit)
+    private _pendingAction: any; 
     private _mDialogs: Map<string, Promise<any>> = new Map();
-    private _bMenuLoading: boolean = false; // ✅ évite double chargement
-    // Dans la classe :
+    private _bMenuLoading: boolean = false; 
     private _bExpanded : boolean
     products: Zproduct[] = [];
     OrderUuid: string = '';
@@ -70,292 +68,98 @@ export default class ProductsController extends Controller {
                 "images/Uhr.jpg",
                 "images/Uhr.jpg",
         ];
+
+
+ 
     
-    onInit(): void {
-          
-    
-           // this._oDataRequestErrorHelper = new ODataRequestErrorHelper();
-            this.oODataModel = this.getOwnerComponent()?.getModel() as ODataModel;
-            //this.iproductrepo = new ZProductImpl(this.oODataModel, this._oDataRequestErrorHelper);
-            //this.productService = new ProductService(this.iproductrepo)
-            //this.orderBatchService = new BatchService(this.oODataModel, this._oDataRequestErrorHelper);
-            //this.iOrderItemStorageRepo = new OrderItemStorage();
-             
-            this.orderDependencies = InitService
-            (
-                this.iproductrepo, 
-                this.oODataModel,
-                this._oDataRequestErrorHelper,
-                this.iOrderItemStorageRepo,
-                this.productService,
-                this.iorderRepo,
-                this.iorderStorage,
-                this.orderService
-            )
+     onInit(): void {
             
-            this.batchServicep = createBatchService(this.oODataModel, this._oDataRequestErrorHelper);
+        this.oODataModel = this.getOwnerComponent()?.getModel() as ODataModel;
             
-            this.authService = AuthService.getInstance()
-            
-            this._bExpanded = false;
-            //this.iOrderItemStorageRepo.clearOrderItem("myCart")
-            //this.iOrderItemStorageRepo.clearOrderItem("myCount")
-            //this.iOrderItemStorageRepo.clearOrderItem("myTotal")
-            //this.iOrderItemStorageRepo.clearOrderItem("myProducts")
-             
-            
-            
-            const oModelUi  = new JSONModel({
-                isCartVisible: false 
-
-            })
-            
-
-            this.getView()?.setModel(oModelUi,"ui");
-            const oModeldata = new JSONModel({
-                  
-                products: [],
-                cartItems: [], 
-                totalAmount: 0,
-                filteredItems: [],
-                countSelectedProduct: 0
-
-            })
-            /** 
-            const oModel = new JSONModel({
-                products: [
-                {
-                    id: "P001",
-                    name: "Laptop Pro 15",
-                    quantity: 1,
-                    description: "Ordinateur portable haute performance avec écran 15 pouces, processeur Intel i7",
-                    price: 1299.99,
-                    currency: "EUR",
-                    category: "Électronique",
-                    rating: 4.5,
-                    imageUrl: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop",
-                    inStock: true,
-                    supplier: "TechCorp"
-                },
-                {
-                    id: "P002",
-                    name: "Casque Audio Sans Fil",
-                    quantity: 1,
-                    description: "Casque bluetooth premium avec réduction de bruit active et autonomie 30h",
-                    price: 249.99,
-                    currency: "EUR",
-                    category: "Audio",
-                    rating: 4.8,
-                    imageUrl: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop",
-                    inStock: true,
-                    supplier: "SoundMax"
-                },
-                {
-                    id: "P003",
-                    name: "Smartphone X12",
-                    Quantity: 1,
-                    description: "Smartphone dernière génération avec caméra 108MP et écran AMOLED 6.7 pouces",
-                    price: 899.99,
-                    currency: "EUR",
-                    category: "Téléphonie",
-                    rating: 4.6,
-                    imageUrl: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop",
-                    inStock: true,
-                    supplier: "MobileTech"
-                },
-                {
-                    id: "P004",
-                    name: "Montre Connectée",
-                    quantity: 1,
-                    description: "Montre intelligente avec suivi santé complet, GPS et résistance à l'eau",
-                    price: 349.99,
-                    currency: "EUR",
-                    category: "Accessoires",
-                    rating: 4.3,
-                    imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",
-                    inStock: false,
-                    supplier: "WearTech"
-                },
-                {
-                    id: "P005",
-                    name: "Appareil Photo Reflex",
-                    quantity: 1,
-                    description: "Appareil photo professionnel 24MP avec objectif 18-55mm et stabilisation",
-                    price: 1599.99,
-                    currency: "EUR",
-                    category: "Photo",
-                    rating: 4.9,
-                    imageUrl: "https://images.unsplash.com/photo-1606980707146-b2202f5ab119?w=400&h=300&fit=crop",
-                    inStock: true,
-                    supplier: "PhotoPro"
-                },
-                {
-                    id: "P006",
-                    name: "Tablette Pro 12",
-                    quantity: 1,
-                    description: "Tablette professionnelle avec stylet inclus, écran 12 pouces haute résolution",
-                    price: 799.99,
-                    currency: "EUR",
-                    category: "Électronique",
-                    rating: 4.4,
-                    imageUrl: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop",
-                    inStock: true,
-                    supplier: "TabletCorp"
-                }
-                ],
-
-                cartItems: [], 
-                totalAmount: 0,
-                filteredItems: [],
-                countSelectedProduct: 0
-            });
-            */
-           
-            this.getView()?.setModel(oModeldata, "products");  
-            const oModel = this.getView()?.getModel("products") as JSONModel;
-            this.cartserviceProcess = CreateCartServiceProcess(
-                this.oODataModel, 
-                oModel,
-                this._oDataRequestErrorHelper,
-                this.orderDependencies.iOrderItemStorage,
-            )
-
-            this.authService.handleAuthCallback() 
-            this.setCartModelFromMemory(oModel);
-            this.saveOrder();
-            //this.initializeOrder(); // create order
-            this.setProductsWithFallback(oModel);  
-                  // ici parceque l'app vas redemarer grace a la redirection 
-    }
-    
-   public async onLoginPress(): Promise<void>{
-       this.authService.onLoginPress()  
-    
-   }
-/*
-
-// --- PARTIE 2 : GÉRER LE RETOUR DE SAP (AU CHARGEMENT DE LA PAGE) ---
-public handleAuthCallback(): void {
-    const urlParams = new URLSearchParams(window.location.search);
-    const sAuthCode = urlParams.get('code');
-
-    if (sAuthCode) {
-        console.log("Code reçu, échange contre un Token...");
-        console.log("Code reçu, échange contre un Token... ",sAuthCode);
-        this.exchangeCodeForToken(sAuthCode);
-    }
-}
-
-
-// Utilitaire : générer un code_verifier aléatoire
-private generateCodeVerifier(): string {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    return btoa(String.fromCharCode(...array))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
-// Utilitaire : dériver le code_challenge depuis le verifier
-private async generateCodeChallenge(verifier: string): Promise<string> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(verifier);
-    const digest = await crypto.subtle.digest('SHA-256', data);
-    return btoa(String.fromCharCode(...new Uint8Array(digest)))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
-// PARTIE 1 : Lancer la connexion
-public async onLoginPress(): Promise<void> {
-    const sClientId = "88dd4681-0e04-417f-9b15-c6d97022e374";
-    //const sRedirectUri = "http://localhost:8080/index.html"; // ✅ pas d'encode ici
-    const sRedirectUri = window.location.hostname === "localhost"
-    ? "http://localhost:8080/index.html"
-    : `https://${window.location.hostname}/index.html`;
-
-    const sCodeVerifier = this.generateCodeVerifier();
-    const sChallenge = await this.generateCodeChallenge(sCodeVerifier);
-
-    // ✅ Stocker le verifier pour l'étape 3
-    sessionStorage.setItem("pkce_code_verifier", sCodeVerifier);
-
-    window.location.href = `https://ankyikmcs.trial-accounts.ondemand.com/oauth2/authorize`
-        + `?response_type=code`
-        + `&client_id=${sClientId}`
-        + `&redirect_uri=${encodeURIComponent(sRedirectUri)}`
-        + `&scope=openid%20profile%20email`
-        + `&code_challenge=${sChallenge}`
-        + `&code_challenge_method=S256`;     
-}
-
-
-// PARTIE 3 : Échanger le code
-private async exchangeCodeForToken(code: string): Promise<void> {
-    const sCodeVerifier = sessionStorage.getItem("pkce_code_verifier"); // ✅ récupéré
-    const sClientId = "88dd4681-0e04-417f-9b15-c6d97022e374";
-    //const sRedirectUri = "http://localhost:8080/index.html"; // ✅ pas d'encode ici
-     const sRedirectUri = window.location.hostname === "localhost"
-    ? "http://localhost:8080/index.html"
-    : `https://${window.location.hostname}/index.html`;
-    //const sTokenEndpoint = "/oauth2/token"; // local
-    const sTokenEndpoint = "https://ankyikmcs.trial-accounts.ondemand.com/oauth2/token"; // in production
-
-    
-
-    const CodeVerifier = sessionStorage.getItem("pkce_code_verifier");
-
-        if (!CodeVerifier) {
-            console.error("❌ code_verifier manquant !");
-            return;
-    }
-
-    const body = new URLSearchParams({ // ✅ URLSearchParams encode lui-même
-        grant_type: "authorization_code",
-        code: code,
-        client_id: sClientId,
-        redirect_uri: sRedirectUri,
-        code_verifier: sCodeVerifier!
-    });
-
-
-    try {
-        const response = await fetch(sTokenEndpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: body
-        });
-
-        const data = await response.json();
+        this.orderDependencies = InitService
+        (
+            this.iproductrepo, 
+            this.oODataModel,
+            this._oDataRequestErrorHelper,
+            this.iOrderItemStorageRepo,
+            this.productService,
+            this.iorderRepo,
+            this.iorderStorage,
+            this.orderService
+        )
         
+        this.batchServicep = createBatchService(this.oODataModel, this._oDataRequestErrorHelper);
+        
+        this.authService = AuthService.getInstance()
+        
+        this._bExpanded = false;
+        
+        // Initialiser le modèle UI avec isLoading à true
+        const oUiModel = new JSONModel({ isLoading: true });
+        this.getView()?.setModel(oUiModel, "ui1");
 
-        if (data.id_token) {
-            console.log("Connexion réussie !",data);
-            // Stocker le jeton (localStorage ou Session)
-            sessionStorage.removeItem("pkce_code_verifier"); // ici
-            sessionStorage.setItem("user_token", data.id_token);
-            localStorage.setItem("user_token", data.id_token);
+        const oModelUi  = new JSONModel({
+            isCartVisible: false 
 
-            
-            // NETTOYAGE de l'URL (enlever le ?code=...) et redirection interne
-            window.location.href = sRedirectUri + "#/DashboardAdmin";
+        })
+        
+        this.getView()?.setModel(oModelUi,"ui");
+        const oModeldata = new JSONModel({
+            products: [],
+            cartItems: [], 
+            totalAmount: 0,
+            filteredItems: [],
+            countSelectedProduct: 0
+
+        })
+        
+        this.getView()?.setModel(oModeldata, "products");  
+        const oModel = this.getView()?.getModel("products") as JSONModel;
+
+        this.cartserviceProcess = CreateCartServiceProcess(
+            this.oODataModel, 
+            oModel,
+            this._oDataRequestErrorHelper,
+            this.orderDependencies.iOrderItemStorage,
+        )
+
+        this.authService.handleAuthCallback() 
+        this.setCartModelFromMemory(oModel);
+        this.saveOrder();
+        this.setProductsWithFallback(oModel);  
+                
+    }
+
+    public async orderActivate(oEvent: any):Promise<void>{
+        const orderUuid = this.orderDependencies.iOrderStorage.getOrderUuid() || ""
+        if(!orderUuid){
+           return
         }
-    } catch (error) {
-        console.error("Erreur lors de l'échange du token", error);
-    }
-    }
-    */
-    public navigateToAdmin(): void{
-        console.log("start navigation.....")
-        const oRouter = UIComponent.getRouterFor(this);  
-        oRouter.navTo("RouteDashboardAdmin");
+        this.orderService.orderActivated(orderUuid)
+        this.iOrderItemStorageRepo.clearOrderItem("myCart");
+        this.iOrderItemStorageRepo.clearOrderItem("myTotal");
+        this.iOrderItemStorageRepo.clearOrderItem("myCount");
 
     }
     
+    // Delegates the login action to the auth service
+    public async onLoginPress(): Promise<void> {
+        this.authService.onLoginPress();
+    }
+
+    // Navigates to the admin dashboard route
+    public navigateToAdmin(): void {
+        const oRouter = UIComponent.getRouterFor(this);
+        oRouter.navTo("RouteDashboardAdmin");
+    }
+
+    // Loads products from local storage and binds them to the model
     private setProductModelFromMemory(oModel: JSONModel): void {
         const products = ProductStorageHelper.resolveProductsFromStorage(this.iOrderItemStorageRepo);
         oModel.setProperty("/products", products);
     }
 
-
+    // Loads cart data from local storage and binds items, total and count to the model
     private setCartModelFromMemory(oModel: JSONModel): void {
         const { items, totalAmount, count } = CartStorageHelper.resolveCartFromStorage(
             this.orderDependencies.iOrderItemStorage
@@ -366,281 +170,142 @@ private async exchangeCodeForToken(code: string): Promise<void> {
         oModel.setProperty("/countSelectedProduct", count);
     }
 
-    /*
-    
-    private getProductFromMemory(oModel:any): void{
-        //const oModel = this.getView()?.getModel("products") as JSONModel;
-        let sProduct = this.iOrderItemStorageRepo.getOrderItem("myProducts");
-        let mProduct: any[] = [];
-         if((typeof sProduct  === "string")){
-              if (sProduct .trim() === "") {
-                console.log("Panier vide (string vide)");
-                 mProduct = [];
-              } else if (sProduct.startsWith("[object")) {
-                 mProduct = [];
-              }else {
-                //  Parser la chaîne JSON
-                try {
-                      mProduct = JSON.parse(sProduct);
-                    if(typeof  mProduct  === "string"){
-                     mProduct= JSON.parse( mProduct ); // Donne enfin le tableau []
-                    }
-                    console.log("JSON parsé avec succès:", mProduct .length, "items");
-                } catch (parseError) {
-                    console.error(" Erreur parsing JSON:", parseError);
-                    console.error(" Contenu:", sProduct);
-                   mProduct  = [];
-                }
-               
-            }
-        }
-        
-        oModel.setProperty("/products", mProduct);
-    }
-   
-    */
-
-
-    /*
-   
-    private getCartItemsFromMemory(oModel: JSONModel): void{
-        let sCart = this.iOrderItemStorageRepo.getOrderItem("myCart");
-        const sTotalAmount = this.iOrderItemStorageRepo.getOrderItem("myTotal");
-        const sCountCart = this.iOrderItemStorageRepo.getOrderItem("myCount");
-        
-        console.log("start memory", sCart)
-        console.log("start count", sCountCart)
-        console.log("start total ",sTotalAmount)
-        let aItems: any[] = [];
-        let nTotalAmount = 0;
-        let nCount = 0;
-        if((typeof sCart === "string")){
-              if (sCart.trim() === "") {
-                console.log("Panier vide (string vide)");
-                aItems = [];
-              } else if (sCart.startsWith("[object")) {
-                aItems = [];
-              }else {
-                //  Parser la chaîne JSON
-                try {
-                     aItems = JSON.parse(sCart);
-                    if(typeof  aItems === "string"){
-                      aItems= JSON.parse( aItems); // Donne enfin le tableau []
-                    }
-                    console.log("JSON parsé avec succès:", aItems.length, "items");
-                } catch (parseError) {
-                    console.error(" Erreur parsing JSON:", parseError);
-                    console.error(" Contenu:", sCart);
-                    aItems = [];
-                }
-               
-            }
-        }
-        if (Array.isArray(sCart)) {
-            // Cas 3: C'est déjà un tableau (getOrderItem retourne un objet)
-            console.log("Storage retourne déjà un tableau");
-            aItems = sCart;           
-        }
-        if (sTotalAmount && sTotalAmount !== "null" && sTotalAmount !== "undefined") {
-            nTotalAmount = parseFloat(sTotalAmount);  // string → number
-            
-            if (isNaN(nTotalAmount)) {
-                console.warn("Total invalide, initialisation à 0");
-                nTotalAmount = 0;
-            }
-        }
-        if (sCountCart && sCountCart !== "null" && sCountCart !== "undefined") {
-            nCount = parseInt(sCountCart, 10);  // string → number (entier)
-            
-            if (isNaN(nCount)) {
-                console.warn(" Count invalide, initialisation à 0");
-                nCount = 0;
-            }
-        }
-
-        oModel.setProperty("/filteredItems", aItems);
-        oModel.setProperty("/totalAmount",nTotalAmount.toFixed(2));
-        oModel.setProperty("/countSelectedProduct",nCount);
-    }
-    */
-
+    // Creates a new order on the backend — skips if an order already exists in storage
     private async saveOrder(): Promise<void> {
 
-        if(OrderStorageHelper.hasExistingOrder(this.iorderStorage)){
-           console.log('Commande existante:', this.OrderUuid);
-           return;
+        if (OrderStorageHelper.hasExistingOrder(this.iorderStorage)) {
+            console.log('Existing order:', this.OrderUuid);
+            return;
         }
-
-         const newOrder: IOrder = {
-            "OrderId": "2026003",
-            "CustomerId": "0000000014",
-            "TotalAmount": 0,
-            "Currency": "EUR",
-            "Status": "PENDING"
-        };
-
-        if(!this.orderService){
-            console.log("class pas creer")
-
-        }
-
-        const response = await this.orderDependencies.orderService.saveOrder(newOrder) ;
-
-    }
-    
-    /** 
-    // this methode make many thing it need refactory
-    private async  initializeOrder(): Promise<void> {
-        this.iorderStorage = new OrderStorageImpl();
-        this.OrderUuid = this.iorderStorage.getOrderUuid() || '';
-        
-        // verify order in localstorage
-        if (this.OrderUuid) {
-           console.log('Commande existante:', this.OrderUuid);
-           return;
-
-        }
-            
-        //this.iorderRepo = new OrderImpl(this.oODataModel, this._oDataRequestErrorHelper);
-        //this.orderService  = new OrderService (this.iorderRepo,this.iorderStorage);
 
         const newOrder: IOrder = {
-            "OrderId": "2026003",
-            "CustomerId": "0000000014",
+            "OrderId":     "2026003",
+            "CustomerId":  "0000000014",
             "TotalAmount": 0,
-            "Currency": "EUR",
-            "Status": "PENDING"
+            "Currency":    "EUR",
+            "Status":      "PENDING"
         };
 
-        const response = await this.orderService.saveOrder(newOrder) ;
-        console.log("new order value", response)
+        if (!this.orderService) {
+            console.log("class pas creer");
+        }
 
+        const response = await this.orderDependencies.orderService.saveOrder(newOrder);
     }
-   */
 
-    private async setProductsWithFallback(oModel:JSONModel):Promise<void> {
+    // Loads products from storage if available, otherwise fetches them from the backend
+    private async setProductsWithFallback(oModel: JSONModel): Promise<void> {
+        const oUiModel = this.getView()?.getModel("ui1") as JSONModel;
         const sProducts = this.orderDependencies.iOrderItemStorage.getOrderItem("myProducts");
 
         if (!sProducts || sProducts === "null" || sProducts === "undefined" || sProducts.trim() === "") {
             try {
-                // load data from backend
-                const dProduct =  await this.getProductFromDb();
-                const sProducts = JSON.stringify(dProduct);
-                this.orderDependencies.iOrderItemStorage.setOrderItem("myProducts",sProducts)
-                    
-                //  RÉCUPÉRER le modèle d'abord
-                // const oModel = this.getView()?.getModel("products") as JSONModel;
 
-                // On met à jour le modèle existant
+                // No cached data fetch from the backend and persist to storage
+                const dProduct = await this.getProductFromDb();
+                const sProducts = JSON.stringify(dProduct);
+                this.orderDependencies.iOrderItemStorage.setOrderItem("myProducts", sProducts);
                 oModel.setProperty("/products", this.products);
-                console.log('Modèles créés avec', this.products);
+                console.log('Models created with', this.products);
             } catch (error) {
-                console.error('Erreur initialisation:', error);
-            }
-        }else{
-              this.setProductModelFromMemory(oModel);
+                console.error('Initialization error:', error);
+            }finally {
+            //  Cacher le loading une fois les données prêtes
+            oUiModel?.setProperty("/isLoading", false);
+        }
+        } else {
+            // Cached data found — restore products from storage
+             oUiModel?.setProperty("/isLoading", false);
+            this.setProductModelFromMemory(oModel);
         }
     }
-    
-    private async getProductFromDb(): Promise<Zproduct[]>{
+
+    // Fetches all products from the backend and assigns image URLs by index
+    private async getProductFromDb(): Promise<Zproduct[]> {
         try {
-    
             const db_products = await this.orderDependencies.productService.getAllProducts();
-            
+
             if (!db_products) {
                 this.products = [];
             }
 
             this.products = db_products.map((product: Zproduct, index: number) => {
-            product.ImageUrl = (this.images && this.images[index]) ? this.images[index] : '';
-            return product;
+                product.ImageUrl = (this.images && this.images[index]) ? this.images[index] : '';
+                return product;
             });
-            
-            return this.products
-            //const sProducts = JSON.stringify(this.products);
-            //this.iOrderItemStorageRepo.setOrderItem("myProducts",sProducts)
+
+            return this.products;
         } catch (error) {
-            console.error('Erreur:', error);
-            throw error;  
+            console.error('Error:', error);
+            throw error;
         }
     }
-    
-    
 
-    onDelete(oEvent:any): void {
-        const oButton = oEvent.getSource();
-        const oContext = oButton.getBindingContext("products"); // products is given model name
+    // Reads the cart item from the button context and removes it from the cart
+    onDelete(oEvent: any): void {
+        const oButton  = oEvent.getSource();
+        const oContext = oButton.getBindingContext("products");
         const oCartItem = oContext.getObject() as ICartItem;
-       
-        if(oCartItem){
-            //https://abapcloud.com/sap-event-mesh-abap-cloud/
-          this.cartserviceProcess.deleteFromCart(oCartItem);
+
+        if (oCartItem) {
+            this.cartserviceProcess.deleteFromCart(oCartItem);
         }
-
     }
 
-   
-    addToCard(oEvent:any):void{
-            const oButton = oEvent.getSource();
-            const oContext = oButton.getBindingContext("products");
-            const oProduct = oContext.getObject() as Zproduct ;
-            this.cartserviceProcess.addToCart(oProduct);
+    // Reads the product from the button context and adds it to the cart
+    addToCard(oEvent: any): void {
+        const oButton  = oEvent.getSource();
+        const oContext = oButton.getBindingContext("products");
+        const oProduct = oContext.getObject() as Zproduct;
+        this.cartserviceProcess.addToCart(oProduct);
     }
 
-    private _updateTotal(aCartItems: any[]): void {
-        const oModel = this.getView()?.getModel() as JSONModel;
-        const total = aCartItems.reduce((sum, item) => sum + item.subtotal, 0);
-        oModel.setProperty("/total", total);
-    }
 
+    // Toggles the cart panel visibility in the UI model
     private toggleDisplay(): void {
-            const oModel = this.getView()?.getModel("ui") as JSONModel;
-            const aVisible = oModel.getProperty("/isCartVisible");
-            
-            oModel.setProperty("/isCartVisible", !aVisible)
-
+        const oModel   = this.getView()?.getModel("ui") as JSONModel;
+        const aVisible = oModel.getProperty("/isCartVisible");
+        oModel.setProperty("/isCartVisible", !aVisible);
     }
 
+    // Returns a stock label string based on the available quantity
     public formatStock(iInStock: number): string {
-        return iInStock > 0 ? `En stock ` : "Rupture";
+        return iInStock > 0 ? `En stock` : "Rupture";
     }
 
+    // Returns the semantic state color for the stock indicator
     public getStockState(iInStock: number): string {
         return iInStock > 0 ? "Success" : "Error";
     }
 
+    // Opens or closes the mobile menu popover and toggles the hamburger icon accordingly
+    public async onHamburgerPress(oEvent: Event): Promise<void> {
+        const oButton = oEvent.getSource() as Button;
 
+        // Prevent multiple simultaneous load attempts
+        if (this._bMenuLoading) return;
 
- 
+        if (!this._oMobileMenu) {
+            this._bMenuLoading = true;
+            try {
+                // Lazy-load the mobile menu fragment on first open
+                this._oMobileMenu = await Fragment.load({
+                    name:       "com.kenne.orderapp.Fragments.MobileMenu",
+                    controller: this
+                }) as Popover;
 
-public async onHamburgerPress(oEvent: Event): Promise<void> {
-  const oButton = oEvent.getSource() as Button;
+                this.getView()?.addDependent(this._oMobileMenu);
+            } finally {
+                this._bMenuLoading = false;
+            }
+        }
 
-  if (this._bMenuLoading) return; // ✅ bloque si déjà en cours de chargement
-
-  if (!this._oMobileMenu) {
-    this._bMenuLoading = true;
-    try {
-      this._oMobileMenu = await Fragment.load({
-        name: "com.kenne.orderapp.Fragments.MobileMenu", // ⚠️ sans id de vue
-        controller: this
-      }) as Popover;
-
-      this.getView()?.addDependent(this._oMobileMenu);
-    } finally {
-      this._bMenuLoading = false;
+        if (this._oMobileMenu.isOpen()) {
+            this._oMobileMenu.close();
+            oButton.setIcon("sap-icon://menu2");
+        } else {
+            this._oMobileMenu.openBy(oButton);
+            oButton.setIcon("sap-icon://decline");
+        }
     }
-  }
-
-  if (this._oMobileMenu.isOpen()) {
-    this._oMobileMenu.close();
-    oButton.setIcon("sap-icon://menu2");
-  } else {
-    this._oMobileMenu.openBy(oButton);
-    oButton.setIcon("sap-icon://decline");
-  }
-}
-
-
-
 }

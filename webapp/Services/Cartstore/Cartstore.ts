@@ -12,7 +12,7 @@ export class CartStore implements ICartStore {
     }
 
     getTotal(): string {
-        return this.model.getProperty("/totalAmount") || 0;
+        return this.model.getProperty("/totalAmount")
     }
 
     setItems(items: ICartItem[]): void {

@@ -24,7 +24,7 @@ export class BatchServiceProcess {
         const orderPath = this.pathBuilder.buildOrderPath(orderUuid);
         const itemsPath = this.pathBuilder.buildItemsPath(orderUuid);
 
-        // 1) Action : décrémente la quantité via Function Import
+        // 1) Action: decrement the item quantity via a Function Import call
         this.executor.addFunctionCall(
             DECREASE_QUANTITY_PATH,
             "POST",
@@ -32,21 +32,21 @@ export class BatchServiceProcess {
             BATCH_GROUP_ID
         );
 
-        // 2) Refresh : relecture du total commande
+        // 2) Refresh: re-read the order to get the updated total
         this.executor.addRead(
             orderPath,
             this.queryBuilder.buildOrderParams(),
             BATCH_GROUP_ID
         );
 
-        // 3) Refresh : relecture de l'item mis à jour
+        // 3) Refresh: re-read the updated item to reflect the new quantity
         this.executor.addRead(
             itemsPath,
             this.queryBuilder.buildItemParams(item.productId),
             BATCH_GROUP_ID
         );
 
-        // soumettre tous les api dans un submitBatch
+        // Submit all queued API calls in a single batch request
         const responses = await this.executor.submitBatch(BATCH_GROUP_ID);
         return this.responseParser.parseDeleteResponse(responses);
     }
@@ -63,23 +63,24 @@ export class BatchServiceProcess {
             Currency:    orderItem.Currency
         };
 
-        // 1) Action : création de l'item
+        // 1) Action: create the new item in the order
         this.executor.addCreate(itemsPath, payload, BATCH_GROUP_ID);
 
-        // 2) Refresh : relecture du total commande
+        // 2) Refresh: re-read the order to get the updated total
         this.executor.addRead(
             orderPath,
             this.queryBuilder.buildOrderParams(),
             BATCH_GROUP_ID
         );
 
-        // 3) Refresh : relecture du nouvel item
+        // 3) Refresh: re-read the items list to include the newly created entry
         this.executor.addRead(
             itemsPath,
             this.queryBuilder.buildItemParams(orderItem.ProductId),
             BATCH_GROUP_ID
         );
 
+        // Submit all queued API calls in a single batch request
         const responses = await this.executor.submitBatch(BATCH_GROUP_ID);
         return this.responseParser.parseAddResponse(responses);
     }

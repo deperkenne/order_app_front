@@ -14,7 +14,7 @@ export interface IBatchResult {
     totalOrder: number;
     currency: string;
     newItems: any[];
-    postStatus: string | number;
+    Status: boolean;
 }
 
 

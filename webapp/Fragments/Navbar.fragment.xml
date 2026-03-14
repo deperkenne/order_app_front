@@ -16,9 +16,9 @@
             class="navAppTitle" />
         <ToolbarSpacer id="navspace1" />
         <!-- MIDDLE: Navigation Links -->
-        <Button id="navBtn1"   text="Solution"   type="Transparent" press="onSolutionPress"   class="navLinkBtn" />
-        <Button id="navBtn2"   text="Resource"   type="Transparent" press="onResourcePress"   class="navLinkBtn" />
-        <Button id="navBtn3" text="Entreprise" type="Transparent" press="onEntreprisePress" class="navLinkBtn" />
+        <Button id="navBtn1"   text="Services"   type="Transparent" press="onSolutionPress"   class="navLinkBtn" />
+        <Button id="navBtn2"   text="Portail"   type="Transparent" press="onResourcePress"   class="navLinkBtn" />
+        <Button id="navBtn3" text="Contact" type="Transparent" press="onEntreprisePress" class="navLinkBtn" />
         <ToolbarSpacer  id="navspace2" />
         
         <!-- Icônes -->
@@ -31,14 +31,7 @@
 
         <Button
             id="profileBtn"
-            icon="sap-icon://person-placeholder"
-            type="Transparent"
-            press=".onProfilePress"
-             class="navCartBtn" />
-
-        <Button
-            id="wishlistBtn"
-            icon="sap-icon://unfavorite"
+            icon="sap-icon://settings"
             type="Transparent"
             press="onLoginPress"
             class="navCartBtn" />

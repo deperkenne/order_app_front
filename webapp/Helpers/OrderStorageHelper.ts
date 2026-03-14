@@ -11,6 +11,10 @@ export class OrderStorageHelper {
         }
         return false;
     }
+    
+    static getOderUuid(iorderStorage:IOrderStorageRepo): string{
 
+        return  iorderStorage.getOrderUuid() || ''
+    }
     
 }

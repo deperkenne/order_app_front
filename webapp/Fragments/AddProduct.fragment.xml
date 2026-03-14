@@ -1,11 +1,12 @@
 <core:FragmentDefinition
     xmlns:core="sap.ui.core"
     xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
     xmlns="sap.m">
     
-    <Dialog id="AddStockDialog" title="Stock Management" contentWidth="450px">
+    <Dialog id="AddProductD" title="Product Management" contentWidth="450px">
         <content>
-            <f:SimpleForm id="AddStockForm"
+            <f:SimpleForm id="AddProductForm"
                 editable="true"
                 layout="ResponsiveGridLayout"
                 labelSpanL="4"
@@ -13,16 +14,13 @@
                 columnsL="1"
                 columnsM="1">
                 <f:content>
-                     <Label text="IDStock" id="AddStockLabel1"/>
-
-            <Input id="AddStockInput1" />
-            <Label id="AddStockLabel3" text="ProductName" />
-            <Input  id="AddStockInput3" placeholder="name.."  />
-            <Label id="AddStockLabel4"  text="Currency"  />
-            <Input   id="AddStockInput4" placeholder="Currency.." />
-            <Label id="AddStockLabel6" text="Price" />
+            <Label id="AddProductLabel1" text="ProductName" />
+            <Input  id="AddProductInput1" placeholder="name.."  />
+            <Label id="AddProductLabel2"  text="Currency"  />
+            <Input   id="AddProductInput2" placeholder="Currency.." />
+            <Label id="AddProductLabel3" text="Price" />
             <Input
-                id="AddStockInput6"
+                id="AddProductInput3"
                 type="Number"
                 editable="true"
                 valueLiveUpdate="true"
@@ -33,17 +31,17 @@
 
         <beginButton>
             <Button 
-                id="AddStocktId"
-                text="Enregistrer" 
+                id="AddProductId"
+                text="Save" 
                 type="Emphasized" 
                 icon="sap-icon://save" 
-                press="onAddStock" />
+                press=".onAddProduct"/>
         </beginButton>
         <endButton>
             <Button 
-                id="closedStockId"
-                text="Annuler" 
-                press="onCloseDialogAddStock" />
+                id="closedProductId"
+                text="Close" 
+                press=".onCloseDialog" />
         </endButton>
     </Dialog>
 </core:FragmentDefinition>

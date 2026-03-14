@@ -12,6 +12,7 @@ import Fragment from "sap/ui/core/Fragment";
 import {StockImpl} from "../Repositories/impl/StockImpl"
 import { StockService } from "../Services/StockService";
 import Input from "sap/m/Input";
+
 import {ODataRequestErrorHelper} from "../Helpers/oDataRequestErrorHelper";
 export default class Main extends Controller {
     
@@ -77,6 +78,7 @@ export default class Main extends Controller {
         
         this.loadDialog("com.kenne.orderapp.Fragments.LoginDialog",null)
     }
+
     // helper methode
     private async loadDialog (dialogName:string, oData?:any ): Promise<void> {
         console.log("show data oData",oData)
@@ -86,11 +88,11 @@ export default class Main extends Controller {
             const pDialog = Fragment.load({
                 id: this.getView()?.getId(), // attaching manually fragment to the View ID
                 name: dialogName ,// <--- Respecte strictement ce chemin
-                controller: this
+                controller: this // on lie le fragment au controleur actuel. Cela permet au fragment d'appeler les fonctions 
+                                 //(comme onClose) directement définies dans votre fichier .controller.ts.
             }).then((oDialog: any) => {
                 console.log(dialogName,"binding")
-                this.getView()?.addDependent(oDialog); // Crucial pour le dataflow du contoleur vers le fragment ou enfant
-                  
+                this.getView()?.addDependent(oDialog); // ajoute le dialogue comme "dépendant" de la vue :               
                 return oDialog;
             });
             this._mDialogs.set(dialogName, pDialog);
@@ -98,6 +100,7 @@ export default class Main extends Controller {
         this.setDialog(dialogName,this._mDialogs,oData)  
     }
 
+    // oData peut etre null ou recevoire les donnees : null si nous devons remplir tous un formulaire  si non non null dans le cas de la modification
     private async setDialog(dialogName:string,mDialogs?:any,oData?:any):Promise<void>{
         console.log("start set data")
          // 2. Attendre que le dialog soit chargé
@@ -108,7 +111,7 @@ export default class Main extends Controller {
             const oModel = oDialog.getModel("dialogData");
             if (oModel) {
                    console.log("show model2..", oModel)
-                   oModel.setData(oData); // Mise à jour
+                   oModel.setData(oData); // Mise à jour remplacement du model 
             } else {
                     console.log("start model")
                     oDialog.setModel(new JSONModel(

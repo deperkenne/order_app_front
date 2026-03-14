@@ -10,9 +10,8 @@ import { ODataRequestErrorHelper } from "../Helpers/oDataRequestErrorHelper";
 export function createBatchService(
     oModel: ODataModel,
     _oDataRequestErrorHelper: ODataRequestErrorHelper  
-):  BatchServiceProcess {
+): BatchServiceProcess {
     oModel.setDeferredGroups(["OrderBatchGroup"]);
-
     return new  BatchServiceProcess(
         new ODataBatchExecutor(oModel as any),
         new BatchResponseParser(),

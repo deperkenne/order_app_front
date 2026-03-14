@@ -9,10 +9,14 @@ import { IorderItemStorage } from "../Repositories/IOrder_ItemStorageRepository"
 import { BatchServiceProcess } from "./BatchService";
 import { createBatchService } from "./CreateBatchService";
 import { OrderStorageImpl } from "../Repositories/impl/OrderStorageImpl";
+import { OrderItemStorage } from "../Repositories/impl/Order_ItemStrorage_impl";
  
-
-export function CreateCartServiceProcess(oModel: ODataModel, productModel:JSONModel,
-    _oDataRequestErrorHelper: ODataRequestErrorHelper,iOrderItemStorage:IorderItemStorage): CartServiceProcess{
+export function CreateCartServiceProcess(
+    oModel: ODataModel, 
+    productModel:JSONModel,
+    _oDataRequestErrorHelper: ODataRequestErrorHelper,
+    iOrderItemStorage:IorderItemStorage
+): CartServiceProcess{
         _oDataRequestErrorHelper = new ODataRequestErrorHelper();
         const  batchServiceProcess = createBatchService(oModel,_oDataRequestErrorHelper)
         return new CartServiceProcess(
@@ -20,6 +24,7 @@ export function CreateCartServiceProcess(oModel: ODataModel, productModel:JSONMo
             new CartCalculator(),
             new CartPersistence(iOrderItemStorage),
             new OrderStorageImpl(),
-            batchServiceProcess
+            batchServiceProcess,
+            new OrderItemStorage()
     );
 }

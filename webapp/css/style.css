@@ -35,11 +35,20 @@
 }
 .bodyCard{
    background-color: var(--sapList_Background);
+   
+}
 
+.productSession{
+    background-color: #001f3f; 
+    height: 100vh;
+    
+    /* Votre dégradé */
+    background: linear-gradient(155deg, #001f3f 0%, #0F2A4E 100%);
 }
 
 .productTitleMessage{
-   background-color: #d0d1dc !important ;
+   /*background-color: #d0d1dc !important ;*/
+   background: var(--navy) !important;
    padding: 5rem !important;
 
 }
@@ -473,6 +482,11 @@
     margin-top: 60px;
 }
 
+.productTitle{
+    color:#16a34a !important;
+    font-size: 1.8rem !important;
+
+}
 
 
 /* Rendre la liste transparente pour voir le fond noir */
@@ -1237,10 +1251,10 @@
 /******************************************NAVBARFRAGMENT***************************************************************************************************************************************************************************/
 
 .navHeader {
-    background-color: #000000 !important;
+    background: rgba(8, 23, 46, .94);
     border-bottom: 1px solid #1a1a1a;
     padding: 0 2rem;
-     height: 5.5rem !important;
+     height: 3.5rem !important;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
         
@@ -1392,7 +1406,6 @@ html body .navHamburgerBtn .sapMBtnIcon:hover {
     background-color: #181717;
     border-top: 1px solid #e0e0e0;
     box-sizing: border-box;
-    position:sticky;
     bottom: 0;
 }
 
@@ -1595,9 +1608,9 @@ body.sapUiBody {
 .brandTextBox.sapMFlexBox { gap: 2px; }
 
 .brandName .sapMText {
-    font-size: 0.875rem;
+    font-size: 1.2rem !important;
     font-weight: 700;
-    color: var(--clr-text-main);
+    color: var(--clr-text-main) !important;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1606,6 +1619,12 @@ body.sapUiBody {
 .brandRole .sapMText {
     font-size: 0.75rem;
     color: var(--clr-text-muted);
+}
+
+.productSubTitle{
+    font-size: 1.2rem !important;
+    color:#ffffff !important
+
 }
 
 /* ── Espace élastique entre nav et footer ── */
@@ -2773,6 +2792,11 @@ body.sapUiBody {
 }
 
 
+.umSession{
+
+    background-color: #001f3f !; 
+}
+
 /* ── Carte tableau ──
    Équivalent :
      <div className="bg-white rounded-2xl shadow-lg border ..."> */
@@ -2933,4 +2957,165 @@ body.sapUiBody {
 
     /* Padding réduit dans la carte */
     .umTableCardHeader { padding: 12px 16px !important; }
+}
+
+
+/* ══════════════════════════════════════════
+   NOT FOUND PAGE — Dark 404 Error Page
+   ══════════════════════════════════════════ */
+
+/* Page background — dark navy */
+.nfPage,
+.nfPage .sapMPageBgStandard,
+.nfPage .sapMPage {
+    background-color: #0f1724 !important;
+    height: 100% !important;
+}
+
+/* Center wrapper — full height vertical centering */
+.nfWrapper {
+    min-height: 100vh;
+    padding: 2rem;
+    background-color: #0f1724;
+    box-sizing: border-box;
+}
+
+/* ── Icon container ── */
+.nfIconBox {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 2rem;
+}
+
+/* Map icon — large grey circle background */
+.nfIconBox > .sapUiVBox:first-child,
+.nfMapIcon.sapUiIcon {
+    width: 90px;
+    height: 90px;
+    background-color: #1e2a3a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem !important;
+    color: #6b7a90 !important;
+    padding: 1.2rem;
+    box-sizing: border-box;
+}
+
+/* Question mark red badge */
+.nfBadge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 30px;
+    height: 30px;
+    background-color: #e63946;
+    border-radius: 50%;
+    border: 2px solid #0f1724;
+    z-index: 10;
+}
+
+.nfBadgeText.sapMText {
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ── Title ── */
+.nfTitle.sapMTitle {
+    color: #ffffff !important;
+    font-size: 2.4rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 1.2rem !important;
+    margin-top: 0 !important;
+    text-align: center;
+    letter-spacing: -0.5px;
+}
+
+/* ── Description ── */
+.nfDescription.sapMText {
+    color: #8a9ab5 !important;
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+    max-width: 400px;
+    text-align: center;
+    margin-bottom: 2.5rem !important;
+}
+
+/* ── Button container ── */
+.nfButtonBox {
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+/* Back button — outline style */
+.nfBackBtn.sapMBtn {
+    min-width: 140px;
+}
+
+.nfBackBtn.sapMBtn .sapMBtnInner {
+    background-color: transparent !important;
+    border: 1.5px solid #3a4a60 !important;
+    color: #c8d6e8 !important;
+    border-radius: 2rem !important;
+    padding: 0 1.6rem !important;
+    height: 44px !important;
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.nfBackBtn.sapMBtn:hover .sapMBtnInner {
+    background-color: #1e2a3a !important;
+    border-color: #5a7a9a !important;
+}
+
+/* Home button — blue filled */
+.nfHomeBtn.sapMBtn {
+    min-width: 180px;
+}
+
+.nfHomeBtn.sapMBtn .sapMBtnInner {
+    background-color: #2563eb !important;
+    border: none !important;
+    color: #ffffff !important;
+    border-radius: 2rem !important;
+    padding: 0 1.6rem !important;
+    height: 44px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.4rem !important;
+}
+
+.nfHomeBtn.sapMBtn:hover .sapMBtnInner {
+    background-color: #1d4ed8 !important;
+}
+
+/* ✅ Fix icon + text alignment inside button */
+.nfHomeBtn .sapMBtnIcon {
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    margin-right: 0.3rem !important;
+}
+
+.nfHomeBtn .sapMBtnContent {
+    display: flex !important;
+    align-items: center !important;
+}
+
+
+.productLoadingText.sapMText {
+    color: #ffffff !important;
+    font-size: 1.0rem !important;
+    font-weight: 100 !important;
 }
