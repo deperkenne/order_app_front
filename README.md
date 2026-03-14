@@ -12,7 +12,7 @@
 --
 
 ## Architecture
-![Architecture Diagram](./webapp/images/Sap-BTP-Architecture.jpg)
+![Architecture Diagram](./webapp/images/Sap-BTP-Architecture.jpeg)
 ```
 
 ---
