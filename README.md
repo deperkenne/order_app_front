@@ -9,7 +9,7 @@
 
 > Full-stack SAP BTP application for cart and order management — built with **RAP (ABAP RESTful Application Programming)**, **Draft Handling**, **OData V2 Batch**, and secured via **IAS OAuth2 PKCE**.
 
----
+--
 
 ## Architecture
 
