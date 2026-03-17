@@ -130,16 +130,47 @@ export default class ProductsController extends Controller {
                 
     }
 
-    public async orderActivate(oEvent: any):Promise<void>{
-        const orderUuid = this.orderDependencies.iOrderStorage.getOrderUuid() || ""
-        if(!orderUuid){
-           return
-        }
-        this.orderService.orderActivated(orderUuid)
-        this.iOrderItemStorageRepo.clearOrderItem("myCart");
-        this.iOrderItemStorageRepo.clearOrderItem("myTotal");
-        this.iOrderItemStorageRepo.clearOrderItem("myCount");
+    public async orderActivate(oEvent: any): Promise<void> {
+        try {
+            const orderUuid = this.orderDependencies.iOrderStorage.getOrderUuid() || "";
 
+            if (!orderUuid) {
+                console.error("No active order found.");
+                return;
+            }
+
+            const response = await this.orderDependencies.orderService.orderActivated(orderUuid);
+
+            if (response ) {
+                const oJsonModel = this.getView()?.getModel("products") as JSONModel;
+                if (oJsonModel) {
+                    oJsonModel.setProperty("/filteredItems", []);
+                    oJsonModel.setProperty("/totalAmount", 0);  
+                    oJsonModel.setProperty("/countSelectedProduct", 0);     
+                }
+
+               
+                console.log("Succès ! Statut HTTP :", response.status);
+                this.orderDependencies.iOrderStorage.clearOrderUuid()
+                this.orderDependencies.iOrderItemStorage.clearOrderItem("myCart");
+                this.orderDependencies.iOrderItemStorage.clearOrderItem("myTotal");
+                this.orderDependencies.iOrderItemStorage.clearOrderItem("myCount");
+                MessageToast.show("Order confirmed successfully!");
+            }
+
+        } catch (error: any) {
+            console.error("orderActivate error:", error);
+
+            if (error.statusCode === 404) {
+                console.error("Order not found or draft has expired.");
+            } else if (error.statusCode === 400) {
+                console.error("Invalid order data: " + error.message);
+            } else if (error.statusCode === 409) {
+                console.error("Order conflict: " + error.message);
+            } else {
+                console.error("Activation failed: " + (error.message || "Unknown error"));
+            }
+        }
     }
     
     // Delegates the login action to the auth service
@@ -186,11 +217,8 @@ export default class ProductsController extends Controller {
             "Status":      "PENDING"
         };
 
-        if (!this.orderService) {
-            console.log("class pas creer");
-        }
-
         const response = await this.orderDependencies.orderService.saveOrder(newOrder);
+        
     }
 
     // Loads products from storage if available, otherwise fetches them from the backend

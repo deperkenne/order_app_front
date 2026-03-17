@@ -5,7 +5,7 @@ import { IOrderStorageRepo } from "../Repositories/IOrderStorageRepository";
 
 export class OrderService {
 
-    readonly  orderRepo :  IOrderRepository
+    private orderRepo :  IOrderRepository
     private iorderstorageRepo: IOrderStorageRepo;
 
     constructor(orderRepo: IOrderRepository, iorderstorageRepo : IOrderStorageRepo ) {

@@ -3,7 +3,7 @@
     xmlns:f="sap.ui.layout.form"
     xmlns="sap.m">
     
-    <Dialog id="ProductEditDialog" title="Stock Management" contentWidth="450px">
+    <Dialog id="ProductEditDialog" title="Product Management" contentWidth="450px">
         <content>
             <f:SimpleForm id="StockForm"
                 editable="true"
@@ -28,7 +28,7 @@
         <beginButton>
             <Button 
                 id="onSetQuantityId"
-                text="Enregistrer" 
+                text="Save" 
                 type="Emphasized" 
                 icon="sap-icon://save" 
                 press="onUpdateProduct" />

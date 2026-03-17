@@ -17,13 +17,16 @@ export class ZProductImpl implements IProductRepos {
     // Sends a POST request to create a new product and returns the backend-enriched object
     async saveProduct(zproduct: Zproduct): Promise<Zproduct> {
 
-        const oPayload = {
-            ProductId:   zproduct.ProductId,
+            const oPayload = {
+            ProductId:   "301",  
             Productname: zproduct.Productname,
             Price:       String(zproduct.Price),
             Currency:    zproduct.Currency,
-            Stock:       zproduct.Stock,
+            Stock:       zproduct.Stock,        
         };
+
+        console.log("Payload:", JSON.stringify(oPayload));
+        //  {"ProductId":"300","Productname":"...","Price":"10.50",...}
 
         return new Promise((resolve, reject) => {
             this.oModel.create("/Products", oPayload, {

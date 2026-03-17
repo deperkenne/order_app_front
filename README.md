@@ -61,34 +61,52 @@
 ```
 ├── backend/
 │   ├── CDS/
-│   │   ├── ZI_ORDER_K.cds         # Interface view — Orders
-│   │   ├── ZI_LINE_ITEM.cds       # Interface view — Order Items
-│   │   ├── ZI_PRODUCT.cds         # Interface view — Products
-│   │   ├── ZC_ORDER_K.cds         # Consumption view — Orders
-│   │   ├── ZC_LINE_ITEM.cds       # Consumption view — Items
-│   │   └── ZC_PRODUCT.cds         # Consumption view — Products
+│   │   ├── ZI_ORDER_K.cds              # Interface view — Orders
+│   │   ├── ZI_LINE_ITEM.cds            # Interface view — Order Items
+│   │   ├── ZI_PRODUCT.cds              # Interface view — Products
+│   │   ├── ZC_ORDER_K.cds              # Consumption view — Orders
+│   │   ├── ZC_LINE_ITEM.cds            # Consumption view — Items
+│   │   └── ZC_PRODUCT.cds              # Consumption view — Products
 │   ├── Behavior/
-│   │   ├── ZI_ORDER_K.bdef        # Draft-enabled behavior definition
-│   │   ├── ZBP_ORDER_K.clas.abap  # Order behavior implementation
-│   │   ├── ZBP_PRODUCT.bdef       # Product behavior definition
-│   │   └── ZBP_PRODUCT.clas.abap  # Product behavior implementation
+│   │   ├── ZI_ORDER_K.bdef             # Draft-enabled behavior definition
+│   │   ├── ZBP_ORDER_K.clas.abap       # Order behavior implementation
+│   │   ├── ZBP_PRODUCT.bdef            # Product behavior definition
+│   │   └── ZBP_PRODUCT.clas.abap       # Product behavior implementation
+│   ├── OOP — Business Logic Layer/
+│   │   ├── Interfaces/
+│   │   │   ├── ZIF_ITEM_CALCULATOR          # Line item calculation contract
+│   │   │   ├── ZIF_ITEM_QUANTITY_MANAGER    # Quantity management contract
+│   │   │   ├── ZIF_LINEITEM_SERVICE         # Line item service contract
+│   │   │   ├── ZIF_LINEITEM_NEW_QUANTITY    # New quantity update contract
+│   │   │   ├── ZIF_ORDER_CALCULATOR         # Order total calculation contract
+│   │   │   ├── ZIF_ORDER_WORKFLOW_SERVICE   # Workflow orchestration contract
+│   │   │   └── ZIF_DECREASE_ITEM_WORKFLOW   # Decrease workflow contract
+│   │   └── Classes/
+│   │       ├── ZCL_ITEM_CALCULATOR          # Line item price calculation
+│   │       ├── ZCL_ITEM_QUANTITY_MANAGER    # Quantity validation & update
+│   │       ├── ZCL_CALC_TOTAL_QTY           # Total quantity aggregation
+│   │       ├── ZCL_LINEITEM_SERVICE_IMPL    # Line item service implementation
+│   │       ├── ZCL_LINEITEM_NEW_QUANTITY_IMPL # Quantity update implementation
+│   │       ├── ZCL_ORDER_CALCULATOR_IMPL    # Order total implementation
+│   │       ├── ZCL_ORDER_WORKFLOW_SV_IMPL   # Workflow orchestration
+│   │       └── ZCL_DECREASE_ITEM_WORKFLOW   # Decrease item workflow
 │   └── Service/
-│       ├── ZUI_ORDER_SRV.srvd     # Service definition
-│       └── ZUI_ORDER_SRV.srvb     # Service binding (OData V2)
+│       ├── ZUI_ORDER_SRV.srvd          # Service definition
+│       └── ZUI_ORDER_SRV.srvb          # Service binding (OData V2)
 │
 └── frontend/
     ├── auth/
-    │   └── AuthService.ts         # PKCE / OAuth2 / IAS authentication
+    │   └── AuthService.ts              # PKCE / OAuth2 / IAS authentication
     ├── Services/
-    │   ├── CartServiceProcess.ts  # Cart orchestration + optimistic UI
-    │   └── BatchServiceProcess.ts # OData batch request builder
+    │   ├── CartServiceProcess.ts       # Cart orchestration + optimistic UI
+    │   └── BatchServiceProcess.ts      # OData batch request builder
     ├── Repositories/
-    │   ├── OrderImpl.ts           # OData order calls
-    │   └── OrderItemImpl.ts       # OData order item calls
+    │   ├── OrderImpl.ts                # OData order calls
+    │   └── OrderItemImpl.ts            # OData order item calls
     ├── Helpers/
-    │   └── oDataRequestError.ts   # Typed domain error handling
+    │   └── oDataRequestError.ts        # Typed domain error handling
     └── Controllers/
-        ├── Product.controller.ts  # Product detail
+        ├── Product.controller.ts       # Product detail
         ├── ProductManagement.controller.ts  # CRUD management
         └── DashboardAdmin.controller.ts     # Admin dashboard
 ```
@@ -156,4 +174,4 @@ A productive BTP subaccount with proper destination and communication arrangemen
 
 ## Author
 
-> Built as a hands-on BTP full-stack project to explore RAP draft handling, OData V4 batch patterns, and IAS authentication in a real-world cart management context.
+> Built as a hands-on BTP full-stack project to explore RAP draft handling, OData V2 batch patterns, and IAS authentication in a real-world cart management context.

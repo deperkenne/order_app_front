@@ -18,10 +18,12 @@ export class OrderImpl implements IOrderRepository {
 
     
     async activateOrder(orderUuid: string): Promise<any> {
+      
 
+   
         const mParameters = {
-            "OrderUuid": `guid'${orderUuid}'`,
-            "IsActiveEntity": false
+         "OrderUuid": orderUuid,
+         "IsActiveEntity": false
         };
 
         return new Promise((resolve, reject) => {
