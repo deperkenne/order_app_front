@@ -7,6 +7,12 @@
 ![OAuth2](https://img.shields.io/badge/Auth-OAuth2%20PKCE%20%2F%20IAS-red?style=flat-square)
 ![TypeScript](https://img.shields.io/badge/TypeScript-Strict-3178C6?style=flat-square)
 
+## 🎬 Live Demo
+
+[![Watch Demo on Loom](https://img.shields.io/badge/▶%20Watch%20Demo-Loom-625DF5?style=for-the-badge&logo=loom&logoColor=white)](https://www.loom.com/share/226649e8229b4b6080a0df5f3fe66c31)
+
+> Full-stack SAP BTP application...
+
 ## Full-stack SAP BTP application for cart and order management — built with **RAP (ABAP RESTful Application Programming)**, **Draft Handling**, **OData V2 Batch**, and secured via **IAS OAuth2 PKCE**. Includes a **protected Admin Dashboard** for product management (create, update, delete) accessible only after OAuth2 authentication. 
 
 --
