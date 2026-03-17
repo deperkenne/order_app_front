@@ -1,19 +1,18 @@
 export class Zproduct {
-  ProductId: number;    
+  ProductId: number;
   Productname: string;    
-  Price: number;           
+  Price: number;    
   Currency: string; 
   Status : string;    
   Stock: number; 
   private _imageurl: string = '';
-
 
   constructor(dbProduct: any) {
         this.ProductId = dbProduct.ProductId;
         this.Productname = dbProduct.Productname;
         this.Price = dbProduct.Price;
         this.Currency = dbProduct.Currency; 
-        this.Stock = dbProduct.Stock;
+        //this.Stock = dbProduct.Stock;
   }
 
   get ImageUrl(): string {

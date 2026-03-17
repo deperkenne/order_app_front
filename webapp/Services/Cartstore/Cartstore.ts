@@ -11,6 +11,10 @@ export class CartStore implements ICartStore {
         return this.model.getProperty("/filteredItems") || [];
     }
 
+    getTotal(): string {
+        return this.model.getProperty("/totalAmount")
+    }
+
     setItems(items: ICartItem[]): void {
         this.model.setProperty("/filteredItems", items);
     }
@@ -22,4 +26,5 @@ export class CartStore implements ICartStore {
     setCount(count: number): void {
         this.model.setProperty("/countSelectedProduct", count);
     }
+
 }

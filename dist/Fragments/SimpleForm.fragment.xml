@@ -1,0 +1,53 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns="sap.m">
+    
+    <Dialog id="StockDialog" title="Stock Management" contentWidth="450px">
+        <content>
+            <f:SimpleForm id="StockForm"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                labelSpanL="4"
+                labelSpanM="4"
+                columnsL="1"
+                columnsM="1">
+                <f:content>
+                     <Label text="IDStock" id="StockLabel1"/>
+
+            <Input id="StockInput1" value="{dialogData>/StockId}" editable="false" />
+            <Label id="StockLabel2" text="ID Produit" />
+            <Input   id="StockInput2" value="{dialogData>/ProductId}" editable="false" />
+            <Label id="StockLabel3" text="SKU" />
+            <Input  id="StockInput3" value="{dialogData>/SkuId}" editable="false" />
+            <Label id="StockLabel4" text="Quantité Totale" />
+            <Input   id="StockInput4" value="{dialogData>/Quantity}" editable="false" />
+            <Label id="StockLabel5" text="Unité" />
+            <Input   id="StockInput5" value="{dialogData>/Unit}" editable="false" />
+            <Label id="StockLabel6" text="Quantité Disponible" />
+            <Input
+                id="StockInput6"
+                type="Number"
+                editable="true"
+                valueLiveUpdate="true"
+                placeholder="Entrez la quantité disponible..." />
+                </f:content>
+            </f:SimpleForm>
+        </content>
+
+        <beginButton>
+            <Button 
+                id="onSetQuantityId"
+                text="Enregistrer" 
+                type="Emphasized" 
+                icon="sap-icon://save" 
+                press="onUpdateStock" />
+        </beginButton>
+        <endButton>
+            <Button 
+                id="closedId"
+                text="Annuler" 
+                press="onCloseDialogStock" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

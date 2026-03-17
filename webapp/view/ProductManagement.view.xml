@@ -1,0 +1,150 @@
+
+<mvc:View
+    controllerName="comkenneorderapp.controller.ProductManagement"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <!-- ════════════════════════════════════════════════
+         PAGE PRINCIPALE
+         enableScrolling="true" : le scroll est géré
+         par sap.m.Page directement (pas de ScrollContainer
+         imbriqué ici — la page est plus simple).
+         ════════════════════════════════════════════════ -->
+   <Page id="pmPage"
+      showHeader="false"
+      enableScrolling="true"
+      class="umPage umSession">
+    <content>
+
+         <VBox id="loadingBox"
+            visible="{ui>/isLoading}"
+            alignItems="Center"
+            justifyContent="Center"
+            class="productLoadingBox">
+            <core:Icon src="sap-icon://synchronize" class="productLoadingIcon"/>
+            <Text text="product Loading..." class="productLoadingText"/>
+        </VBox>
+
+        <VBox id="pmPageWrapper" class="umPageWrapper" visible="{= !${ui>/isLoading} }">
+
+            <VBox id="pmHeader" class="umHeader">
+                <Link text="← back to Dashboard"
+                      press="onNavBack"
+                      class="umBackLink"
+                      wrapping="false"/>
+                <Title text="products handling"
+                       level="H1"
+                       class="umPageTitle"/>
+            </VBox>
+
+            <HBox id="pmToolbar" class="umToolbar">
+                <Button id="addUserBtn"
+                        icon="sap-icon://add"
+                        text="Add new Product"
+                        type="Emphasized"
+                        press=".onCreateProduct"
+                        class="umAddBtn"/>
+            </HBox>
+
+            <SearchField id="umSearch"
+                         placeholder="find product..."
+                         liveChange="onSearch"
+                         search="onSearch"
+                         class="umSearchField"/>
+
+            <VBox id="pmTableCard" class="umTableCard">
+
+                <HBox id="pmTableCardHeader" class="umTableCardHeader" alignItems="Center">
+                    <Title id="umTableTitle"
+                           text="List of products"
+                           level="H2"
+                           class="umTableCardTitle"/>
+                </HBox>
+
+                <Table id="umTable"
+                       items="{um>/products}"
+                       mode="None"
+                       alternateRowColors="true"
+                       noDataText="product not exist"
+                       class="umTable">
+
+                    <columns>
+                        <Column id="pmColId" class="umColNom">
+                            <Text text="Id" class="umColHeader"/>
+                        </Column>
+                        <Column id="pmColName" class="umColNom">
+                            <Text text="Name" class="umColHeader"/>
+                        </Column>
+                        <Column id="pmColPrice"
+                                minScreenWidth="Tablet"
+                                demandPopin="false"
+                                class="umColPrice">
+                            <Text text="Price" class="umColHeader"/>
+                        </Column>
+                        <Column id="pmColCurrency" class="umColCurrency">
+                            <Text text="Currency" class="umColHeader"/>
+                        </Column>
+                        <Column id="pmColActions" hAlign="End" class="umColActions">
+                            <Text text="Actions" class="umColHeader"/>
+                        </Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem type="Inactive" class="umRow">
+                            <cells>
+                                <Text text="{um>ProductId}"
+                                    class="umUserEmail"
+                                    wrapping="false"/>
+
+                                <VBox class="umCellNom">
+                                    <Text text="{um>Productname}"
+                                        class="umUserName"
+                                        wrapping="false"/>
+                                    <Text text="{um>ProductId}"
+                                        class="umUserEmailMobile"
+                                        wrapping="false"/>
+                                </VBox>
+
+                                <Text text="{um>Price}"
+                                    class="umUserEmail"
+                                    wrapping="false"/>
+
+                                <ObjectStatus
+                                    text="{um>Currency}"
+                                    state="None"
+                                    class="umRoleBadge"/>
+
+                                <HBox class="umActions" justifyContent="End">
+                                    <Button icon="sap-icon://edit"
+                                            type="Transparent"
+                                            press=".onEditProduct"
+                                            class="umEditBtn">
+                                        <customData>
+                                            <core:CustomData key="action" value="EDIT"/>
+                                        </customData>
+                                    </Button>
+                                    <Button icon="sap-icon://delete"
+                                            type="Transparent"
+                                            press=".onDeleteProduct"
+                                            class="umDeleteBtn">
+                                        <customData>
+                                            <core:CustomData key="action" value="DELETE"/>
+                                        </customData>
+                                    </Button>
+                                </HBox>
+
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+
+                </Table>
+            </VBox>
+        </VBox>
+    </content>
+</Page>
+
+
+
+</mvc:View>

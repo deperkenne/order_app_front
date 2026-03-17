@@ -1,0 +1,20 @@
+<core:FragmentDefinition id="footerfrag" xmlns="sap.m"  xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form">
+ <HBox
+    id="appFooter"
+    justifyContent="SpaceBetween"
+    alignItems="Center"
+    class="appFooter">
+
+    <Text id="droits" text="© 2026 OrderApp. Tous droits réservés." class="footerText" />
+
+    <HBox id="footer" alignItems="Center" class="footerLinks">
+        <Link id="Confidentialite" text="Confidentialité" class="footerLink" />
+        <Text id="footersepa1" text="|" class="footerSeparator" />
+        <Link  id="footerLink1" text="Conditions" class="footerLink" />
+        <Text id="footersepa2" text="|" class="footerSeparator" />
+        <Link id="footerLink2" text="Contact" class="footerLink" />
+    </HBox>
+
+</HBox>
+</core:FragmentDefinition>

@@ -3,6 +3,7 @@ import {IStockRepository} from "../Repositories/IStockRepository"
 import {Stock} from "../model/Stock"
 
 export class StockService{
+   
    private readonly stockRepository: IStockRepository; 
 
    constructor(stockRepository: IStockRepository) {

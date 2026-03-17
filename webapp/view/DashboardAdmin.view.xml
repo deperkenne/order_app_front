@@ -1,10 +1,196 @@
 <mvc:View
-    controllerName="comkenneorderappcontroller.DashboardAdmin"
+    controllerName="comkenneorderapp.controller.DashboardAdmin"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-     xmlns:core="sap.ui.core">
+    xmlns:l="sap.ui.layout"
+    xmlns:core="sap.ui.core">
     
-    <Page title="Gestion de Stock - Entrepôt Central" id = "Dadmin" >
-        <Text id="Dmytext" text="Une description ici"/>
-    </Page>
+     <App id="mainApp">
+        <pages>
+            <!--
+                showHeader="false"  → pas de toolbar Fiori standard,
+                                      on a notre propre layout.
+                enableScrolling="false" → le défilement est géré par
+                                          le ScrollContainer interne.
+            -->
+            <Page id="dashboardPage"
+                  showHeader="false"
+                  enableScrolling="false"
+                  class="dashboardPage">
+                <content>
+
+                    <!-- ════════════════════════════════════════
+                         OVERLAY MOBILE (fond semi-transparent)
+                         Visible uniquement quand le menu mobile
+                         est ouvert. Clic → ferme le menu.
+                         Équivalent : <AnimatePresence> + motion.div
+                         ════════════════════════════════════════ -->
+                    <HBox id="sidebarOverlay"
+                          class="sidebarOverlay"
+                          visible="false"
+                          >
+                    </HBox>
+
+                    <!-- ════════════════════════════════════════
+                         CONTENEUR PRINCIPAL (sidebar + contenu)
+                         Équivalent au div flex racine de React.
+                         ════════════════════════════════════════ -->
+                    <HBox id="appShell" class="appShell">
+
+                        <!-- ╔══════════════════════════════╗
+                             ║         S I D E B A R        ║
+                             ╚══════════════════════════════╝ -->
+                        <VBox id="sidebar" class="sidebar">
+
+                            <!-- ── En-tête : avatar + nom compagnie ── -->
+                            <HBox  id="avatarid" class="sidebarBrand" alignItems="Center">
+                                <!--
+                                    sap.m.Avatar : remplace l'<img> React.
+                                    initials et backgroundColor sont
+                                    bindés depuis le modèle "dashboard".
+                                -->
+                                <Avatar id="companyAvatar"
+                                        initials="KT"
+                                        backgroundColor="{dashboard>/company/accent}"
+                                        displaySize="S"
+                                        class="companyAvatar"/>
+                                <VBox id="brandid" class="brandTextBox">
+                                    <Text id="companyN" text="KenneTchofo"
+                                          class="brandName"
+                                          wrapping="false"/>
+                                    <Text  id="Admin"  text="Admin"
+                                          class="brandRole"/>
+                                </VBox>
+                            </HBox>
+
+                            <!-- ── Liste de navigation ──
+                                 Binding sur le tableau navItems du modèle dashboard.
+                                 mode="SingleSelectMaster" : sélection immédiate
+                                 sans checkbox/radio (style pur CSS).
+                                 Équivalent : les <Link> du sidebar React.
+                            -->
+                            <List id="navList"
+                                  items="{dashboard>/navItems}"
+                                  mode="SingleSelectMaster"
+                                  selectionChange="onNavItemSelect"
+                                  showSeparators="None"
+                                  class="navList">
+                                <items>
+                                    <StandardListItem
+                                    id="titleid"
+                                        title="{dashboard>title}"
+                                        icon="{dashboard>icon}"
+                                        type="Active"
+                                        selected="{dashboard>active}"
+                                        class="navListItem"/>
+                                </items>
+                            </List>
+
+                            <!-- Séparateur flexible (pousse le footer en bas) -->
+                            <core:HTML  id="separatorId" content="&lt;div class='sidebarSpacer'&gt;&lt;/div&gt;"/>
+
+                            <!-- ── Footer : bouton déconnexion ── -->
+                            <VBox  id="sidebarFoot" class="sidebarFooter">
+                                <Button id="logoutBtn"
+                                        icon="sap-icon://log"
+                                        text="Log out"
+                                        press="onLogout"
+                                        type="Transparent"
+                                        class="logoutBtn"/>
+                            </VBox>
+
+                        </VBox>
+                        <!-- FIN SIDEBAR -->
+
+
+                        <!-- ╔══════════════════════════════╗
+                             ║      CONTENU PRINCIPAL        ║
+                             ╚══════════════════════════════╝ -->
+                        <VBox id="mainContent" class="mainContent">
+
+                            <!-- ── Header mobile (masqué sur desktop via CSS) ──
+                                 Équivalent au <div class="lg:hidden"> React.
+                            -->
+                            <HBox id="mobileHeader"
+                                  class="mobileHeader"
+                                  justifyContent="SpaceBetween"
+                                  alignItems="Center">
+
+                                <HBox alignItems="Center" class="mobileBrand">
+                                    <Avatar id="mobileAvatar"
+                                            initials="{dashboard>/company/initials}"
+                                            backgroundColor="{dashboard>/company/accent}"
+                                            displaySize="XS"
+                                            class="mobileCompanyAvatar"/>
+                                    <Text text="{dashboard>/company/name}"
+                                          class="mobileBrandName"
+                                          wrapping="false"/>
+                                </HBox>
+
+                                <!-- Bouton hamburger (☰ / ✕) -->
+                                <Button id="menuToggleBtn"
+                                        icon="sap-icon://menu2"
+                                        press="onToggleMobileMenu"
+                                        type="Transparent"
+                                        class="menuToggleBtn"/>
+
+                            </HBox>
+
+                            <!-- ── Zone scrollable principale ── -->
+                            <ScrollContainer id="contentScroll"
+                                             vertical="true"
+                                             horizontal="false"
+                                             class="contentScroll">
+
+                                <VBox  id="contentWrapper" class="contentWrapper">
+
+                                    <!-- PAGE HEADER : titre + bouton settings -->
+                                    <HBox id="pageT" class="pageTitleRow"
+                                          justifyContent="SpaceBetween"
+                                          alignItems="Start">
+                                        <VBox  id="pBox" class="pageTitleBox">
+                                            <Title id="welcom" text="Welcome to your dashboard"
+                                                   level="H1"
+                                                   class="pageMainTitle"
+                                                   wrapping="true"/>
+                                            <Text id="pageS" text="Manage your products and stock with ease"
+                                                  class="pageSubtitle"/>
+                                        </VBox>
+                                        <Button id="iconB" icon="sap-icon://action-settings"
+                                                type="Transparent"
+                                                class="settingsBtn"
+                                                tooltip="Paramètres"/>
+                                    </HBox>
+
+                                    
+                                  
+                                    <!-- ══════════════════════════════════════
+                                         ACTIONS RAPIDES
+                                         Grid : L4 M6 S12 →
+                                           3 colonnes sur Large
+                                           2 colonnes sur Medium
+                                           1 colonne  sur Small
+                                         Les cartes utilisent CustomListItem
+                                         pour obtenir un retour visuel au clic
+                                         (equivalent de whileTap de Framer).
+                                         ══════════════════════════════════════ -->
+                                   
+                                    <!-- FIN ACTIONS RAPIDES -->
+
+                                </VBox>
+                                <!-- FIN contentWrapper -->
+
+                            </ScrollContainer>
+                            <!-- FIN ScrollContainer -->
+
+                        </VBox>
+                        <!-- FIN MAIN CONTENT -->
+
+                    </HBox>
+                    <!-- FIN appShell -->
+
+                </content>
+            </Page>
+        </pages>
+    </App>
 </mvc:View>

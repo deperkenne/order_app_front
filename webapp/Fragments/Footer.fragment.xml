@@ -4,7 +4,7 @@
     id="appFooter"
     justifyContent="SpaceBetween"
     alignItems="Center"
-    class="appFooter">
+    class="appFooter" visible="{= !${ui1>/isLoading} }">
 
     <Text id="droits" text="© 2026 OrderApp. Tous droits réservés." class="footerText" />
 

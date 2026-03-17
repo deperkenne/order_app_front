@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class t{buildOrderPath(t){return`/Orders(OrderUuid=guid'${t}',IsActiveEntity=false)`}buildItemsPath(t){return`${this.buildOrderPath(t)}/to_Items`}}var e={__esModule:true};e.ODataPathBuilder=t;return e});
+//# sourceMappingURL=PathBuilder.js.map

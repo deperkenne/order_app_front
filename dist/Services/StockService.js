@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class t{constructor(t){this.stockRepository=t}async createStocks(t){return this.stockRepository.saveStock(t)}async getAllStocks(){return await this.stockRepository.findAll()}async ModifyStock(t,s){await this.stockRepository.updateByStockId(t,s)}}var s={__esModule:true};s.StockService=t;return s});
+//# sourceMappingURL=StockService.js.map

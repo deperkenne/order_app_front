@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class t{constructor(t){this.oDataModel=t}addCreate(t,a,e){this.oDataModel.create(t,a,{groupId:e})}addFunctionCall(t,a,e,r){this.oDataModel.callFunction(t,{method:a,groupId:r,urlParameters:e})}addRead(t,a,e){this.oDataModel.read(t,{groupId:e,urlParameters:a})}submitBatch(t){return new Promise((a,e)=>{this.oDataModel.submitChanges({groupId:t,success:t=>{const e=t?.__batchResponses??[];a(e)},error:t=>{e(t)}})})}}var a={__esModule:true};a.ODataBatchExecutor=t;return a});
+//# sourceMappingURL=BachExecutor.js.map

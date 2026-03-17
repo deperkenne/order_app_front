@@ -1,0 +1,47 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:l="sap.ui.layout"
+    xmlns="sap.m">
+    
+    <Dialog id="AddProductD" title="Product Management" contentWidth="450px">
+        <content>
+            <f:SimpleForm id="AddProductForm"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                labelSpanL="4"
+                labelSpanM="4"
+                columnsL="1"
+                columnsM="1">
+                <f:content>
+            <Label id="AddProductLabel1" text="ProductName" />
+            <Input  id="AddProductInput1" placeholder="name.."  />
+            <Label id="AddProductLabel2"  text="Currency"  />
+            <Input   id="AddProductInput2" placeholder="Currency.." />
+            <Label id="AddProductLabel3" text="Price" />
+            <Input
+                id="AddProductInput3"
+                type="Number"
+                editable="true"
+                valueLiveUpdate="true"
+                placeholder="Entrez la quantité disponible..." />
+                </f:content>
+            </f:SimpleForm>
+        </content>
+
+        <beginButton>
+            <Button 
+                id="AddProductId"
+                text="Save" 
+                type="Emphasized" 
+                icon="sap-icon://save" 
+                press=".onAddProduct"/>
+        </beginButton>
+        <endButton>
+            <Button 
+                id="closedProductId"
+                text="Close" 
+                press=".onCloseDialog" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

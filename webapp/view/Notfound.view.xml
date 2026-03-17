@@ -1,0 +1,74 @@
+<mvc:View
+    controllerName="comkenneorderapp.controller.NotFound"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true">
+
+    <Page
+        id="notFoundPage"
+        showHeader="false"
+        class="nfPage">
+
+        <content>
+            <VBox
+                id="nfWrapper"
+                class="nfWrapper"
+                alignItems="Center"
+                justifyContent="Center">
+
+                <!-- Icon container with badge -->
+                <VBox id="nfIconBox" class="nfIconBox" alignItems="Center">
+                    <!-- Map icon -->
+                    <core:Icon
+                        id="nfMapIcon"
+                        src="sap-icon://map"
+                        class="nfMapIcon"/>
+                    <!-- Question mark badge -->
+                    <VBox id="nfBadge" class="nfBadge" alignItems="Center" justifyContent="Center">
+                        <Text id="nfBadgeText" text="?" class="nfBadgeText"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Title -->
+                <Title
+                    id="nfTitle"
+                    text="Page Not Found"
+                    level="H1"
+                    class="nfTitle"/>
+
+                <!-- Description -->
+                <Text
+                    id="nfDescription"
+                    text="Sorry, the destination you are looking for seems to have no available routes. It may have been moved or deleted."
+                    class="nfDescription"
+                    textAlign="Center"
+                    wrapping="true"/>
+
+                <!-- Buttons -->
+                <HBox
+                    id="nfButtonBox"
+                    class="nfButtonBox"
+                    justifyContent="Center"
+                    alignItems="Center">
+
+                    <Button
+                        id="nfBackBtn"
+                        text="← Back"
+                        press=".onNavBack"
+                        class="nfBackBtn"/>
+
+                    <Button
+                        id="nfHomeBtn"
+                        icon="sap-icon://home"
+                        text="Go to Homepage"
+                        press=".onNavHome"
+                        class="nfHomeBtn"/>
+
+                </HBox>
+
+            </VBox>
+        </content>
+    </Page>
+
+</mvc:View>

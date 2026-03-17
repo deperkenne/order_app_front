@@ -1,0 +1,179 @@
+{
+	"_version": "1.76.0",
+	"sap.app": {
+		"id": "comkenneorderapp",
+		"type": "application",
+		"i18n": {
+			"bundleUrl": "i18n/i18n.properties",
+			"supportedLocales": [
+				""
+			]
+		},
+		"applicationVersion": {
+			"version": "0.0.1"
+		},
+		"dataSources": {
+			"mainService": {
+				"uri": "sap/opu/odata/sap/ZSDB_CUSTOMER_RAP/",
+				"type": "OData",
+				"settings": {
+					"localUri": "localService/mainService/metadata.xml",
+					"odataVersion": "2.0"
+				}
+			}
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"resources": "resources.json",
+		"sourceTemplate": {
+			"id": "@sap/generator-fiori:basic",
+			"version": "1.20.0",
+			"toolsId": "32be6637-df8e-4476-9879-b48f7655d5de"
+		},
+		"crossNavigation": {
+			"inbounds": {
+				"intent1": {
+					"semanticObject": "comkenneorderapp",
+					"action": "display",
+					"title": "E-Commerce App",
+					"subTitle": "Gestion des Commandes",
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					}
+				}
+			}
+		}
+	},
+	"sap.cloud": {
+		"public": true,
+		"service": "comkenneorderapp"
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"flexEnabled": true,
+		"dependencies": {
+			"minUI5Version": "1.143.2",
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "comkenneorderapp.i18n.i18n",
+					"supportedLocales": [
+						""
+					]
+				}
+			},
+			"": {
+				"type": "sap.ui.model.odata.v2.ODataModel",
+				"dataSource": "mainService",
+				"preload": true,
+				"settings": {
+					"synchronizationMode": "None",
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true
+				}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"controlAggregation": "pages",
+				"controlId": "app",
+				"transition": "slide",
+				"type": "View",
+				"viewType": "XML",
+				"path": "comkenneorderapp.view",
+				"async": true,
+				"viewPath": "comkenneorderapp.view"
+			},
+			"routes": [
+				{
+					"name": "RouteMain",
+					"pattern": "",
+					"target": [
+						"TargetMain"
+					]
+				},
+				{
+					"name": "RouteProduct",
+					"pattern": "Product",
+					"target": [
+						"TargetTest"
+					]
+				},
+				{
+					"name": "RouteAdmin",
+					"pattern": "Admin",
+					"target": [
+						"TargetAdmin"
+					]
+				},
+				{
+					"name": "RouteDashboardAdmin",
+					"pattern": "DashboardAdmin",
+					"target": [
+						"TargetDashboardAdmin"
+					]
+				}
+			],
+			"targets": {
+				"TargetMain": {
+					"id": "Product",
+					"name": "Product"
+				},
+				"TargetTest": {
+					"id": "Product",
+					"name": "Product"
+				},
+				"TargetAdmin": {
+					"id": "Admin",
+					"name": "Admin"
+				},
+				"TargetDashboardAdmin": {
+					"id": "DashboardAdmin",
+					"name": "DashboardAdmin"
+				}
+			}
+		},
+		"rootView": {
+			"viewName": "comkenneorderapp.view.App",
+			"type": "XML",
+			"id": "App",
+			"async": true
+		},
+		"flexBundle": false
+	}
+}

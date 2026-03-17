@@ -1,0 +1,1 @@
+{"version":3,"file":"IStock-dbg.js","names":[],"sources":["IStock.ts"],"sourcesContent":["export interface IStock {\r\n    StockId: string;\r\n    ProductId: string;\r\n    SkuId: string;\r\n    Quantity: int;\r\n    Unit: String;\r\n    AvailableQuantity: int;\r\n}"],"mappings":"","ignoreList":[]}

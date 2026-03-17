@@ -16,15 +16,11 @@
                      <Label text="IDStock" id="AddStockLabel1"/>
 
             <Input id="AddStockInput1" />
-            <Label id="AddStockLabel2" text="ID Produit" />
-            <Input   id="AddStockInput2"  placeholder="product" />
-            <Label id="AddStockLabel3" text="SKU" />
-            <Input  id="AddStockInput3" placeholder="sku"  />
-            <Label id="AddStockLabel4"  text="Quantity"  />
-            <Input   id="AddStockInput4" placeholder="Quantity" />
-            <Label id="AddStockLabel5" text="Unit" />
-            <Input   id="AddStockInput5"  placeholder="unit"/>
-            <Label id="AddStockLabel6" text="Quantité Disponible" />
+            <Label id="AddStockLabel3" text="ProductName" />
+            <Input  id="AddStockInput3" placeholder="name.."  />
+            <Label id="AddStockLabel4"  text="Currency"  />
+            <Input   id="AddStockInput4" placeholder="Currency.." />
+            <Label id="AddStockLabel6" text="Price" />
             <Input
                 id="AddStockInput6"
                 type="Number"

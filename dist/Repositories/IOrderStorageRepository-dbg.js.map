@@ -1,0 +1,1 @@
+{"version":3,"file":"IOrderStorageRepository-dbg.js","names":[],"sources":["IOrderStorageRepository.ts"],"sourcesContent":["export interface IOrderStorageRepo {\r\n      getOrderUuid(): string | null,\r\n      setOrderUuid(uuid: string): void,\r\n      clearOrderUuid(): void ,\r\n      hasOrderUuid(): boolean\r\n}"],"mappings":"","ignoreList":[]}

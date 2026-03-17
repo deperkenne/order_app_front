@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class t{constructor(t){this.model=t}getItems(){return this.model.getProperty("/filteredItems")||[]}setItems(t){this.model.setProperty("/filteredItems",t)}setTotal(t){this.model.setProperty("/totalAmount",t)}setCount(t){this.model.setProperty("/countSelectedProduct",t)}}var e={__esModule:true};e.CartStore=t;return e});
+//# sourceMappingURL=Cartstore.js.map

@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";const e="TotalAmount,Currency";const r="ItemUuid,Price,Currency,ProductId,GrossAmount,Quantity,CreatedAt";const t="CreatedAt desc";const u="1";class s{buildOrderParams(){return{$select:e}}buildItemParams(e){return{$filter:`ProductId eq '${e}'`,$select:r,$orderby:t,$top:u}}}var a={__esModule:true};a.ODataQueryParameterBuilder=s;return a});
+//# sourceMappingURL=QueryParameterBuilder.js.map

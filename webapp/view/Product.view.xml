@@ -9,12 +9,21 @@
    
     
 
-    <Page id="ProductPage1" title="{i18n>title}" showHeader="false" >
+    <Page id="ProductPage1" title="{i18n>title}" showHeader="false" class="productSession">
 
          <!--<core:Fragment fragmentName="com.kenne.orderapp.Fragments.Header" type="XML"/>-->
         <core:Fragment fragmentName="comkenneorderapp.Fragments.Navbar" type="XML"/>
+
+        <VBox id="loadingBox"
+            visible="{ui1>/isLoading}"
+            alignItems="Center"
+            justifyContent="Center"
+            class="productLoadingBox">
+            <core:Icon src="sap-icon://synchronize" class="productLoadingIcon"/>
+            <Text text="product Loading..." class="productLoadingText"/>
+        </VBox>
           
-        <HBox id="mainContainer"  alignItems="Start" class="panierWrapper">
+        <HBox id="mainContainer"  alignItems="Start" class="panierWrapper" visible="{= !${ui1>/isLoading} }">
                           
             <!-- CART DROPDOWN CONTENT -->
             <VBox id="cartContent" visible="{ui>/isCartVisible}" class="panierDropdown">
@@ -180,7 +189,7 @@
                         width="100%"
                         type="Emphasized"
                         class="panierCheckoutBtn"
-                        press=".onCheckout" />
+                        press=".orderActivate" />
 
                     <!-- SECURITY BADGE -->
                     <HBox 
@@ -203,18 +212,18 @@
 
 		<content> 
             <FlexBox id="pMessageTitle" direction="Column" alignItems="Center" width="auto"  displayInline="false"
-              class=" productTitleMessage  sapUiShadow sapUiMediumMarginBegin sapUiMediumMarginEnd  sapUiMediumMarginBottom"
+              class=" productTitleMessage  sapUiShadow sapUiMediumMarginBegin sapUiMediumMarginEnd  sapUiMediumMarginBottom" visible="{= !${ui1>/isLoading} }"
             >
               <Title id="pMessage"
-                text="Produits disponibles"
+                text="Available Products"
                 level="H2"
-                class="sapThemeText sapUiTinyMarginBottom" />
+                class="sapThemeText sapUiTinyMarginBottom productTitle" />
 
               <Text
                     id="pDescription"
-                    text="Voici la liste complète de nos articles en stock actuellement."
+                    text="Here is the complete list of items currently in stock."
                     textAlign="Center"
-                    class="sapThemeText" />
+                    class="sapThemeText productSubTitle" />
 
             </FlexBox>
             
@@ -276,15 +285,16 @@
 									
 								  </HBox>
 
+
                                   <HBox id="cardFooter"  gap="0.5rem"  class="sapUiSmallMarginTop">
                                         <Button
                                             id="productLink"
-                                            text="Voir plus"  
+                                            text="See more"  
                                             press=".onNavigateToProduct"
                                             class="cardButton" />
                                         <Button
                                         id="pAdd"
-                                        text="Ajouter"
+                                        text="Addproduct"
                                         press=".addToCard"
                                         enabled="{products>inStock}"
                                          class="cardButton" />
@@ -298,7 +308,7 @@
 			</FlexBox>
 		</content>
          <!--<core:Fragment fragmentName="com.kenne.orderapp.Fragments.Header" type="XML"/>-->
-        <core:Fragment fragmentName="comkenneorderapp.Fragments.Footer" type="XML"/>
+        <core:Fragment fragmentName="comkenneorderapp.Fragments.Footer" type="XML" />
         
 
 	</Page>

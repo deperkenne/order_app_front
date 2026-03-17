@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class r{constructor(r,e){this.orderItemRepo=r;this.iorderstorageRepo=e}async CreateOrderItem(r){this.orderUuid=this.iorderstorageRepo.getOrderUuid()??"";if(this.orderUuid!==""){try{const e=await this.orderItemRepo.saveOrderItem(r,this.orderUuid);return e}catch(r){console.error("Erreur lors de la sauvegarde de l'item:",r);return null}}console.error("Impossible de créer l'item : OrderUuid est manquant.");return null}}var e={__esModule:true};e.OrderItemService=r;return e});
+//# sourceMappingURL=Order_Item_Service_Impl.js.map

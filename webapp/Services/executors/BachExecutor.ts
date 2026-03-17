@@ -1,7 +1,6 @@
 import ODataModel from "sap/ui/model/odata/v2/ODataModel";
 import { IBatchRequestBuilder } from "../Interfaces/IBatchProcessing";
 
-
 export class ODataBatchExecutor implements  IBatchRequestBuilder {
 
     constructor(private readonly oDataModel: ODataModel) {}

@@ -1,0 +1,2 @@
+sap.ui.define([],function(){"use strict";class r{_imageurl="";constructor(r){this.ProductId=r.ProductId;this.Productname=r.Productname;this.Price=r.Price;this.Currency=r.Currency;this.Stock=r.Stock}get ImageUrl(){return this._imageurl}set ImageUrl(r){this._imageurl=r}}var t={__esModule:true};t.Zproduct=r;return t});
+//# sourceMappingURL=Zproduct.js.map

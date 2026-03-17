@@ -136,6 +136,21 @@
             "TargetTest"
           ]
         },
+         {
+          "name": "RouteProductManagement",
+          "pattern": "ProductManagement",
+          "target": [
+            "TargetProductManagement"
+          ]
+        },
+
+        {
+          "name": "Notfound",
+          "pattern": "Notfound",
+          "target": [
+            "TargetNotfound"
+          ]
+        },
 
          {
           "name": "RouteAdmin",
@@ -160,9 +175,19 @@
           "name": "Product"
         },
          "TargetTest": {
-          "id": "Product",
-          "name": "Product"
+          "id": "Product1",
+          "name": "Product1"
         },
+        "TargetProductManagement": {
+          "id": "ProductManagement",
+          "name": "ProductManagement"
+        },
+
+         "TargetNotfound":{
+          "id": "Notfound",
+          "name": "Notfound"
+        },
+
         "TargetAdmin": {
           "id": "Admin",
           "name": "Admin"

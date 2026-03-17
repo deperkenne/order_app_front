@@ -21,14 +21,9 @@ server:
           - path: /sap
             #url: https://fa13318e-1cb9-41eb-b81d-1759ca1e28d3.abap-web.us10.hana.ondemand.com
             url: https://fa13318e-1cb9-41eb-b81d-1759ca1e28d3.abap.us10.hana.ondemand.com
-            #destination: ABAP_CUSTOMER 
+            destination: abap-order-service
             authenticationType: reentranceTicket # SAML support for vscode
             #authenticationType: none # SAML support for vscode
-          - path: /oauth2
-            url: https://ankyikmcs.trial-accounts.ondemand.com
-            authenticationType: none  # ✅ Pas d'auth, SAP IAS gère lui-même
-            pathRewrite:
-              "^/oauth2": "/oauth2"
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

@@ -14,10 +14,8 @@ export class OrderItemStorage implements IorderItemStorage {
             console.error('Erreur sauvegarde cart:', error);
           }
       }
+      
       clearOrderItem(key:string): void {
-          
-        localStorage.removeItem(key)
-          
-      }
-    
+        localStorage.removeItem(key) 
+      } 
 }
